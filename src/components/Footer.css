@@ -1,0 +1,31 @@
+.footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fff; /* Cor de fundo */
+    padding: 10px 0;
+    border-top: 1px solid #ddd; /* Borda superior */
+    position: fixed; /* Fixar na parte inferior */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .footer-item {
+    text-align: center;
+    text-decoration: none;
+    color: #333; /* Cor do texto */
+    flex: 1;
+  }
+  
+  .footer-item.active {
+    color: #007bff; /* Cor ativa */
+    font-weight: bold; /* Destacar texto ativo */
+  }
+  
+  .footer-item span {
+    display: block; /* Colocar texto abaixo do ícone */
+    font-size: 12px; /* Tamanho da fonte do texto */
+  }
+  

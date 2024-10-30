@@ -1,0 +1,32 @@
+/* src/components/SplashScreen.css */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff; /* Cor de fundo da tela de abertura */
+    display: flex;
+    flex-direction: column; /* Alinhar verticalmente */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Mantenha acima de outros elementos */
+  }
+  
+  .splash-screen img {
+    width: 228px; /* Ajuste o tamanho padrão da logomarca */
+    height: auto; /* Mantém a proporção da imagem */
+  }
+
+  .loading-icon {
+    font-size: 28px; /* Tamanho do ícone */
+    margin-top: 80px; /* Espaço entre a logo e o ícone de loading */
+    animation: spin 1s linear infinite; /* Animação de rotação */
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

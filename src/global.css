@@ -1,0 +1,614 @@
+/* Estiliza todos os elementos <p> ou qualquer outro texto */
+p {
+  line-height: 1.0; /* Diminui o espaçamento entre linhas */
+}
+
+/* Ajusta o espaçamento para um título ou subtítulo */
+h1, h2, h3 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.a {
+text-decoration: none;
+}
+
+.container {
+  max-width: 1200px; /* Largura máxima do conteúdo */
+  margin: 0 auto; /* Centralizar o container */
+  padding: 20px; /* Aumentar o padding conforme necessário */
+}
+
+/* Estilo para o container da busca */
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Estilo para o campo de busca */
+.search-input {
+  flex: 1;
+  margin-top: 5px;
+  padding: 5px;
+  height: 40px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+}
+
+/* Estilo para o botão de filtro */
+.filter-button {
+  background-color: #007bff; /* Cor do botão */
+  border: 1px solid #007bff;
+  border-radius: 0 4px 4px 0;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilo para o ícone de filtro */
+.filter-button i {
+  font-size: 16px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .search-container {
+    flex-direction:row;
+  }
+  .search-input {
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .search-button {
+    border-radius: 4px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+  }
+
+  .filter-button {
+    border-radius: 4px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Estilo geral da lista de marcas */
+.Marcas-list {
+  display: flex;
+  overflow-x: auto; /* Permite o scroll horizontal */
+  scroll-snap-type: x mandatory; /* Faz com que o scroll "trave" nos itens */
+  gap: 15px; /* Espaçamento entre os itens */
+  padding: 10px 0; /* Padding para dar um respiro ao redor */
+}
+
+.Marcas-list::-webkit-scrollbar {
+  display: none; /* Remove a barra de rolagem do Chrome/Safari */
+}
+
+.Marcas-item {
+  min-width: 100px; /* Largura mínima para cada item */
+  flex: 0 0 auto; /* Garante que os itens não encolham nem cresçam */
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  scroll-snap-align: start; /* Faz com que o item "trave" no início ao rolar */
+  flex-direction: column; /* Para que a imagem fique acima do texto */
+  text-align: center;
+}
+
+.Marcas-item img {
+  width: 100px;  /* Largura da imagem */
+  height: 100px; /* Altura igual à largura para ser circular */
+  border-radius: 50%; /* Deixa a imagem circular */
+  object-fit: cover; /* Garante que a imagem preencha a área circular */
+  margin-bottom: 10px; /* Espaço entre a imagem e o texto */
+}
+
+.Marcas-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Informação de cada favorito */
+.Marcas-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.Marcas-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .Marcas-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .Marcas-image {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* Estilo geral da lista de categorias */
+.Categorias-section {    
+  border-radius: 8px;
+  max-width: 1200px;
+}
+
+.Categorias-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;  
+}
+
+.titulo-home {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.subtitulo-home {
+  font-size: 14px;
+  margin: 0px;
+}
+
+.Categorias-list::-webkit-scrollbar {
+  display: none; /* Remove a barra de rolagem do Chrome/Safari */
+}
+
+.Categorias-item {
+  min-width: 100px; /* Largura mínima para cada item */
+  flex: 0 0 auto; /* Garante que os itens não encolham nem cresçam */
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  scroll-snap-align: start; /* Faz com que o item "trave" no início ao rolar */
+  flex-direction: column; /* Para que a imagem fique acima do texto */
+  text-align: center;
+}
+
+.Categorias-item img {
+  width: 100px;  /* Largura da imagem */
+  height: 100px; /* Altura igual à largura para ser circular */
+  object-fit: cover; /* Garante que a imagem preencha a área circular */
+  margin-bottom: 10px; /* Espaço entre a imagem e o texto */
+}
+
+.Categorias-item:hover {
+  background-color: #f0f0f0;
+}
+
+.Categorias-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.Categorias-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .Categorias-item {
+    flex-direction: column;
+    align-items: flex-start;
+  } 
+
+  .Categorias-image {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* Estilo geral da lista de itens */
+.items-list {
+  display: flex;
+  flex-direction: column; /* Organiza os itens verticalmente */
+  gap: 5px; /* Espaçamento entre os itens */
+  overflow-y: auto; /* Permite o scroll vertical */
+  scroll-snap-type: x mandatory; /* Faz com que o scroll "trave" nos itens */
+  padding: 5px 0; /* Padding para dar um respiro ao redor */
+}
+
+/* Estilo para cada cartão de item */
+.item-card {
+  display: flex;
+  align-items: flex-start; /* Alinha a imagem e informações no início */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 15px;
+  transition: background-color 0.3s ease;
+}
+
+/* Efeito hover para cada cartão */
+.item-card:hover {
+  background-color: #f0f0f0;
+}
+
+/* Estilo para a imagem do item */
+.item-image {
+  width: 100px; /* Largura da imagem */
+  height: 100px; /* Altura igual à largura para ser quadrada */
+  margin-right: 0px; /* Espaço entre a imagem e as informações */
+  object-fit: cover; /* Garante que a imagem preencha a área quadrada */
+  border-radius: 8px; /* Borda arredondada para suavizar as bordas */
+}
+
+/* Nome do item */
+.item-name {
+  font-weight: bold;
+  margin: 0;
+  width: 200px;
+  display: contents;
+}
+
+.item-total{
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Descrição do item */
+.item-description {
+  margin: 5px 0;
+}
+
+/* Preço antigo */
+.item-old-price {
+  text-decoration: line-through; /* Sinaliza que o preço está riscado */
+  color: red; /* Cor para indicar desconto */
+}
+
+/* Preço atual */
+.item-current-price {
+  color: black; /* Cor para indicar preço atual */
+}
+
+/* Estilo para paginação */
+.pagination {
+  display: flex;
+  justify-content: center; /* Centraliza os botões de paginação */
+  margin-top: 20px; /* Espaçamento acima da paginação */
+}
+
+.pagination-button {
+  background-color: #007bff; /* Cor do botão */
+  color: white; /* Cor do texto */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  padding: 10px 15px; /* Espaçamento interno do botão */
+  margin: 0 5px; /* Espaçamento entre os botões */
+  cursor: pointer; /* Cursor em forma de mão ao passar */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+.pagination-button:hover {
+  background-color: #0056b3; /* Cor ao passar o mouse */
+}
+
+.pagination-button.active {
+  background-color: #0056b3; /* Cor do botão ativo */
+}
+
+/* global.css */
+.product-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  margin-top: 80px;
+}
+
+.product-image {
+  max-width: 80%;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-control button {
+  font-size: 1.2em;
+  margin: 5px 5px 5px 5px;
+  padding: 10px 20px 10px;
+  font-size: 1.1em;
+  background-color: #d8d8d8; /* Cor do botão */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor em forma de mão ao passar */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+.buy-button {
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  background-color: #007bff; /* Cor do botão */
+  color: white; /* Cor do texto */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  padding: 10px 35px 10px; /* Espaçamento interno do botão */
+  margin: 10px 5px; /* Espaçamento entre os botões */
+  cursor: pointer; /* Cursor em forma de mão ao passar */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+.add-to-cart-button {
+  margin-bottom: 10px;
+  font-size: 1.1em;  
+  background-color: #007bff; /* Cor do botão */
+  color: white; /* Cor do texto */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  padding: 10px 15px; /* Espaçamento interno do botão */
+  margin: 10px 5px; /* Espaçamento entre os botões */
+  cursor: pointer; /* Cursor em forma de mão ao passar */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: none;
+  font-size: 1.0em;
+  color: black; /* Cor do texto */
+  background-color: #ffffff;
+  padding: 10px 15px; /* Espaçamento interno do botão */
+  margin: 10px 5px; /* Espaçamento entre os botões */
+}
+
+.close-icon {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  font-size: 1.0em;
+  color: black; /* Cor do texto */
+  background-color: #ffffff;
+  padding: 10px 15px; /* Espaçamento interno do botão */
+  margin: 10px 5px; /* Espaçamento entre os botões */
+}
+
+.cart-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  padding-bottom: 50px;
+  margin-top: 10px;
+}
+
+.Cart-section {  
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1000;
+  margin: 0 auto; /* Centralizar o container */
+  max-height: 100%; /* Defina a altura máxima para o contêiner */
+  overflow-y: auto; /* Permite rolar verticalmente */
+  padding-right: 10px; /* Adiciona espaço para a rolagem */
+}
+
+.Cart-list {
+  position: relative;  
+  flex-direction:row ; /* Organiza os itens verticalmente */
+  margin: 20px;
+}
+
+.item-card-cart {
+  display: flex;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 0px;
+  margin-top: 10px;
+}
+
+/* Efeito hover para cada cartão */
+.item-card-cart:hover {
+  background-color: none;
+}
+
+.titulo-home-cart {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  display: inline;
+  padding-left: 10%;
+}
+
+.subtitulo-home-cart {
+  font-size: 14px;
+  margin: 20px;
+  margin-bottom: 0px;
+}
+
+.close-button {
+  position: relative;
+  top: 10px;
+  left: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 0px;
+  background: none;
+  cursor: pointer;
+}
+
+.checkout-button {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  background-color: #28a745;; /* Cor do botão */
+  color: white; /* Cor do texto */
+  border: none;
+  border-radius: 5px; /* Bordas arredondadas */
+  padding: 10px 10px 10px; /* Espaçamento interno do botão */
+  margin: 10px 5px; /* Espaçamento entre os botões */
+  cursor: pointer; /* Cursor em forma de mão ao passar */
+  transition: background-color 0.3s; /* Transição suave na mudança de cor */
+  
+}
+
+.checkout-title {
+  position: relative;
+  align-content: center;
+
+}
+
+.checkout {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1001;
+  max-height: 100%; /* Defina a altura máxima para o contêiner */
+  overflow-y: auto; /* Permite rolar verticalmente */
+  padding-right: 10px; /* Adiciona espaço para a rolagem */
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%); /* Posição inicial fora da tela */
+}
+
+.close-button-checkout {
+  position: relative;
+  top: 10px;
+  left: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 0px;
+  background: none;
+  cursor: pointer;
+}
+
+.clear-cart-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-item-button {
+  border: none;
+  cursor: pointer;
+  color: #dc3545;
+  background: none;
+  right: 0px;
+  position: absolute;
+}
+
+.cart-slide-in {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%; /* Deslizar Tela inteira */
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  transition: transform 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+.cart-slide-in.open {
+  transform: translateX(0);
+}
+
+.cart.hide {
+  transform: translateX(100%); /* Move a tela para fora quando fechada */
+}
+
+.checkout.slide-in {
+  transform: translateX(0); /* Move o checkout para dentro da tela */
+}
+
+.checkout.slide-out {
+  transform: translateX(100%); /* Move o checkout para fora da tela */
+}
+
+.continue-shopping {
+  font-size: large;
+  text-decoration: underline;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 10px 10px 10px 10px;
+  margin-top: 30px;
+}
+
+.pull-right {
+  text-align: right;
+  padding-right: 5%;
+}
+
+.text-decoration {
+  text-decoration: none;
+  color: black;
+}
+
+.confirmation-screen {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1001;
+  margin: 0 auto; /* Centralizar o container */
+  max-height: 100%; /* Defina a altura máxima para o contêiner */
+  overflow-y: auto; /* Permite rolar verticalmente */
+  padding-right: 10px; /* Adiciona espaço para a rolagem */
+}
+
+.order-details {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.back-home-button {
+  display: flex;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 auto;
+  background-color: #007bff;  
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.center {
+  color: green;
+  padding-top: 10%;
+  text-align: center;
+  padding-bottom: 10%;
+}

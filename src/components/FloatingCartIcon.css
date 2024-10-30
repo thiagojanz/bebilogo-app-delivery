@@ -1,0 +1,16 @@
+.floating-cart {
+    position: fixed;
+    top: 20px; /* Distância do topo */
+    right: 20px; /* Distância da direita */
+    background-color: #fff; /* Cor de fundo */
+    border-radius: 50%; /* Forma circular */
+    padding: 10px; /* Espaço interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 2000; /* Manter acima de outros elementos */
+  }
+  
+  .floating-cart:hover {
+    background-color: #f0f0f0; /* Efeito ao passar o mouse */
+  }
+  
