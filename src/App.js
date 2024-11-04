@@ -12,7 +12,7 @@ import Cart from './pages/Cart'; // Importa o componente do carrinho
 import Footer from './components/Footer';
 import FloatingCartIcon from './components/FloatingCartIcon';
 import SplashScreen from './components/SplashScreen';
-import Checkout from './components/Checkout'; // Importe o componente Checkout
+import Checkout from './components/Checkout.js'; // Importe o componente Checkout
 import OrderConfirmation from './pages/OrderConfirmation'; // Importe a tela de confirmação
 import './global.css';
 
@@ -39,7 +39,7 @@ const App = () => {
     <CartProvider>
     <Router>
       {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
-      <div style={{ paddingBottom: '60px' }}>
+      <div translate="no" style={{ paddingBottom: '60px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />

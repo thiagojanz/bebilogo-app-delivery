@@ -24,7 +24,7 @@ const FloatingCartIcon = () => {
           position: 'fixed',
           top: '24px',
           right: '23px',
-          zIndex: 1000,
+          zIndex: 998,
           background: '#f3f3f3f3',
           padding: '10px 11px 6px 9px',
           borderRadius: '30px',

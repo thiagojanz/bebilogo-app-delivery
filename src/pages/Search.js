@@ -1,11 +1,11 @@
 // src/pages/Search.js
 import React from 'react';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaSearch } from 'react-icons/fa';
 
 const Search = () => {
   return (
     <div className="container texto-home">
-    <h1 className="titulo-home">Buscar</h1>
+    <h1 className="titulo-home"><FaSearch /> Buscar</h1>
     <div className="search-container">
       <input type="text" className="search-input" placeholder="Buscar produtos..." />
       

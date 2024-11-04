@@ -2,7 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../CartContext';
 import { SlTrash } from "react-icons/sl";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaArrowCircleRight } from "react-icons/fa";
+import { Button } from 'antd';
+
 import '../global.css';
 
 const Cart = ({ isOpen, onClose }) => {
@@ -50,6 +52,7 @@ const Cart = ({ isOpen, onClose }) => {
           <FaArrowLeft size={30} />
         </button>
         <h1 className="titulo-home-cart">Carrinho de Compras</h1>
+        <hr/>
         <div className="Cart-list">
           {cartItems.length === 0 ? (
             <p>O carrinho está vazio.</p>
@@ -83,15 +86,18 @@ const Cart = ({ isOpen, onClose }) => {
           )}
         </div>
         <h2 className='pull-right'>Total: R$ {totalAmount}</h2> {/* Mostra o total dos produtos */}
-        <div className="cart-details">
-          <div className="button-group">
-            <button onClick={handleCheckout} className="checkout-button">Ir para Pagamentos</button>
+        <div className='container center'>
+          <div className='flex_profile'>
+            <Button type="default" size='large' onClick={handleCheckout}>Continuar <span style={{ marginLeft: 10 }}>
+              <FaArrowCircleRight size={22}/></span></Button>
           </div>
+        </div> 
+        <div className='center'>
           <button onClick={onClose} className="continue-shopping">
-            Continuar comprando
+                Continuar comprando
           </button>
         </div>
-      </div>
+      </div>      
     </div>
   );
 };

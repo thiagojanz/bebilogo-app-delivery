@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../CartContext'; 
@@ -6,6 +7,9 @@ import '../global.css';
 import { Api_VariavelGlobal } from '../global';
 
 const ProductDetails = () => {
+  const location = useLocation();
+  const [totalAmount, setTotalAmount] = useState(location.state?.totalAmount || 0);
+  const { cartItems } = useCart(); // Acesse os itens do carrinho
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -55,9 +59,22 @@ const ProductDetails = () => {
     }
   };
 
+  // Função para calcular o total do carrinho
+  const calculateTotal = useCallback(() => {
+    return cartItems.reduce((total, item) => {
+      return total + (parseFloat(item.PRECO_ATUAL) || 0) * (item.quantity || 0);
+    }, 0).toFixed(2);
+  }, [cartItems]);
+
+   // Atualizar o total sempre que cartItems mudar
+   useEffect(() => {
+    const calculatedTotal = calculateTotal();
+    setTotalAmount(calculatedTotal);
+  }, [cartItems, calculateTotal]);
+
   const handleBuy = () => {
-    handleAddToCart();
-    navigate('/checkout');
+    handleAddToCart();    
+    navigate('/checkout', { state: { totalAmount, isOpen: true } });
   };
 
   if (!product) return <p>Carregando...</p>;

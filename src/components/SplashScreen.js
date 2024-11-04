@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import './SplashScreen.css'; // Para estilos
 import logo from '../img/logomarca_app_white.png'; // Ajuste para o caminho correto da sua logomarca
-import { FaSpinner } from 'react-icons/fa'; // Importar o ícone de loading
+import { Flex, Spin } from 'antd';
 
 const SplashScreen = ({ onFinish }) => {
   useEffect(() => {
@@ -16,7 +16,9 @@ const SplashScreen = ({ onFinish }) => {
   return (
     <div className="splash-screen">
       <img src={logo} alt="Logo" /> {/* Use a logomarca importada */}
-      <FaSpinner className="loading-icon" />
+      <Flex className='loading-icon' align="center">
+        <Spin size="large" />
+      </Flex>
     </div>
   );
 };
