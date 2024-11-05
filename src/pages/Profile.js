@@ -1,191 +1,203 @@
-// Checkout.js
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaDoorOpen, FaRegUser, FaMapMarkerAlt, FaUser } from "react-icons/fa";
+import { FaRegUser, FaUserClock } from "react-icons/fa";
 import axios from 'axios';
-import InputMask from 'react-input-mask'; // Importa InputMask
-import Loginmodal from '../components/Loginmodal';
+import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
+import AddressForm from '../components/AddressForm';
+import Addresses from './Addresses';
 
 const Profile = () => {
   const [TELEFONE, setTelefone] = useState('');
-  const [showLogin, setShowLogin] = useState(false);
-  const [CEP, setCep] = useState(''); // Adicionar estado para o CEP
-  const [addresses, setAddresses] = useState([]);
-  const [NOME, setNome] = useState([]);
-  const [EMAIL, setEmail] = useState([]);
-  const [ENDERECO, setEndereco] = useState([]);
-  const [NUMERO, setNumero] = useState([]);
-  const [BAIRRO, setBairro] = useState([]);
-  const [CIDADE, setCidade] = useState([]);
-  const [UF, setUf] = useState([]);
+  const [LOGIN, setNome] = useState('');
+  const [EMAIL, setEmail] = useState('');
+  const [SENHA, setSenha] = useState('');
+  const [REPSENHA, setRepsenha] = useState('');
+  const [userData, setUserData] = useState(null); // Para armazenar os dados do usuário
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para controle de autenticação
 
-  // Função para buscar o endereço baseado no CEP
-  const fetchAddressByCep = async (CEP) => {
-    try {
-      const response = await axios.get(`https://viacep.com.br/ws/${CEP}/json/`);
-      if (response.data && !response.data.erro) {
-        setAddresses([{
-          ENDERECO: response.data.logradouro,
-          COMPLEMENTO: response.data.complemento,
-          BAIRRO: response.data.bairro,
-          CIDADE: response.data.localidade,
-          UF: response.data.uf,
-        }]);
-      } else {
-        console.error("CEP não encontrado");
-      }
-    } catch (error) {
-      console.error('Erro ao buscar endereço:', error);
-    }
-  };
-
-  // Monitora o valor de `cep` e chama a função de busca uma vez quando o CEP é completo (8 dígitos)
   useEffect(() => {
-    if (CEP.length === 8) {
-      fetchAddressByCep(CEP);
+    // Verifica se existe um token no localStorage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      fetchUserData(); // Busca os dados do usuário
     }
-  }, [CEP]); // Somente executa quando `cep` muda para evitar loop infinito
+  }, []);
 
-  const handleCepChange = (e) => {
-    const rawValue = e.target.value.replace(/\D/g, "");
-    setCep(rawValue);
+  const fetchUserData = async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token'); // Obtém o token
+    if (userId) {
+      try {
+        const response = await axios.get(`${Api_VariavelGlobal}/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        message.error('Erro ao carregar os dados do usuário.');
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    }
   };
+  
 
   const handleSubmit = async () => {
+    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA) {
+      message.error('Todos os campos obrigatórios devem ser preenchidos!');
+      return;
+    }
+
+    if (SENHA !== REPSENHA) {
+      message.error('As senhas não coincidem!');
+      return;
+    }
+
+    const telefoneNumeros = TELEFONE.replace(/\D/g, '');
+
     const formData = {
-      NOME,
+      LOGIN,
+      NASCIMENTO: '00/00/0000',
+      STATUS: '1',
+      NIVEL_ACESSO: '0',
+      TELEFONE: telefoneNumeros,
       EMAIL,
-      TELEFONE,
-      ENDERECO,
-      NUMERO,
-      CEP,
-      CIDADE,
-      BAIRRO,
-      UF,
+      SENHA,
+      REPSENHA: SENHA,
+      DATA: new Date().toISOString(),
     };
-  
-    console.log("Dados enviados:", formData); // Adicione esta linha
-  
+
     try {
       const response = await axios.post(`${Api_VariavelGlobal}/api/register`, formData);
-      console.log(response.data.message); // Mensagem de sucesso
+      message.success(response.data.message);
+      navigate('/cadastro-confirmation');
     } catch (error) {
-      console.error(error.response.data.message); // Mensagem de erro
+      message.error(error.response.data.message);
     }
   };
- 
+
+  const handleLogin = async (values) => {
+    const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
+
+    try {
+      const response = await axios.post(`${Api_VariavelGlobal}/api/login/`, {
+        EMAIL: values.EMAIL,
+        SENHA: hashedPassword,
+      });
+
+      // Armazena o token e o ID do usuário no localStorage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.user.ID_USUARIO); // Armazenando o ID do usuário
+      setIsAuthenticated(true);
+      message.success('Seja Bem Vindo!!!');
+      fetchUserData(); // Chama a função para buscar os dados do usuário após o login
+
+    } catch (error) {
+      if (error.response) {
+        message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
+      } else if (error.request) {
+        message.error('Erro: O servidor não respondeu.');
+      } else {
+        message.error('Erro: ' + error.message);
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    // Remove o token do localStorage ao fazer logout
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // Remove o ID do usuário
+    setIsAuthenticated(false);
+    setUserData('null'); // Limpa os dados do usuário
+  }; 
+
   return (
     <div>
-      <div className="container">
-      <h1 className="titulo-home"><FaUser /> Meu Perfil</h1>
-      <p>Cliente não identificado, favor identificar-se!!!</p>
+      {!isAuthenticated ? ( // Renderiza as seções de login e cadastro se não estiver autenticado
+        <>
+          <div className='section-auth container'>
+            <h1 className="titulo-home"><FaUserClock /> Já tenho perfil</h1>
+            <p>Efetuar Login</p>
+            <Form onFinish={handleLogin}>
+              <Form.Item name="EMAIL">
+                <Input type='text' size='large' placeholder='Email' />
+              </Form.Item>
 
-      <div className=''>
-        <div className='container center'>
-          <div className='flex_profile'>
-            <Button type="primary" size='large' onClick={() => setShowLogin(true)}>Entrar <FaDoorOpen /></Button>
-          </div>
-        </div>
-        {showLogin && <Loginmodal onClose={() => setShowLogin(false)} />}
-      </div>
+              <Form.Item name="SENHALOGIN">
+                <Input type='password' size='large' placeholder='Senha' />
+              </Form.Item>
 
-      <Form onFinish={handleSubmit}>
-       <div className=''>
-       <h1 className="titulo-home"><FaRegUser /> Crie seu perfil agora</h1>
-        <p>Faça seus pedidos rápido e fácil</p>
-        <Form.Item>
-          <Input size='large' required name='NOME' placeholder='Nome'  value={NOME} onChange={(e) => setNome(e.target.value)} />
-        </Form.Item>
-
-        <Form.Item>
-          <Input size='large' required name='EMAIL' placeholder='Email' value={EMAIL} onChange={(e) => setEmail(e.target.value)} />
-        </Form.Item>
-
-        <Form.Item>
-          <InputMask mask="(99) 99999-9999" value={TELEFONE} onChange={(e) => setTelefone(e.target.value)}>{() => 
-          <Input required size="large" name="TELEFONE" placeholder="Telefone" />}
-          </InputMask>
-        </Form.Item>
-        </div>             
-        
-        <div className=''>
-        <h1 className="titulo-home"><FaMapMarkerAlt /> Endereço para Entrega</h1>
-        <div>
-        <p>Digite o <b>CEP</b> para adicionar um endereço.</p>
-        <Form.Item>
-          <InputMask require mask="99999-999" value={CEP} onChange={handleCepChange}>{() => <Input required size="large" name="CEP" placeholder="Cep" />}
-          </InputMask>
-        </Form.Item>
-
-              {addresses.length === 0 ? (
-              <div className=''>
-                <Form.Item>
-                      <Input disabled size='large' name='ENDERECO' placeholder='Endereço' readOnly info='Preencha o Cep'/>
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(29% - 12px)' }}>
-                        <Input disabled name='NUMERO' size='large' placeholder='Nº'/>
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
-                        <Input disabled name='COMPLEMENTO' size='large' placeholder='Complemento'/>
-                      </Form.Item>
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
-                        <Input disabled name='BAIRRO' size='large' placeholder='Bairro'/>
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(47% - 12px)' }}>
-                        <Input disabled name='CIDADE' size='large' placeholder='Cidade' />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(20% - 12px)' }}>
-                        <Input disabled name='UF' size='large' placeholder='Uf' />
-                      </Form.Item>
-                    </Form.Item> 
-              </div>
-            ) : ( 
-              addresses.map((address, index) => (
-                <div className='items-list' key={index}>
-                  <div className=''>
-                    <Form.Item>
-                      <Input required disable size='large' name='ENDERECO' 
-                      value={address.ENDERECO} placeholder='Endereço' onChange={(e) => setEndereco(e.target.value)} />
-                    </Form.Item>
-
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(30% - 12px)' }}>
-                        <Input required name='NUMERO' size='large' value={address.NUMERO} onChange={(e) => setNumero(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
-                        <Input name='COMPLEMENTO' size='large'/>
-                      </Form.Item>
-                    </Form.Item>
-
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
-                        <Input require readOnly name='BAIRRO' size='large' value={address.BAIRRO} onChange={(e) => setBairro(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(47% - 12px)' }}>
-                        <Input require readOnly name='CIDADE' size='large' value={address.CIDADE} onChange={(e) => setCidade(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(20% - 12px)' }}>
-                      <Input require readOnly name='UF' size='large' value={address.UF} onChange={(e) => setUf(e.target.value)} />
-                      </Form.Item>
-                    </Form.Item>
-                    </div>                 
+              <div className='container center'>
+                <div className='flex_profile'>
+                  <Button type="default" size='large' htmlType="submit">Efetuar Login</Button>
                 </div>
-              ))
-            )}
-            <div className='container center'>
-          <div className='flex_profile'>
-            <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
+              </div>
+            </Form>
           </div>
-        </div> 
+
+          <div className="section-profile container">
+            <Form onFinish={handleSubmit}>
+              <h1 className="titulo-home"><FaRegUser /> Crie seu perfil agora!</h1>
+              <p>Dados somente para identificar pedido.</p>
+              <Form.Item>
+                <Input size='large' required name='LOGIN' placeholder='Nome' value={LOGIN} onChange={(e) => setNome(e.target.value)} />
+              </Form.Item>
+
+              <Form.Item>
+                <InputMask mask="(99) 99999-9999" value={TELEFONE} onChange={(e) => setTelefone(e.target.value)}>
+                  {() => <Input required size="large" name="TELEFONE" placeholder="Telefone" />}
+                </InputMask>
+              </Form.Item>
+
+              <Form.Item>
+                <Input size='large' required name='EMAIL' placeholder='Email' value={EMAIL} onChange={(e) => setEmail(e.target.value)} />
+              </Form.Item>
+
+              <Form.Item style={{ marginBottom: 0 }}>
+                <Form.Item style={{ display: 'inline-block', width: 'calc(51% - 12px)' }}>
+                  <Input size='large' type='password' required name='SENHA' value={SENHA} placeholder='Senha' onChange={(e) => setSenha(e.target.value)} />
+                </Form.Item>
+                <Form.Item style={{ display: 'inline-block', marginLeft: '12px', width: 'calc(51% - 12px)' }}>
+                  <Input size='large' type='password' required name='REPSENHA' value={REPSENHA} placeholder='Repita a Senha' onChange={(e) => setRepsenha(e.target.value)} />
+                </Form.Item>
+              </Form.Item>
+
+              <div className='container center'>
+                <div className='flex_profile'>
+                  <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
+                </div>
+              </div>
+            </Form>
+          </div>
+        </>
+      ) : ( // Renderiza a nova seção quando o usuário está autenticado
+        <div className="section-authenticated container">
+          <h1 className="titulo-home">Bem-vindo ao seu perfil!</h1>
+          <p>Aqui você pode gerenciar suas informações.</p>
+          
+          {userData && ( // Verifica se os dados do usuário estão disponíveis
+            <div>
+              <p><strong>Nome:</strong> {userData.LOGIN}</p>
+              <p><strong>Email:</strong> {userData.EMAIL}</p>
+              <p><strong>Telefone:</strong> {userData.TELEFONE}</p>
+              <Addresses />
+            </div>
+          )}
+          
+          <div className='center'>
+            <div className='flex_profile'>
+              <Button className='danger' onClick={handleLogout}>Sair</Button>
+            </div>
+          </div>
+          <AddressForm />          
         </div>
-        </div>
-        </Form>
-      </div>
+      )}
     </div>
   );
 };

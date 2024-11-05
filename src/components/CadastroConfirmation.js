@@ -1,0 +1,29 @@
+// CadastroConfirmation.js
+import React from 'react';
+import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { FaCheckCircle, FaTimes } from "react-icons/fa";
+
+const CadastroConfirmation = () => {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    setTimeout(() => navigate('/'), 300);
+  };
+
+  return (
+    <div className="section-success">
+      <button onClick={handleClose} className="close-button">
+          <FaTimes size={30} />
+      </button>
+      <div className="center">
+      <FaCheckCircle className='success' size={80} />
+      <h1>Cadastro realizado<br/> com sucesso!</h1>
+      <p>Seus dados foram registrados com sucesso.</p>
+      <Button onClick={() => navigate('/')}>Continuar Comprando</Button>
+      </div>
+    </div>
+  );
+};
+
+export default CadastroConfirmation;

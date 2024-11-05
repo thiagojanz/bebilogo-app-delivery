@@ -6,7 +6,7 @@ const Loginmodal = ({ onClose }) => {
   return (
     <Modal visible={true} onCancel={onClose} footer={null}>
       <div className=''>
-       <h1 className="titulo-home"><FaUserCheck /> Autenticar</h1>
+       <h1 className="titulo-home"><FaUserCheck /> Já tenho perfil</h1>
         <p>Seja Bem vindo !!!</p>
         <Form.Item>
           <Input type='text' size='large' name='EMAIL' placeholder='Email' />

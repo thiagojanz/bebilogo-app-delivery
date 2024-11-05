@@ -48,7 +48,7 @@ const Cart = ({ isOpen, onClose }) => {
   return (
     <div className={`cart-slide-in ${isOpen ? 'open' : ''}`}>
       <div className="Cart-section">
-        <button onClick={onClose} className="close-button">
+        <button onClick={onClose} className="close-button-checkout">
           <FaArrowLeft size={30} />
         </button>
         <h1 className="titulo-home-cart">Carrinho de Compras</h1>
