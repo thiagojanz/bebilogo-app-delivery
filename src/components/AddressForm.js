@@ -1,32 +1,58 @@
-// src/components/AddressForm.js
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { FaMapMarkerAlt } from "react-icons/fa";
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
+import { useNavigate } from 'react-router-dom';
 
-const AddressForm = ({ onAddressAdded }) => {
-  const [endereco, setEndereco] = useState('');
-  const [numero, setNumero] = useState('');
-  const [bairro, setBairro] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [uf, setUf] = useState('');
+const AddressForm = () => {
+  const [NUMERO, setNumero] = useState(''); // Use setNumero para atualizar o valor
+  const [BAIRRO, setBairro] = useState('');
+  const [CIDADE, setCidade] = useState('');
+  const [UF, setUf] = useState('');
+  const [ID_USUARIO, setIdUsuario] = useState('');
+  const [ENDERECO, setEndereco] = useState('');
+  const [COMPLEMENTO, setComplemento] = useState(''); // Inclua setComplemento
   const [CEP, setCep] = useState('');
-  const [addresses, setAddresses] = useState([]);
+  const [userData, setUserData] = useState(null);
 
-  // Função para buscar o endereço baseado no CEP
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUserData();
+    }
+  }, []);
+
+  const fetchUserData = async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    if (userId) {
+      try {
+        const response = await axios.get(`${Api_VariavelGlobal}/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(response.data);
+        setIdUsuario(response.data.ID_USUARIO);
+      } catch (error) {
+        message.error('Erro ao carregar os dados do usuário.');
+        console.error("Erro ao buscar dados do usuário:", error);
+      }
+    }
+  };
+
   const fetchAddressByCep = async (CEP) => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${CEP}/json/`);
       if (response.data && !response.data.erro) {
-        setAddresses([{
-          ENDERECO: response.data.logradouro,
-          COMPLEMENTO: response.data.complemento,
-          BAIRRO: response.data.bairro,
-          CIDADE: response.data.localidade,
-          UF: response.data.uf,
-        }]);
+        setEndereco(response.data.logradouro || '');
+        setBairro(response.data.bairro || '');
+        setCidade(response.data.localidade || '');
+        setUf(response.data.uf || '');
       } else {
         console.error("CEP não encontrado");
       }
@@ -35,112 +61,89 @@ const AddressForm = ({ onAddressAdded }) => {
     }
   };
 
-  // Monitora o valor de `cep` e chama a função de busca uma vez quando o CEP é completo (8 dígitos)
   useEffect(() => {
     if (CEP.length === 8) {
       fetchAddressByCep(CEP);
     }
-  }, [CEP]); // Somente executa quando `cep` muda para evitar loop infinito
+  }, [CEP]);
 
   const handleCepChange = (e) => {
     const rawValue = e.target.value.replace(/\D/g, "");
     setCep(rawValue);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    if (!ID_USUARIO || !CEP || !ENDERECO || !NUMERO || !BAIRRO || !CIDADE || !UF) {
+      message.error('Todos os campos obrigatórios devem ser preenchidos!');
+      return;
+    }
+
+    const formData = {
+      ID_USUARIO,
+      STATUS: '1',
+      CEP: CEP.replace(/\D/g, ''),
+      ENDERECO,
+      COMPLEMENTO,
+      NUMERO,
+      BAIRRO,
+      CIDADE,
+      UF,
+      DATA: new Date().toISOString(),
+    };
+
     try {
-      const response = await axios.post(`${Api_VariavelGlobal}/api/enderecos`, {
-        endereco,
-        numero,
-        bairro,
-        cidade,
-        uf,
-        CEP,
-      });
-      console.log(response.data.message); // Mensagem de sucesso
-      onAddressAdded(); // Callback para atualizar a lista de endereços
+      const response = await axios.post(`${Api_VariavelGlobal}/api/endereco/register`, formData);
+      message.success(response.data.message);
+      navigate('/endereco-confirmation');
     } catch (error) {
-      console.error(error.response.data.message); // Mensagem de erro
+      console.error("Erro ao salvar endereço:", error);
+      message.error(error.response.data.message);
     }
   };
-
+  
   return (
-    <Form onSubmit={handleSubmit}>
-        <h1 className="titulo-home"><FaMapMarkerAlt /> Endereço para Entrega</h1>
-        <div>
+    <Form onFinish={handleSubmit}>
+      {userData && (
+        <Input type='hidden' size='large' name='ID_USUARIO' value={userData.ID_USUARIO} />
+      )}
+      <h1 className="titulo-home"><FaMapMarkerAlt /> Endereço para Entrega</h1>
+      <div>
         <p>Digite o <b>CEP</b> para adicionar um endereço.</p>
         <Form.Item>
-          <InputMask require mask="99999-999" value={CEP} onChange={handleCepChange}>{() => 
-          <Input required size="large" name="CEP" placeholder="Cep" />}
+          <InputMask mask="99999-999" value={CEP} onChange={handleCepChange}>
+            {() => <Input required size="large" name="CEP" placeholder="Cep" />}
           </InputMask>
         </Form.Item>
-
-              {addresses.length === 0 ? (
-              <div className=''>
-                <Form.Item>
-                      <Input disabled size='large' name='ENDERECO' placeholder='Endereço' readOnly info='Preencha o Cep'/>
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(29% - 12px)' }}>
-                        <Input disabled name='NUMERO' size='large' placeholder='Nº'/>
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
-                        <Input disabled name='COMPLEMENTO' size='large' placeholder='Complemento'/>
-                      </Form.Item>
-                    </Form.Item>
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
-                        <Input disabled name='BAIRRO' size='large' placeholder='Bairro'/>
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(45% - 12px)' }}>
-                        <Input disabled name='CIDADE' size='large' placeholder='Cidade' />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(21% - 12px)' }}>
-                        <Input disabled name='UF' size='large' placeholder='Uf' />
-                      </Form.Item>
-                    </Form.Item> 
-              </div>
-            ) : ( 
-              addresses.map((address, index) => (
-                <div className='items-list' key={index}>
-                  <div className=''>
-                    <Form.Item>
-                      <Input required disable size='large' name='ENDERECO' 
-                      value={address.ENDERECO} placeholder='Endereço' onChange={(e) => setEndereco(e.target.value)} />
-                    </Form.Item>
-
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(30% - 12px)' }}>
-                        <Input required name='NUMERO' size='large' placeholder='Nº' value={address.NUMERO} onChange={(e) => setNumero(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
-                        <Input name='COMPLEMENTO' size='large' placeholder='Complemento'/>
-                      </Form.Item>
-                    </Form.Item>
-
-                    <Form.Item style={{ marginBottom: 0 }}>
-                      <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
-                        <Input require readOnly name='BAIRRO' size='large' value={address.BAIRRO} onChange={(e) => setBairro(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(47% - 12px)' }}>
-                        <Input require readOnly name='CIDADE' size='large' value={address.CIDADE} onChange={(e) => setCidade(e.target.value)} />
-                      </Form.Item>
-                      <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(20% - 12px)' }}>
-                      <Input require readOnly name='UF' size='large' value={address.UF} onChange={(e) => setUf(e.target.value)} />
-                      </Form.Item>
-                    </Form.Item>
-                    </div>                 
-                </div>
-              ))
-            )}
-            <div className='container center'>
-              <div className='flex_profile'>
-                <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
-              </div>
-            </div> 
-        </div>        
+        <Form.Item>
+          <Input required size='large' name='ENDERECO' value={ENDERECO} onChange={(e) => setEndereco(e.target.value)} placeholder="Endereço" />
+        </Form.Item>
+        <Form.Item style={{ marginBottom: 0 }}>
+          <Form.Item style={{ display: 'inline-block', width: 'calc(29% - 12px)' }}>
+            <Input required name='NUMERO' size='large' value={NUMERO} onChange={(e) => setNumero(e.target.value)} placeholder='Nº'/>
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
+            <Input name='COMPLEMENTO' size='large' value={COMPLEMENTO} onChange={(e) => setComplemento(e.target.value)} placeholder='Complemento'/>
+          </Form.Item>
+        </Form.Item>
+        <Form.Item style={{ marginBottom: 0 }}>
+          <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
+            <Input required readOnly name='BAIRRO' size='large' value={BAIRRO} placeholder='Bairro'/>
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(45% - 12px)' }}>
+            <Input required readOnly name='CIDADE' size='large' value={CIDADE} placeholder='Cidade' />
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(21% - 12px)' }}>
+            <Input required readOnly name='UF' size='large' value={UF} placeholder='Uf'/>
+          </Form.Item>
+        </Form.Item>
+        <div className='container center'>
+          <div className='flex_profile'>
+            <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
+          </div>
+        </div> 
+      </div>        
     </Form>
-    );
-  };
+  );
+};
+
 export default AddressForm;

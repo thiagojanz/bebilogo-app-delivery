@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaRegUser, FaUserClock } from "react-icons/fa";
+import { FaUserPlus, FaUser , FaUserCircle } from "react-icons/fa";
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
 import { Button, Form, Input, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import AddressForm from '../components/AddressForm';
 import Addresses from './Addresses';
@@ -122,20 +122,25 @@ const Profile = () => {
       {!isAuthenticated ? ( // Renderiza as seções de login e cadastro se não estiver autenticado
         <>
           <div className='section-auth container'>
-            <h1 className="titulo-home"><FaUserClock /> Já tenho perfil</h1>
+            <h1 className="titulo-home"><FaUser /> Cliente</h1>
             <p>Efetuar Login</p>
             <Form onFinish={handleLogin}>
               <Form.Item name="EMAIL">
-                <Input type='text' size='large' placeholder='Email' />
+                <Input required type='text' size='large' placeholder='Email' />
               </Form.Item>
 
               <Form.Item name="SENHALOGIN">
-                <Input type='password' size='large' placeholder='Senha' />
+                <Input required type='password' size='large' placeholder='Senha' />
               </Form.Item>
 
               <div className='container center'>
                 <div className='flex_profile'>
                   <Button type="default" size='large' htmlType="submit">Efetuar Login</Button>
+                </div>
+                <div className='center link-reset-password'>
+                  <Link to='/' className="continue-shopping">
+                        Esqueci a Senha
+                  </Link>
                 </div>
               </div>
             </Form>
@@ -143,7 +148,7 @@ const Profile = () => {
 
           <div className="section-profile container">
             <Form onFinish={handleSubmit}>
-              <h1 className="titulo-home"><FaRegUser /> Crie seu perfil agora!</h1>
+              <h1 className="titulo-home"><FaUserPlus /> Novo Cliente</h1>
               <p>Dados somente para identificar pedido.</p>
               <Form.Item>
                 <Input size='large' required name='LOGIN' placeholder='Nome' value={LOGIN} onChange={(e) => setNome(e.target.value)} />
@@ -160,10 +165,10 @@ const Profile = () => {
               </Form.Item>
 
               <Form.Item style={{ marginBottom: 0 }}>
-                <Form.Item style={{ display: 'inline-block', width: 'calc(51% - 12px)' }}>
+                <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 12px)' }}>
                   <Input size='large' type='password' required name='SENHA' value={SENHA} placeholder='Senha' onChange={(e) => setSenha(e.target.value)} />
                 </Form.Item>
-                <Form.Item style={{ display: 'inline-block', marginLeft: '12px', width: 'calc(51% - 12px)' }}>
+                <Form.Item style={{ display: 'inline-block', marginLeft: '23px', width: 'calc(50% - 12px)' }}>
                   <Input size='large' type='password' required name='REPSENHA' value={REPSENHA} placeholder='Repita a Senha' onChange={(e) => setRepsenha(e.target.value)} />
                 </Form.Item>
               </Form.Item>
@@ -177,24 +182,20 @@ const Profile = () => {
           </div>
         </>
       ) : ( // Renderiza a nova seção quando o usuário está autenticado
-        <div className="section-authenticated container">
-          <h1 className="titulo-home">Bem-vindo ao seu perfil!</h1>
-          <p>Aqui você pode gerenciar suas informações.</p>
-          
+        <div className="section-authenticated container">          
           {userData && ( // Verifica se os dados do usuário estão disponíveis
-            <div>
-              <p><strong>Nome:</strong> {userData.LOGIN}</p>
+            <div className="">
+              <h1 className="titulo-home"><FaUserCircle /> {userData.LOGIN}</h1>
               <p><strong>Email:</strong> {userData.EMAIL}</p>
               <p><strong>Telefone:</strong> {userData.TELEFONE}</p>
               <Addresses />
-            </div>
+            </div>            
           )}
-          
-          <div className='center'>
-            <div className='flex_profile'>
-              <Button className='danger' onClick={handleLogout}>Sair</Button>
-            </div>
-          </div>
+              <div className='container center'>
+                <div className='flex_profile'>
+                  <Button onClick={handleLogout} type="default" size='large'>Sair (Logout)</Button>
+                </div>
+              </div>
           <AddressForm />          
         </div>
       )}

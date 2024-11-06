@@ -237,6 +237,17 @@ text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
+.addresses-card {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 5px 0px 0px 10px;
+  transition: background-color 0.3s ease;
+  margin: 10px 0px 0px 0px;
+}
+
 /* Efeito hover para cada cartão */
 .item-card:hover {
   background-color: #f0f0f0;
@@ -564,6 +575,7 @@ text-decoration: none;
   cursor: pointer;
   padding: 10px 10px 10px 10px;
   margin-top: 30px;
+  color: black;
 }
 
 .pull-right {
@@ -739,4 +751,23 @@ text-decoration: none;
   width: 100%;
   z-index: 2000;
   top: 0px;
+}
+
+.button-trash-address {
+  display: inline;
+  color: red;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+.button-switch-address {
+  position: relative;
+  bottom: 22px;
+  left: 270px;
+}
+
+.link-reset-password {
+  margin-top: 22px;
+  text-decoration: underline;
+  color: currentColor;
 }
