@@ -53,8 +53,8 @@
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "react-scripts": "^5.0.0",
-    "typescript": "^4.x.x"  // Verifique se o typescript está listado aqui
+    "react-scripts": "^4.x.x",
+    "typescript": "^4.x.x"
   },
   "engines": {
     "node": "16.x"
