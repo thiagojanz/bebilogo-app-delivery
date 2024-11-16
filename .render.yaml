@@ -1,3 +1,4 @@
 build:
   env:
     USE_NPM: "true"
+  command: "npm run build"
