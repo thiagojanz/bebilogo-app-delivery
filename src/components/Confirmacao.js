@@ -8,7 +8,7 @@ const CadastroConfirmation = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    setTimeout(() => navigate('/profile'), 300);
+    setTimeout(() => navigate('/orders'), 300);
   };
 
   return (
@@ -18,9 +18,9 @@ const CadastroConfirmation = () => {
       </button>
       <div className="center">
       <FaCheckCircle className='success' size={80} />
-      <h1>Cadastro realizado<br/> com sucesso!</h1>
-      <p>Seus dados foram registrados com sucesso.</p>
-      <Button onClick={() => navigate('/profile')}>Voltar</Button>
+      <h1>Pedido realizado<br/> com sucesso!</h1>
+      <h4>Seu pedido foi recebido.</h4><p>Já estamos preparando...</p>
+      <Button onClick={() => navigate('/orders')}>Acompanhar Pedido</Button>
       </div>
     </div>
   );

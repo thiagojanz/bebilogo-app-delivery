@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Api_VariavelGlobal } from '../global';
+import { Flex, Spin } from 'antd';
 
 const BrandList = () => {
   const [brands, setBrands] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Função para embaralhar o array de marcas
+  const shuffleArray = (array) => {
+    return array.sort(() => Math.random() - 0.5);
+  };
 
   useEffect(() => {
     fetch(`${Api_VariavelGlobal}/api/marcas/status`, {
@@ -11,13 +18,28 @@ const BrandList = () => {
       }
     })
       .then(response => response.json())
-      .then(data => setBrands(data))
-      .catch(error => console.error('Erro ao buscar marcas:', error));
+      .then(data => {
+        const shuffledBrands = shuffleArray(data); // Embaralha as marcas
+        setBrands(shuffledBrands);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar marcas:', error);
+        setIsLoading(false);
+      });
   }, []);
+
+  if (isLoading) return <>
+    <div className="Marcas-section loading-screen">
+    <h2 className="titulo-home-marcas">Marcas</h2>
+      <Flex className='loading-icon-screen' align="center">
+        <Spin size="large" />
+      </Flex>
+    </div></>;
 
   return (
     <div className="Marcas-section">
-      <h2 className="titulo-home">Marcas</h2>
+      <h2 className="titulo-home-marcas">Marcas</h2>
       <div className="Marcas-list">
         {brands.map((item) => (
           <div key={item.ID_MARCA} className="Marcas-item">

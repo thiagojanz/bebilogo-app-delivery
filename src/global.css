@@ -3,6 +3,17 @@ p {
   line-height: 1.0; /* Diminui o espaçamento entre linhas */
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Aplique a cor de fundo desejada no body */
+body {
+  background-color: rgb(240, 242, 245); /* Substitua com a cor desejada */
+}
+
 /* Ajusta o espaçamento para um título ou subtítulo */
 h1, h2, h3 {
   margin-top: 0px;
@@ -97,11 +108,11 @@ text-decoration: none;
   flex: 0 0 auto; /* Garante que os itens não encolham nem cresçam */
   align-items: center;
   padding: 10px;
-  background-color: #fff;
   transition: background-color 0.3s ease;
   scroll-snap-align: start; /* Faz com que o item "trave" no início ao rolar */
   flex-direction: column; /* Para que a imagem fique acima do texto */
   text-align: center;
+  cursor: pointer;
 }
 
 .Marcas-item img {
@@ -162,7 +173,23 @@ text-decoration: none;
 }
 .subtitulo-home {
   font-size: 14px;
-  margin: 0px;
+  margin: 10px;
+}
+
+.titulo-home-marcas {
+  width: 50%;
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.titulo-home-categorias {
+  width: 50%;
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .Categorias-list::-webkit-scrollbar {
@@ -174,11 +201,11 @@ text-decoration: none;
   flex: 0 0 auto; /* Garante que os itens não encolham nem cresçam */
   align-items: center;
   padding: 10px;
-  background-color: #fff;
   transition: background-color 0.3s ease;
   scroll-snap-align: start; /* Faz com que o item "trave" no início ao rolar */
   flex-direction: column; /* Para que a imagem fique acima do texto */
   text-align: center;
+  cursor: pointer;
 }
 
 .Categorias-item img {
@@ -186,6 +213,7 @@ text-decoration: none;
   height: 100px; /* Altura igual à largura para ser circular */
   object-fit: cover; /* Garante que a imagem preencha a área circular */
   margin-bottom: 10px; /* Espaço entre a imagem e o texto */
+  border-radius: 10px;
 }
 
 .Categorias-item:hover {
@@ -233,8 +261,9 @@ text-decoration: none;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #fff;
-  padding: 15px;
+  padding: 12px 0px 5px 0px;
   transition: background-color 0.3s ease;
+  margin-bottom: 5px;
 }
 
 .addresses-card {
@@ -245,8 +274,20 @@ text-decoration: none;
   background-color: #fff;
   padding: 5px 0px 0px 10px;
   transition: background-color 0.3s ease;
-  margin: 10px 0px 0px 0px;
+  margin: 15px 0px 25px 5px;
 }
+
+.orders-card {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 0px 0px 0px 0px;
+  transition: background-color 0.3s ease;
+  margin: 10px 0px 10px 0px
+}
+
 
 /* Efeito hover para cada cartão */
 .item-card:hover {
@@ -299,6 +340,7 @@ text-decoration: none;
   display: flex;
   justify-content: center; /* Centraliza os botões de paginação */
   margin-top: 20px; /* Espaçamento acima da paginação */
+  margin-bottom: 30px;
 }
 
 .pagination-button {
@@ -318,6 +360,10 @@ text-decoration: none;
 
 .pagination-button.active {
   background-color: #0056b3; /* Cor do botão ativo */
+}
+
+.pagination-info {
+  padding-top: 5px;
 }
 
 /* global.css */
@@ -622,13 +668,15 @@ text-decoration: none;
 }
 
 .center {
-  padding-top: 0px;
   text-align: center;
-  padding-bottom: 5%;
 }
 
 .success {
   color: green;
+}
+
+.default {
+  color: blue;
 }
 
 .address-card {
@@ -662,19 +710,19 @@ text-decoration: none;
 }
 
 .right-form {
-  width: 170px;
+  width: 210px;
   text-align: right;
   padding-right: 20px;
 }
 
 .flex {
   display: flex;
-  padding: 15px 0px 5px 20px;
+  padding: 15px 0px 5px 0px;
 }
 
 .flex_profile {
   margin: 0 auto;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .card-checkout {
@@ -694,15 +742,15 @@ text-decoration: none;
 }
 
 .section-client {
-  padding: 10px 0px 0px 20px;
+  padding: 10px 0px 10px 20px;
 }
 
 .section-delivery {
-  padding: 10px 0px 0px 20px;
+  padding: 20px 0px 10px 20px;
 }
 
 .section-payment{
-  padding: 10px 0px 0px 20px;
+  padding: 20px 0px 10px 20px;
 }
 
 .section-success {
@@ -720,7 +768,6 @@ text-decoration: none;
 }
 
 .section-auth {
-  border-bottom: 1px solid #d7d7d7;
   padding-bottom: 0px;
 }
 
@@ -754,16 +801,15 @@ text-decoration: none;
 }
 
 .button-trash-address {
-  display: inline;
-  color: red;
-  cursor: pointer;
-  padding-right: 10px;
+  color: #bebebe;
+    cursor: pointer;
+    float: left;
+    display: flex;
 }
 
 .button-switch-address {
-  position: relative;
-  bottom: 22px;
-  left: 270px;
+  margin-right: 10px;
+  float: right;
 }
 
 .link-reset-password {
@@ -771,3 +817,119 @@ text-decoration: none;
   text-decoration: underline;
   color: currentColor;
 }
+
+.trash {
+  cursor: pointer;
+  color: #d9d9d9;
+}
+
+.address-title{
+  padding: 0px 0px 0px 0px;
+}
+
+.loading-screen {
+  display: flex;
+}
+
+.loading-screen-orders {
+  position: fixed;
+    bottom: 50%;
+    left: 50%;
+    right: 50%;
+    z-index: 999;
+}
+
+.loading-screen img {  
+  width: 228px; /* Ajuste o tamanho padrão da logomarca */
+  height: auto; /* Mantém a proporção da imagem */
+}
+
+.loading-icon-screen {
+  position:relative ;
+  display:inline;
+  margin-top: 60px; /* Espaço entre a logo e o ícone de loading */
+  animation: spin 1s linear infinite; /* Animação de rotação */
+  margin-bottom: 60px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-screen-category {
+  display: flex;
+}
+
+.loading-screen-category img {  
+  width: 228px; /* Ajuste o tamanho padrão da logomarca */
+  height: auto; /* Mantém a proporção da imagem */
+}
+
+.loading-icon-screen-category {
+  position:relative ;
+  display:inline;
+  margin-top: 90px; /* Espaço entre a logo e o ícone de loading */  
+  animation: spin 1s linear infinite; /* Animação de rotação */
+}
+
+.section-search-component {
+  margin-top: 10px;
+}
+
+.item-category {
+  font-size: smaller;
+}
+
+.list-orders {
+  cursor: pointer;
+}
+
+.order-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-content {
+  display: grid;
+  grid-template-areas:
+    "date id"
+    "address total"
+    "empty status";
+  grid-gap: 8px;
+}
+
+.order-date {
+  grid-area: date;
+  font-weight: bold;
+}
+
+.order-id {
+  grid-area: id;
+  text-align: right;
+}
+
+.order-address {
+  grid-area: address;
+}
+
+.order-total {
+  grid-area: total;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.order-status {
+  grid-area: status;
+  text-align: right;
+  color: #52c41a;
+}
+
+.bottom10 {
+  margin-bottom: 10px;
+}
+

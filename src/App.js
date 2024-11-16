@@ -17,6 +17,10 @@ import Checkout from './components/Checkout.js'; // Importe o componente Checkou
 import OrderConfirmation from './pages/OrderConfirmation'; // Importe a tela de confirmação
 import CadastroConfirmation from './components/CadastroConfirmation';
 import EnderecoConfirmation from './components/EnderecoConfirmation';
+import AlteracaoConfirmation from './components/AlteracaoConfirmation';
+import Confirmacao from './components/Confirmacao';
+import ProductsCategory from './components/ProductsCategory';
+import ProductsAll from './components/ProductsAll';
 import './global.css';
 
 import { CartProvider } from './CartContext'; // Certifique-se de importar o provider
@@ -46,14 +50,19 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/ProductsAll" element={<ProductsAll />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cadastro-confirmation" element={<CadastroConfirmation />} />
           <Route path="/endereco-confirmation" element={<EnderecoConfirmation />} />
+          <Route path="/alteracao-confirmation" element={<AlteracaoConfirmation />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/brands" element={<BrandList />} />
+          <Route path="/produtos/categoria/:idCategoria" element={<ProductsCategory />} />
+          <Route path="/" element={<CategoryList />} />
           <Route path="/categories" element={<CategoryList />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
+          <Route path="/confirmacao" element={<Confirmacao />} />
         </Routes>
       </div>
       <Footer />

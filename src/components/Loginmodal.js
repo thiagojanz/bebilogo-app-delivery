@@ -4,7 +4,7 @@ import { FaUserCheck } from "react-icons/fa";
 
 const Loginmodal = ({ onClose }) => {
   return (
-    <Modal visible={true} onCancel={onClose} footer={null}>
+    <Modal open={true} onCancel={onClose} footer={null}>
       <div className=''>
        <h1 className="titulo-home"><FaUserCheck /> Já tenho perfil</h1>
         <p>Seja Bem vindo !!!</p>

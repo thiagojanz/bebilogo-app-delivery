@@ -1,83 +1,33 @@
-// Checkout.js
 import React, { useEffect, useState, useCallback } from 'react';
+import { Flex, Radio, Form, Button, message } from 'antd';
 import MD5 from 'crypto-js/md5';
-import { useCart } from '../CartContext';
-import { FaArrowLeft, FaRegUser, FaUserPlus, FaUserClock, FaMapMarkerAlt, FaMoneyCheck, FaClipboardList } from "react-icons/fa";
+import { useCart } from '../CartContext'; // Certifique-se de que o CartContext tem uma função para limpar o carrinho
+import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaClipboardList } from "react-icons/fa";
 import { Api_VariavelGlobal } from '../global';
 import '../global.css';
-import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Space, Flex, Radio, Button } from 'antd';
-import Loginmodal from '../components/Loginmodal';
+import { useNavigate } from 'react-router-dom';
+import SectionClient from '../components/SectionClient';
 
-const generateRandomToken = () => {
-  const randomNumber = Math.floor(Math.random() * (99999 - 1 + 1)) + 1;
-  return MD5(randomNumber.toString()).toString();
-};
+const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
 
 const Checkout = () => {
-  const [showLogin_checkout, setShowLogin] = useState(false);
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart(); // Adicione a função clearCart do contexto
   const navigate = useNavigate();
-  const location = useLocation();
-  const [totalAmount, setTotalAmount] = useState(location.state?.totalAmount || 0);
   const [isOpen, setIsOpen] = useState(false);
+  const [frete, setFrete] = useState();
   const [orderData, setOrderData] = useState({
     STATUS: '2',
     OBS: 'Pedido pelo Ap',
-    ENTREGA: '',
-    PAGAMENTO: '',
-    TROCO: '0.00',
-    TOKEN: '',
-    ID_LOJA: '10',
+    ENTREGA: '1',
+    PAGAMENTO: '1',
+    TOKEN: generateRandomToken(),
+    ID_LOJA: '2',
     ID_USUARIO: '26',
-    FRETE_PEDIDO: '0.00',
     SUBTOTAL: '0.00',
-    TOTAL: '',
-    TOTAL_RECEBER: '',
+    TOTAL: '0.00',
+    FRETE: '0.00',
     DATA: new Date().toISOString(),
   });
-
-  useEffect(() => {
-    const token = generateRandomToken();
-    setOrderData((prevData) => ({ ...prevData, TOKEN: token }));
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setOrderData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .post(`${Api_VariavelGlobal}/api/pedidos`, orderData)
-      .then((response) => {
-        console.log('Pedido criado:', response.data);
-        navigate('/order-confirmation', { state: { orderData } });
-      })
-      .catch((error) => {
-        console.error('Erro ao criar pedido:', error);
-      });
-  };
-
-  const calculateTotal = useCallback(() => {
-    return cartItems
-      .reduce((total, item) => total + (parseFloat(item.PRECO_ATUAL) || 0) * (item.quantity || 0), 0)
-      .toFixed(2);
-  }, [cartItems]);
-
-  useEffect(() => {
-    if (totalAmount === 0) {
-      setTotalAmount(calculateTotal());
-      setOrderData((prevData) => ({
-        ...prevData,
-        SUBTOTAL: calculateTotal(),
-        TOTAL: calculateTotal(),
-      }));
-    }
-  }, [calculateTotal, totalAmount]);
 
   useEffect(() => {
     setTimeout(() => setIsOpen(true), 50);
@@ -87,103 +37,176 @@ const Checkout = () => {
     setIsOpen(false);
     setTimeout(() => navigate('/'), 300);
   };
- 
+
+  const calculateTotal = useCallback(() => {
+    return cartItems
+      .reduce((total, item) => total + (parseFloat(item.PRECO_ATUAL) || 0) * (item.quantity || 0), 0)
+      .toFixed(2);
+  }, [cartItems]);
+
+  useEffect(() => {
+    const calculatedTotal = calculateTotal();
+    setOrderData((prevData) => ({
+      ...prevData,
+      SUBTOTAL: calculatedTotal,
+    }));
+  }, [cartItems, calculateTotal]);
+
+  useEffect(() => {
+    const freight = parseFloat(frete) || 0;
+    const subtotal = parseFloat(orderData.SUBTOTAL) || 0;
+    const total = (subtotal + freight).toFixed(2);
+
+    setOrderData((prevData) => ({
+      ...prevData,
+      TOTAL: total,
+      FRETE: frete,
+    }));
+  }, [orderData.SUBTOTAL, frete]);
+
+  const handleFreteUpdate = (newFrete) => {
+    setFrete(newFrete);
+  };
+
+  const handleSubmit = async () => {
+    if (cartItems.length === 0) {
+      // Mostra uma mensagem de erro se o carrinho estiver vazio
+      message.error('Seu carrinho está vazio. Adicione produtos antes de finalizar o pedido.');
+      return;
+    }
+
+    const pedidoData = {
+      ...orderData,
+      produtos: cartItems.map(item => ({
+        produtoId: item.id,
+        quantidade: item.quantity,
+        precoUnitario: item.PRECO_ATUAL,
+      })),
+    };
+
+    console.log('Pedido Data:', pedidoData);
+
+    try {
+      const response = await fetch(`${Api_VariavelGlobal}/api/pedidos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedidoData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        // Limpa o carrinho após o pedido ser realizado
+        clearCart(); // Chama a função para limpar o carrinho
+
+        // Redireciona para a página de confirmação
+        navigate('/confirmacao'); // Substitua '/confirmacao' com a rota correta para a tela de confirmação
+      } else {
+        alert('Erro ao realizar o pedido: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Erro de comunicação com a API:', error);
+    }
+  };
+
+  const handlePaymentChange = (e) => {
+    setOrderData((prevData) => ({
+      ...prevData,
+      PAGAMENTO: e.target.value,
+    }));
+  };
+
+  const handleDeliveryChange = (e) => {
+    setOrderData((prevData) => ({
+      ...prevData,
+      ENTREGA: e.target.value,
+    }));
+  };
+
   return (
     <div className={`checkout ${isOpen ? 'slide-in' : 'slide-out'}`}>
-      <button onClick={handleClose} className="close-button-checkout"> <FaArrowLeft size={30} /></button>
-      <h1 className="titulo-home-cart">Resumo do Pedido </h1> 
-      <hr/>  
+      <button onClick={handleClose} className="close-button-checkout"><FaArrowLeft size={30} /></button>
+      <h1 className="titulo-home-cart">Resumo do Pedido</h1>
+      <hr/>
 
-      <div className='section-client container'>
-        <h3><FaUserClock /> Cliente</h3>
-        <p className='subtitulo-home'>Pedido será entrega:</p>
-        <div className='radio-list'>
-        <p>Cliente não identificado, favor identificar-se!!!</p>
-        <Space>
-          <Button size='large' onClick={() => setShowLogin(true)}><FaRegUser /> Já sou Cliente </Button>
-          <Button size="large"><FaUserPlus /> Novo Cliente</Button>
-        </Space>
-        </div>
-      </div>
-
-      {showLogin_checkout && <Loginmodal onClose={() => setShowLogin(false)} />}
+      <SectionClient onFreteUpdate={handleFreteUpdate} />
 
       <div className='section-delivery container'>
         <h3><FaMapMarkerAlt /> Opções de Entrega</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
-        <div className='radio-list'>
         <Flex vertical gap="middle">
-          <Radio.Group size='large' name='ENTREGA' defaultValue="1" buttonStyle="solid">
+          <Radio.Group 
+            size='large' 
+            name='ENTREGA' 
+            value={orderData.ENTREGA} 
+            buttonStyle="solid" 
+            onChange={handleDeliveryChange}
+          >
             <Radio.Button value="1">Delivery</Radio.Button>
-            <Radio.Button value="2">Buscar na Loja</Radio.Button>
           </Radio.Group>
         </Flex>
-        </div>
       </div>
 
       <div className='section-payment container'>
         <h3><FaMoneyCheck /> Modelo de Pagamento</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
-        <div className='radio-list'>
         <Flex vertical gap="middle">
-          <Radio.Group size='large' name='PAGAMENTO' defaultValue="1" buttonStyle="solid">
+          <Radio.Group 
+            size='large' 
+            name='PAGAMENTO' 
+            value={orderData.PAGAMENTO} 
+            buttonStyle="solid" 
+            onChange={handlePaymentChange}
+          >
             <Radio.Button value="1">Dinheiro</Radio.Button>
             <Radio.Button value="2">Cartão</Radio.Button>
             <Radio.Button value="3">Pix</Radio.Button>
           </Radio.Group>
         </Flex>
-        </div>
       </div>
 
       <div className='section-payment container'>
         <h3><FaClipboardList /> Produtos Selecionados</h3>
-        <div className='radio-list'>
-          {cartItems.length > 0 ? (
-          <ul className='product-list-checkout'>
-            {cartItems.map((item) => (
-              <li key={item.id}>
-                {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} x {item.quantity}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Nenhum item no carrinho...</p>    
-        )}
-        </div>
+        <ul className='product-list-checkout'>
+          {cartItems.length > 0 ? cartItems.map((item) => (
+            <li key={item.id}>
+              {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} x {item.quantity}
+            </li>
+          )) : <p>Nenhum item no carrinho...</p>}
+        </ul>
       </div>
-      <form onSubmit={handleSubmit}>
-        <input type="hidden" name="ENTREGA" value='ENTREGA' onChange={handleChange} required />        
-        <input type="hidden" name="PAGAMENTO" value='PAGAMENTO' onChange={handleChange} required />        
-        <input type="hidden" name="PRODUTO" value='ID_PRODUTO' onChange={handleChange} required />        
-        <input type="hidden" name="QTD" value='QTD_PRODUTO' onChange={handleChange} required />        
-        <input type="hidden" name="OBS" value={orderData.OBS} onChange={handleChange} required />        
-        <input type="hidden" name="TOKEN" value={orderData.TOKEN} readOnly />
-        <input type="hidden" name="ID_LOJA" value={orderData.ID_LOJA} onChange={handleChange} required />
-        <input type="hidden" name="ID_USUARIO" value={orderData.ID_USUARIO} onChange={handleChange} required />
-        <input type="hidden" name="FRETE_PEDIDO" value={orderData.FRETE_PEDIDO} onChange={handleChange} required />
-        <input type="hidden" name="SUBTOTAL" value={orderData.SUBTOTAL} onChange={handleChange} required />
-        <input type="hidden" name="TOTAL" value={totalAmount} onChange={handleChange} required placeholder={totalAmount} />
-        <input type="hidden" name="TOTAL_RECEBER" value={orderData.TOTAL_RECEBER} onChange={handleChange} required placeholder={totalAmount} />
-        <div className='flex'>
-          <div className='left-form'>Subtotal</div>
-          <div className='right-form'>R$ {orderData.SUBTOTAL}</div>
-        </div>
-        <div className='flex'>
-          <div className='left-form'>Frete</div>
-          <div className='right-form'>R$ {orderData.FRETE_PEDIDO}</div>
-        </div>
-        <div className='flex'>
-          <div className='left-form'><h3>Total</h3></div>
-          <div className='right-form'><h3>R$ {totalAmount}</h3></div>
-        </div>
-        <div className='center'>
-            <button className='back-home-button' type="submit">Fazer Pedido</button>
-        </div>
-      </form>
-      <div className='center'>
-        <button onClick={handleClose} className="continue-shopping">
-              Continuar comprando
-        </button>
+
+      <div className='section-payment container'>
+        
+        <Form
+          onFinish={handleSubmit}
+          initialValues={{
+            ...orderData,
+            FRETE: frete
+          }}
+        >   
+          <div className='flex'>
+            <div className='left-form'><b>Subtotal</b></div>
+            <div className='right-form'><b>R$ {orderData.SUBTOTAL}</b></div>
+          </div>
+          <div className='flex'>
+            <div className='left-form'><b>Frete</b></div>
+            <div className='right-form'><b>R$ {frete}</b></div>
+          </div>
+          <div className='flex'>
+            <div className='left-form'><b>Total</b></div>
+            <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
+          </div>
+
+          {/* Botão desabilitado se o carrinho estiver vazio */}
+          <Button 
+            htmlType="submit" 
+            className="checkout-button" 
+            size="large" 
+            disabled={cartItems.length === 0} // Desabilita o botão se não houver itens no carrinho
+          >
+            Fazer Pedido
+          </Button>
+        </Form>
       </div>
     </div>
   );

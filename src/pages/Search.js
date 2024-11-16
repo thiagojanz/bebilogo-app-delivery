@@ -1,20 +1,21 @@
-// src/pages/Search.js
 import React from 'react';
-import { FaFilter, FaSearch } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
+import SearchResults from '../components/SearchResult';
+import { Link } from 'react-router-dom';
 
 const Search = () => {
+
   return (
     <div className="container texto-home">
-    <h1 className="titulo-home"><FaSearch /> Buscar</h1>
-    <div className="search-container">
-      <input type="text" className="search-input" placeholder="Buscar produtos..." />
-      
-      <button className="filter-button">
-        <i className="fas fa-filter"></i> {<FaFilter />}
-      </button>
+      <h1 className="titulo-home"><FaSearch /> Buscar</h1>
+      <SearchResults /> 
+
+      <div className='center'>
+        <Link to='/ProductsAll' className="continue-shopping">
+          Listar Todos os Produtos
+        </Link>
+      </div>
     </div>
-    <p className="texto-home">Este é o melhor lugar para pedir suas bebidas favoritas!</p>
-  </div>
   );
 };
 

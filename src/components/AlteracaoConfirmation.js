@@ -1,10 +1,10 @@
-// CadastroConfirmation.js
+// AlteracaoConfirmation.js
 import React from 'react';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaTimes } from "react-icons/fa";
+import { FaHistory, FaTimes } from "react-icons/fa";
 
-const CadastroConfirmation = () => {
+const AlteracaoConfirmation = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
@@ -17,8 +17,8 @@ const CadastroConfirmation = () => {
           <FaTimes size={30} />
       </button>
       <div className="center">
-      <FaCheckCircle className='success' size={80} />
-      <h1>Cadastro realizado<br/> com sucesso!</h1>
+      <FaHistory className='default' size={80} />
+      <h1>Cadastro alterado<br/> com sucesso!</h1>
       <p>Seus dados foram registrados com sucesso.</p>
       <Button onClick={() => navigate('/profile')}>Voltar</Button>
       </div>
@@ -26,4 +26,4 @@ const CadastroConfirmation = () => {
   );
 };
 
-export default CadastroConfirmation;
+export default AlteracaoConfirmation;

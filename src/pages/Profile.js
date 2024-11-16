@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserPlus, FaUser , FaUserCircle } from "react-icons/fa";
+import { FaUserPlus, FaUser } from "react-icons/fa";
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
-import { Button, Form, Input, message } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Form, Button, Input, message, Flex, Spin } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import AddressForm from '../components/AddressForm';
 import Addresses from './Addresses';
 
 const Profile = () => {
@@ -19,6 +19,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null); // Para armazenar os dados do usuário
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para controle de autenticação
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Verifica se existe um token no localStorage
@@ -34,6 +35,7 @@ const Profile = () => {
     const token = localStorage.getItem('token'); // Obtém o token
     if (userId) {
       try {
+        setLoading(true);
         const response = await axios.get(`${Api_VariavelGlobal}/api/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
@@ -42,11 +44,11 @@ const Profile = () => {
         setUserData(response.data);
       } catch (error) {
         message.error('Erro ao carregar os dados do usuário.');
-        console.error("Erro ao buscar dados do usuário:", error);
-      }
+        } finally {
+          setLoading(false);
+        }
     }
-  };
-  
+  };  
 
   const handleSubmit = async () => {
     if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA) {
@@ -74,18 +76,22 @@ const Profile = () => {
     };
 
     try {
+      setLoading(true);
       const response = await axios.post(`${Api_VariavelGlobal}/api/register`, formData);
       message.success(response.data.message);
       navigate('/cadastro-confirmation');
     } catch (error) {
-      message.error(error.response.data.message);
-    }
+      message.error('Erro ao cadastrar usuário.');
+      } finally {
+        setLoading(false);
+      }
   };
 
   const handleLogin = async (values) => {
     const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
 
     try {
+      setLoading(true);
       const response = await axios.post(`${Api_VariavelGlobal}/api/login/`, {
         EMAIL: values.EMAIL,
         SENHA: hashedPassword,
@@ -106,7 +112,7 @@ const Profile = () => {
       } else {
         message.error('Erro: ' + error.message);
       }
-    }
+    } setLoading(false);
   };
 
   const handleLogout = () => {
@@ -117,20 +123,30 @@ const Profile = () => {
     setUserData('null'); // Limpa os dados do usuário
   }; 
 
+  if (loading) {
+    return <>
+    <div className="loading-screen-orders loading-screen">
+      <Flex className='loading-icon-screen' align="center">
+        <Spin size="large" />
+      </Flex>
+    </div></>;
+  }
+
   return (
-    <div>
+    <div className='section-auth container'>
+      <h1 className="titulo-home"><FaUser /> Cliente</h1>
       {!isAuthenticated ? ( // Renderiza as seções de login e cadastro se não estiver autenticado
         <>
-          <div className='section-auth container'>
-            <h1 className="titulo-home"><FaUser /> Cliente</h1>
             <p>Efetuar Login</p>
             <Form onFinish={handleLogin}>
               <Form.Item name="EMAIL">
                 <Input required type='text' size='large' placeholder='Email' />
               </Form.Item>
 
-              <Form.Item name="SENHALOGIN">
-                <Input required type='password' size='large' placeholder='Senha' />
+              <Form.Item name="SENHALOGIN">                
+                <Input.Password required type='password' size='large' placeholder="Senha"
+                  iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                />                
               </Form.Item>
 
               <div className='container center'>
@@ -144,9 +160,7 @@ const Profile = () => {
                 </div>
               </div>
             </Form>
-          </div>
-
-          <div className="section-profile container">
+          
             <Form onFinish={handleSubmit}>
               <h1 className="titulo-home"><FaUserPlus /> Novo Cliente</h1>
               <p>Dados somente para identificar pedido.</p>
@@ -166,10 +180,12 @@ const Profile = () => {
 
               <Form.Item style={{ marginBottom: 0 }}>
                 <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 12px)' }}>
-                  <Input size='large' type='password' required name='SENHA' value={SENHA} placeholder='Senha' onChange={(e) => setSenha(e.target.value)} />
+                  <Input.Password size='large' type='password' required name='SENHA' 
+                  placeholder="Senha" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} onChange={(e) => setSenha(e.target.value)}/> 
                 </Form.Item>
                 <Form.Item style={{ display: 'inline-block', marginLeft: '23px', width: 'calc(50% - 12px)' }}>
-                  <Input size='large' type='password' required name='REPSENHA' value={REPSENHA} placeholder='Repita a Senha' onChange={(e) => setRepsenha(e.target.value)} />
+                  <Input.Password size='large' type='password' required name='REPSENHA' 
+                  placeholder="Repita Senha" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} onChange={(e) => setRepsenha(e.target.value)}/> 
                 </Form.Item>
               </Form.Item>
 
@@ -179,13 +195,13 @@ const Profile = () => {
                 </div>
               </div>
             </Form>
-          </div>
+          
         </>
       ) : ( // Renderiza a nova seção quando o usuário está autenticado
-        <div className="section-authenticated container">          
+        <>          
           {userData && ( // Verifica se os dados do usuário estão disponíveis
             <div className="">
-              <h1 className="titulo-home"><FaUserCircle /> {userData.LOGIN}</h1>
+              <p><strong>Nome:</strong> {userData.LOGIN}</p>
               <p><strong>Email:</strong> {userData.EMAIL}</p>
               <p><strong>Telefone:</strong> {userData.TELEFONE}</p>
               <Addresses />
@@ -195,9 +211,8 @@ const Profile = () => {
                 <div className='flex_profile'>
                   <Button onClick={handleLogout} type="default" size='large'>Sair (Logout)</Button>
                 </div>
-              </div>
-          <AddressForm />          
-        </div>
+              </div>      
+        </>
       )}
     </div>
   );

@@ -96,7 +96,6 @@ const AddressForm = () => {
       message.success(response.data.message);
       navigate('/endereco-confirmation');
     } catch (error) {
-      console.error("Erro ao salvar endereço:", error);
       message.error(error.response.data.message);
     }
   };
@@ -106,7 +105,7 @@ const AddressForm = () => {
       {userData && (
         <Input type='hidden' size='large' name='ID_USUARIO' value={userData.ID_USUARIO} />
       )}
-      <h1 className="titulo-home"><FaMapMarkerAlt /> Endereço para Entrega</h1>
+      <h1 className="titulo-home"><FaMapMarkerAlt /> Novo endereço</h1>
       <div>
         <p>Digite o <b>CEP</b> para adicionar um endereço.</p>
         <Form.Item>
@@ -118,21 +117,21 @@ const AddressForm = () => {
           <Input required size='large' name='ENDERECO' value={ENDERECO} onChange={(e) => setEndereco(e.target.value)} placeholder="Endereço" />
         </Form.Item>
         <Form.Item style={{ marginBottom: 0 }}>
-          <Form.Item style={{ display: 'inline-block', width: 'calc(29% - 12px)' }}>
+          <Form.Item style={{ display: 'inline-block', width: 'calc(30% - 0px)' }}>
             <Input required name='NUMERO' size='large' value={NUMERO} onChange={(e) => setNumero(e.target.value)} placeholder='Nº'/>
           </Form.Item>
-          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(75% - 12px)' }}>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '15px', width: 'calc(70% - 0px)' }}>
             <Input name='COMPLEMENTO' size='large' value={COMPLEMENTO} onChange={(e) => setComplemento(e.target.value)} placeholder='Complemento'/>
           </Form.Item>
         </Form.Item>
         <Form.Item style={{ marginBottom: 0 }}>
-          <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 12px)' }}>
+          <Form.Item style={{ display: 'inline-block', width: 'calc(40% - 0px)' }}>
             <Input required readOnly name='BAIRRO' size='large' value={BAIRRO} placeholder='Bairro'/>
           </Form.Item>
-          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(45% - 12px)' }}>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(40% - 0px)' }}>
             <Input required readOnly name='CIDADE' size='large' value={CIDADE} placeholder='Cidade' />
           </Form.Item>
-          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(21% - 12px)' }}>
+          <Form.Item style={{ display: 'inline-block', paddingLeft: '10px', width: 'calc(20% - 0px)' }}>
             <Input required readOnly name='UF' size='large' value={UF} placeholder='Uf'/>
           </Form.Item>
         </Form.Item>
