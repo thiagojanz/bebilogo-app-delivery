@@ -1,3 +1,3 @@
 build:
   env:
-    USE_NPM: true
+    USE_NPM: "true"
