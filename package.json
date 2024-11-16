@@ -54,7 +54,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "react-scripts": "^5.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^4.x.x"  // Verifique se o typescript está listado aqui
   },
   "engines": {
     "node": "16.x"
