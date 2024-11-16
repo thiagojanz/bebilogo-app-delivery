@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.e6c13ad2.css",
-    "main.js": "/static/js/main.bfbd2f3a.js",
-    "static/js/453.c656c95e.chunk.js": "/static/js/453.c656c95e.chunk.js",
+    "main.css": "/static/css/main.f0e45b59.css",
+    "main.js": "/static/js/main.fde8063e.js",
+    "static/js/453.35ced2ed.chunk.js": "/static/js/453.35ced2ed.chunk.js",
+    "static/media/logomarca_app_white.png": "/static/media/logomarca_app_white.7cd61bbff8647eeb95f1.png",
     "index.html": "/index.html",
-    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
-    "main.bfbd2f3a.js.map": "/static/js/main.bfbd2f3a.js.map",
-    "453.c656c95e.chunk.js.map": "/static/js/453.c656c95e.chunk.js.map"
+    "main.f0e45b59.css.map": "/static/css/main.f0e45b59.css.map",
+    "main.fde8063e.js.map": "/static/js/main.fde8063e.js.map",
+    "453.35ced2ed.chunk.js.map": "/static/js/453.35ced2ed.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e6c13ad2.css",
-    "static/js/main.bfbd2f3a.js"
+    "static/css/main.f0e45b59.css",
+    "static/js/main.fde8063e.js"
   ]
 }
