@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.f0e45b59.css",
-    "main.js": "/static/js/main.fde8063e.js",
+    "main.js": "/static/js/main.b33dbc84.js",
     "static/js/453.35ced2ed.chunk.js": "/static/js/453.35ced2ed.chunk.js",
     "static/media/logomarca_app_white.png": "/static/media/logomarca_app_white.7cd61bbff8647eeb95f1.png",
     "index.html": "/index.html",
     "main.f0e45b59.css.map": "/static/css/main.f0e45b59.css.map",
-    "main.fde8063e.js.map": "/static/js/main.fde8063e.js.map",
+    "main.b33dbc84.js.map": "/static/js/main.b33dbc84.js.map",
     "453.35ced2ed.chunk.js.map": "/static/js/453.35ced2ed.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f0e45b59.css",
-    "static/js/main.fde8063e.js"
+    "static/js/main.b33dbc84.js"
   ]
 }
