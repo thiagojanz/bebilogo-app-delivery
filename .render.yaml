@@ -1,0 +1,3 @@
+build:
+  env:
+    USE_NPM: true
