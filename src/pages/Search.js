@@ -1,13 +1,16 @@
 import React from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import SearchResults from '../components/SearchResult';
 import { Link } from 'react-router-dom';
 
 const Search = () => {
 
   return (
-    <div className="container texto-home">
-      <h1 className="titulo-home"><FaSearch /> Buscar</h1>
+    <div className="container">
+      <div className="left-arrow">
+      <Link className="secondary" to='/'><FaArrowLeft /></Link>
+      </div>
+      <h1 className="titulo-home">Buscar</h1>
       <SearchResults /> 
 
       <div className='center'>

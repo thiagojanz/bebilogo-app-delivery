@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spin, Alert, Modal, Button, Card, Flex } from 'antd';
 import { Api_VariavelGlobal } from '../global';
-import { FaClipboardList } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState([]);
@@ -92,7 +93,10 @@ const Orders: React.FC = () => {
   if (!token) {
     return (
       <div className='container'>
-        <h1 className="titulo-home"><FaClipboardList /> Meu(s) Pedido(s)</h1>
+        <div className="left-arrow">
+          <Link className="secondary" to='/'><FaArrowLeft /></Link>
+        </div>
+        <h1 className="titulo-home"> Meu(s) Pedido(s)</h1>
         <p>Usuário não autenticado! <br/>Por favor, faça login para ver seus pedidos.</p>
       </div>
     );
@@ -113,8 +117,11 @@ const Orders: React.FC = () => {
 
   return (
     <div className='container'>
-      <h1 className="titulo-home"><FaClipboardList /> Meu(s) Pedido(s)</h1>
-      <p>Histórico</p>
+      <div className="left-arrow">
+      <Link className="secondary" to='/'><FaArrowLeft /></Link>
+      </div>
+      <h1 className="titulo-home"> Meu(s) Pedido(s)</h1>
+      <p>Pedidos Realizados</p>
 
       {/* Exibindo os pedidos */}
       <div>

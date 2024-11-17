@@ -1,7 +1,7 @@
 .floating-cart {
     position: fixed;
-    top: 20px; /* Distância do topo */
-    right: 20px; /* Distância da direita */
+    top: 5px; /* Distância do topo */
+    right: 10px; /* Distância da direita */
     background-color: #fff; /* Cor de fundo */
     border-radius: 50%; /* Forma circular */
     padding: 10px; /* Espaço interno */

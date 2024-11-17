@@ -92,16 +92,16 @@ const SectionClient = ({ onFreteUpdate }) => {
   };
 
   return (
-    <div className="section-client container">
+    <div className="">
       <h3><FaUserClock /> Dados do Cliente</h3>
       <p className="subtitulo-home">Este pedido será entregue a:</p>
       <div className="radio-list">
         {isAuthenticated ? (
-          <div className="section-authenticated">
+          <div className="">
             {userData && (
               <div className="subtitulo-home">
-                <h3><b>{userData.LOGIN}</b></h3>
-                <p>{userData.TELEFONE}</p>
+                <p><b>{userData.LOGIN}</b><br/>
+                {userData.TELEFONE}</p>
               </div>
             )}
             {userAddress ? (

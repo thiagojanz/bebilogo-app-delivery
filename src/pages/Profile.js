@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserPlus, FaUser } from "react-icons/fa";
+import { FaUserPlus, FaArrowLeft } from "react-icons/fa";
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
@@ -134,7 +134,10 @@ const Profile = () => {
 
   return (
     <div className='section-auth container'>
-      <h1 className="titulo-home"><FaUser /> Cliente</h1>
+      <div className="left-arrow">
+        <Link className="secondary" to='/'><FaArrowLeft /></Link>
+      </div>
+      <h1 className="titulo-home"> Cliente</h1>
       {!isAuthenticated ? ( // Renderiza as seções de login e cadastro se não estiver autenticado
         <>
             <p>Efetuar Login</p>

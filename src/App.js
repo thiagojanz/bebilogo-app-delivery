@@ -21,6 +21,7 @@ import AlteracaoConfirmation from './components/AlteracaoConfirmation';
 import Confirmacao from './components/Confirmacao';
 import ProductsCategory from './components/ProductsCategory';
 import ProductsAll from './components/ProductsAll';
+import ProductsByBrand from './pages/ProductsByBrand';
 import './global.css';
 
 import { CartProvider } from './CartContext'; // Certifique-se de importar o provider
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/confirmacao" element={<Confirmacao />} />
+          <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
         </Routes>
       </div>
       <Footer />

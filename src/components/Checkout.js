@@ -5,7 +5,7 @@ import { useCart } from '../CartContext'; // Certifique-se de que o CartContext 
 import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaClipboardList } from "react-icons/fa";
 import { Api_VariavelGlobal } from '../global';
 import '../global.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import SectionClient from '../components/SectionClient';
 
 const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
@@ -124,13 +124,15 @@ const Checkout = () => {
 
   return (
     <div className={`checkout ${isOpen ? 'slide-in' : 'slide-out'}`}>
-      <button onClick={handleClose} className="close-button-checkout"><FaArrowLeft size={30} /></button>
-      <h1 className="titulo-home-cart">Resumo do Pedido</h1>
-      <hr/>
+      <div className="container">
+      <div className="left-arrow">
+        <Link onClick={handleClose} className="secondary" to='/'><FaArrowLeft /></Link>
+      </div>
+      <h1 className="titulo-home">Resumo do Pedido</h1>
 
       <SectionClient onFreteUpdate={handleFreteUpdate} />
 
-      <div className='section-delivery container'>
+      <div className=''>
         <h3><FaMapMarkerAlt /> Opções de Entrega</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
@@ -146,7 +148,7 @@ const Checkout = () => {
         </Flex>
       </div>
 
-      <div className='section-payment container'>
+      <div style={{paddingTop:10}} className=''>
         <h3><FaMoneyCheck /> Modelo de Pagamento</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
@@ -164,7 +166,7 @@ const Checkout = () => {
         </Flex>
       </div>
 
-      <div className='section-payment container'>
+      <div style={{paddingTop:10}} className=''>
         <h3><FaClipboardList /> Produtos Selecionados</h3>
         <ul className='product-list-checkout'>
           {cartItems.length > 0 ? cartItems.map((item) => (
@@ -175,7 +177,7 @@ const Checkout = () => {
         </ul>
       </div>
 
-      <div className='section-payment container'>
+      <div className=''>
         
         <Form
           onFinish={handleSubmit}
@@ -207,6 +209,7 @@ const Checkout = () => {
             Fazer Pedido
           </Button>
         </Form>
+      </div>
       </div>
     </div>
   );

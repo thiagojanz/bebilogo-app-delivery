@@ -22,8 +22,8 @@ const FloatingCartIcon = () => {
         style={{
           cursor: 'pointer',
           position: 'fixed',
-          top: '24px',
-          right: '23px',
+          top: '8px',
+          right: '13px',
           zIndex: 998,
           background: '#f3f3f3f3',
           padding: '10px 11px 6px 9px',

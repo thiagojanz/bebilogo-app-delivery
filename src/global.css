@@ -11,7 +11,7 @@ html, body {
 
 /* Aplique a cor de fundo desejada no body */
 body {
-  background-color: rgb(240, 242, 245); /* Substitua com a cor desejada */
+  background-color: white;
 }
 
 /* Ajusta o espaçamento para um título ou subtítulo */
@@ -27,7 +27,7 @@ text-decoration: none;
 .container {
   max-width: 1200px; /* Largura máxima do conteúdo */
   margin: 0 auto; /* Centralizar o container */
-  padding: 20px; /* Aumentar o padding conforme necessário */
+  padding: 5px 15px 0px 10px; /* Aumentar o padding conforme necessário */
 }
 
 /* Estilo para o container da busca */
@@ -113,6 +113,8 @@ text-decoration: none;
   flex-direction: column; /* Para que a imagem fique acima do texto */
   text-align: center;
   cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
 
 .Marcas-item img {
@@ -166,14 +168,14 @@ text-decoration: none;
 }
 
 .titulo-home {
-  margin-top: 10px;
+  margin-top: 13px;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 .subtitulo-home {
   font-size: 14px;
-  margin: 10px;
+  margin: 0px 0px 0px 0px;
 }
 
 .titulo-home-marcas {
@@ -341,6 +343,7 @@ text-decoration: none;
   justify-content: center; /* Centraliza os botões de paginação */
   margin-top: 20px; /* Espaçamento acima da paginação */
   margin-bottom: 30px;
+  gap: 10px;
 }
 
 .pagination-button {
@@ -372,7 +375,7 @@ text-decoration: none;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  margin-top: 80px;
+  margin-top: 35px;
 }
 
 .product-image {
@@ -382,11 +385,10 @@ text-decoration: none;
 .product-price {
   font-size: 18px;
   font-weight: bold;
-  margin: 20px;
+  margin: 5px;
 }
 
 .quantity-control {
-  display: flex;
   align-items: center;
 }
 
@@ -679,6 +681,17 @@ text-decoration: none;
   color: blue;
 }
 
+.secondary {
+  color: black;
+}
+
+.left-arrow {
+  font-size: x-large;
+  margin-top: 15px;
+  float: left;
+  padding-right: 15px;
+}
+
 .address-card {
   display: block;
 }
@@ -712,7 +725,6 @@ text-decoration: none;
 .right-form {
   width: 210px;
   text-align: right;
-  padding-right: 20px;
 }
 
 .flex {

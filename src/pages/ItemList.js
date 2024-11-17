@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FaTag, FaCubes } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
-import { Tag, Space, Spin, Flex } from 'antd';
+import { Tag, Space, Spin, Flex, Button } from 'antd';
 
 const ItemList = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
@@ -59,7 +59,7 @@ const ItemList = ({ searchQuery }) => {
 
   return (
     <div className="Itens-section">
-      <h2 className="titulo-home"><FaCubes /> Todos os Produtos</h2>
+      <h2 className="titulo-home"> Todos os Produtos</h2>
 
       {/* Filtro de categorias */}
       <Space size="small" wrap>
@@ -111,23 +111,24 @@ const ItemList = ({ searchQuery }) => {
           </div>
 
           {/* Controles de paginação */}
-          <div className="pagination">
-            <button 
-              className='pagination-button' 
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} 
-              disabled={currentPage === 1}
-            >
-              Anterior
-            </button>
-            <span className='pagination-info'>{`${currentPage} de ${totalPages}`}</span>
-            <button 
-              className='pagination-button' 
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} 
-              disabled={currentPage === totalPages}
-            >
-              Próximo
-            </button>
-          </div>
+          {/* Controle de Navegação */}
+        <div className="pagination">
+          <Button 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </Button>
+          
+          <span style={{paddingTop:5}}> {currentPage} de {totalPages} </span>
+          
+          <Button 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Próxima
+          </Button>
+        </div>
         </>
       )}
     </div>

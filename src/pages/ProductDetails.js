@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
-import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../CartContext'; 
+import { Flex, Spin, Button } from 'antd';
 import '../global.css'; 
 import { Api_VariavelGlobal } from '../global';
 
@@ -13,12 +13,15 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [finalPrice, setFinalPrice] = useState(0); // Estado para o preço final
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`${Api_VariavelGlobal}/api/produtos-imagens/${id}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
@@ -31,13 +34,21 @@ const ProductDetails = () => {
 
         const data = await response.json();
         setProduct(data);
+        setFinalPrice(data.PRECO_ATUAL);  // Inicializa o preço final com o preço do produto
+        setLoading(false);
       } catch (error) {
         console.error('Erro ao buscar detalhes do produto:', error);
       }
     };
-
     fetchProductDetails();
   }, [id]);
+
+  // Atualiza o preço final toda vez que a quantidade mudar
+  useEffect(() => {
+    if (product) {
+      setFinalPrice(product.PRECO_ATUAL * quantity);
+    }
+  }, [quantity, product]);
 
   const increaseQuantity = () => {
     setQuantity(prev => prev + 1);
@@ -77,13 +88,21 @@ const ProductDetails = () => {
     navigate('/checkout', { state: { totalAmount, isOpen: true } });
   };
 
-  if (!product) return <p>Carregando...</p>;
+  if (loading) {
+    return <>
+    <div className="loading-screen-orders loading-screen">
+      <Flex className='loading-icon-screen' align="center">
+        <Spin size="large" />
+      </Flex>
+    </div></>;
+  }
 
   return (
-    <div className="product-details slide-in">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        <FaArrowLeft size={35} />
-      </button>
+    <div className="container">
+        <div className="left-arrow">
+          <Link className="secondary" to='/'><FaArrowLeft /></Link>
+        </div>
+        <div className="center" style={{marginTop:60}}>
       <h2 className="product-title">{product.PRODUTO}</h2>
       {product.imageUrl ? (
         <img 
@@ -99,14 +118,15 @@ const ProductDetails = () => {
         <span>{quantity}</span>
         <button onClick={increaseQuantity}>+</button>
       </div>
-      <p className="product-price">Preço: R$ {product.PRECO_ATUAL.toFixed(2)}</p>
-      <div className="button-group">
-        <button className="buy-button" onClick={handleBuy}>Comprar</button>
-        <button className="add-to-cart-button" onClick={handleAddToCart}>Adicionar ao Carrinho</button>
-      </div>
+      <p className="product-price">Preço: R$ {finalPrice.toFixed(2)}</p> {/* Exibe o preço final */}
+      <div className="pagination">
+          <Button className="buy-button" onClick={handleBuy}>Comprar</Button>
+          <Button className="add-to-cart-button" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
+        </div>
       <button onClick={() => navigate(-1)} className="continue-shopping">
             Continuar comprando
       </button>
+    </div>
     </div>
   );
 };

@@ -40,9 +40,12 @@ const BrandList = () => {
   );
 
   return (
-    <div className="Marcas-section">
-      <h2 className="titulo-home-marcas">Marcas</h2>
-      <div className="Marcas-list">
+    <div className="container">
+      <div className="left-arrow">
+        <Link className="secondary" to='/'><FaArrowLeft /></Link>
+      </div>
+      <h2 className="titulo-home">Marcas</h2>
+      <div className="Categorias-list">
         {brands.map((item) => (
           <Link key={item.ID_MARCA} to={`/produtos/marca/${item.ID_MARCA}`} className="Marcas-item">
             <img src={`https://bebilogo.com.br/uploads_marcas/${item.IMAGEM}`} alt={item.MARCA} />

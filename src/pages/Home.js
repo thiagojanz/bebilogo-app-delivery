@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <div className="container">
       <h1 className="titulo-home">Thiago Janz</h1>
-      <span className="subtitulo-home">thiagojanz@hotmail.com</span>
       <SearchComponent />
 
       <BrandList />
