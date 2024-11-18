@@ -51,10 +51,9 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
     "react-scripts": "^4.x.x",
-    "typescript": "^4.x.x"
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
   },
   "engines": {
     "node": "16.x"
