@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Api_VariavelGlobal } from '../global';
 import { Flex, Spin } from 'antd';
 import { Link } from 'react-router-dom';  // Importar Link do react-router-dom
+import { LoadingOutlined } from '@ant-design/icons';
 
 const BrandList = () => {
   const [brands, setBrands] = useState([]);
@@ -34,7 +35,7 @@ const BrandList = () => {
     <div className="Marcas-section loading-screen">
       <h2 className="titulo-home-marcas">Marcas</h2>
       <Flex className='loading-icon-screen' align="center">
-        <Spin size="large" />
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
       </Flex>
     </div>
   );

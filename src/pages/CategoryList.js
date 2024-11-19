@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Api_VariavelGlobal } from '../global';
 import { Flex, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom'; // Usando useNavigate
+import { LoadingOutlined } from '@ant-design/icons';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -33,8 +34,8 @@ const CategoryList = () => {
   if (isLoading) return (
     <div className="Categorias-section loading-screen-category">
       <h2 className="titulo-home-categorias">Categorias</h2>
-      <Flex className='loading-icon-screen-category' align="center">
-        <Spin size="large" />
+      <Flex className='loading-icon-screen' align="center">
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
       </Flex>
     </div>
   );

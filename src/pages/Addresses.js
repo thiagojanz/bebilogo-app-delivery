@@ -4,6 +4,7 @@ import { Api_VariavelGlobal } from '../global';
 import { FaMapMarkerAlt, FaTrash, FaPlus } from "react-icons/fa";
 import { Switch, Modal, message, Flex, Spin, Card, Button } from 'antd';
 import AddressForm from '../components/AddressForm';  // Import the AddressForm component
+import { LoadingOutlined } from '@ant-design/icons';
 
 const Addresses = () => {
   const [addresses, setAddresses] = useState([]);
@@ -126,8 +127,8 @@ const Addresses = () => {
     return (
       <div className="loading-screen-orders loading-screen">
         <Flex className='loading-icon-screen' align="center">
-          <Spin size="large" />
-        </Flex>
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </Flex>
       </div>
     );
   }

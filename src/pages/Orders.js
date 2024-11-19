@@ -4,6 +4,7 @@ import { Spin, Alert, Modal, Button, Card, Flex } from 'antd';
 import { Api_VariavelGlobal } from '../global';
 import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList } from 'react-icons/fa';
 import moment from 'moment';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState([]);
@@ -131,15 +132,6 @@ const Orders: React.FC = () => {
     );
   }
 
-  if (loading) {
-    return <>
-      <div className="loading-screen-orders loading-screen">
-        <Flex className='loading-icon-screen' align="center">
-          <Spin size="large" />
-        </Flex>
-      </div></>;
-  }
-
   if (error) {
     return <Alert message={error} type="error" />;
   }
@@ -150,6 +142,13 @@ const Orders: React.FC = () => {
       <p>Pedidos Realizados</p>
 
       {/* Exibindo os pedidos */}
+      {loading ? (
+        <div className="loading-screen-orders loading-screen">
+          <Flex className='loading-icon-screen' align="center">
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </Flex>
+        </div>
+      ) : (
       <div>
       {orders.map((order) => (
           <div className='orders-card' key={order.ID_PEDIDO}>
@@ -170,6 +169,7 @@ const Orders: React.FC = () => {
           </div>
         ))}
       </div>
+      )}
 
       {/* Modal de Itens do Pedido */}
       <Modal
