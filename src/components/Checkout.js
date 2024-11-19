@@ -16,7 +16,7 @@ const Checkout = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [frete, setFrete] = useState();
   const [orderData, setOrderData] = useState({
-    STATUS: '2',
+    STATUS: '3',
     OBS: 'Pedido pelo Ap',
     ENTREGA: '1',
     PAGAMENTO: '1',
