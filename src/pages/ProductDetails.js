@@ -120,8 +120,8 @@ const ProductDetails = () => {
       </div>
       <p className="product-price">Preço: R$ {finalPrice.toFixed(2)}</p> {/* Exibe o preço final */}
       <div className="pagination">
-        <Button className="buy-button" onClick={handleBuy}>Comprar</Button>
-        <Button className="add-to-cart-button" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
+        <Button className="buy-button-2" onClick={handleBuy}>Comprar</Button>
+        <Button className="add-to-cart-button-2" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
       </div>
       <button onClick={() => navigate(-1)} className="continue-shopping">
             Continuar comprando

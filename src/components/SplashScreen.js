@@ -16,9 +16,11 @@ const SplashScreen = ({ onFinish }) => {
   return (
     <div className="splash-screen">
       <img src={logo} alt="Logo" /> {/* Use a logomarca importada */}
-      <Flex className='loading-icon' align="center">
-        <Spin size="large" />
-      </Flex>
+      <div className="loading-screen-orders loading-screen">
+        <Flex className='loading-icon-screen' align="center">
+          <Spin size="large" />
+        </Flex>
+      </div>
     </div>
   );
 };
