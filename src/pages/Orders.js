@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spin, Alert, Modal, Button, Card, Flex } from 'antd';
 import { Api_VariavelGlobal } from '../global';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaCreditCard, FaMotorcycle, FaClock, FaCalendar } from 'react-icons/fa';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -66,15 +66,49 @@ const Orders: React.FC = () => {
     setIsModalVisible(true); // Garantir que o modal seja aberto
   };
 
+  // Mapeamento de nomenclaturas
+  const getStatus = (value) => {
+    const numericValue = Number(value); // Converte para número
+    switch (numericValue) {
+      case 1: return '';
+      case 2: return 'Intenção de Compra';
+      case 3: return 'Aguardando Confirmação';
+      case 4: return 'Em Preparação';
+      case 5: return 'Em Entrega';
+      case 6: return 'Concluído';
+      default: return 'Desconhecido';
+    }
+  };
+  
+  const getPaymentMethod = (value) => {
+    switch (value) {
+      case '1': return 'Dinheiro';
+      case '2': return 'Cartão';
+      case '3': return 'Pix';
+      default: return 'Desconhecido';
+    }
+  };
+  
+  const getDeliveryMethod = (value) => {
+    switch (value) {
+      case '1': return 'Delivery';
+      case '2': return 'Buscar na Loja';
+      case '3': return 'Agendamento';
+      default: return 'Desconhecido';
+    }
+  };
+  
+  
+
   const renderOrderItems = () => {
     if (modalLoading) {
       return <Spin tip="Carregando itens..." />;
     }
-  
+
     if (!selectedOrderItems.length) {
       return <p>Não há itens para este pedido.</p>;
     }
-  
+
     return (
       <div>
         {selectedOrderItems.map((item, index) => (
@@ -88,7 +122,6 @@ const Orders: React.FC = () => {
       </div>
     );
   };
-  
 
   if (!token) {
     return (
@@ -97,18 +130,18 @@ const Orders: React.FC = () => {
           <Link className="secondary" to='/'><FaArrowLeft /></Link>
         </div>
         <h1 className="titulo-home"> Meu(s) Pedido(s)</h1>
-        <p>Usuário não autenticado! <br/>Por favor, faça login para ver seus pedidos.</p>
+        <p>Usuário não autenticado! <br />Por favor, faça login para ver seus pedidos.</p>
       </div>
     );
   }
 
   if (loading) {
     return <>
-    <div className="loading-screen-orders loading-screen">
-      <Flex className='loading-icon-screen' align="center">
-        <Spin size="large" />
-      </Flex>
-    </div></>;
+      <div className="loading-screen-orders loading-screen">
+        <Flex className='loading-icon-screen' align="center">
+          <Spin size="large" />
+        </Flex>
+      </div></>;
   }
 
   if (error) {
@@ -118,29 +151,29 @@ const Orders: React.FC = () => {
   return (
     <div className='container'>
       <div className="left-arrow">
-      <Link className="secondary" to='/'><FaArrowLeft /></Link>
+        <Link className="secondary" to='/'><FaArrowLeft /></Link>
       </div>
       <h1 className="titulo-home"> Meu(s) Pedido(s)</h1>
       <p>Pedidos Realizados</p>
 
       {/* Exibindo os pedidos */}
       <div>
-        {orders.map((order) => (
+      {orders.map((order) => (
           <div className='orders-card' key={order.ID_PEDIDO}>
-          <Card title={order.ID_PEDIDO} bordered={false} style={{ width:'100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
-          <div className="order-content">
-              {/* Data */}
-              <div className="order-date">{moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
-              {/* Status */}
-              <div className="order-id">Status: {order.STATUS}</div>
-              {/* Pagamento */}
-              <div className="order-pay">Pagamento: {order.PAGAMENTO}</div>
-              {/* Entrega */}
-              <div className="order-delivery">Entrega: {order.ENTREGA}</div>
-              {/* Total */}
-              <div className="order-total">Total: R$ {order.TOTAL}</div>
-            </div>
-          </Card>
+            <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width: '100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
+              <div className="order-content">
+                {/* Data */}
+                <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
+                {/* Status */}
+                <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
+                {/* Pagamento */}
+                <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
+                {/* Entrega */}
+                <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
+                {/* Total */}
+                <div className="order-total">Total: R$ {order.TOTAL}</div>
+              </div>
+            </Card>
           </div>
         ))}
       </div>

@@ -917,7 +917,6 @@ text-decoration: none;
 
 .order-date {
   grid-area: date;
-  font-weight: bold;
 }
 
 .order-id {
