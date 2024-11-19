@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaUserClock, FaRegUser, FaUserPlus, FaPen } from 'react-icons/fa';
-import { Button, Space, Modal, message } from 'antd';
+import { FaUserClock, FaRegUser, FaUserPlus, FaPen, FaUserCheck } from 'react-icons/fa';
+import { Button, Space, Modal, message, Input, Form, Flex, Spin } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Api_VariavelGlobal } from '../global';
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
+import ClientForm from './ClientForm';
 
 const SectionClient = ({ onFreteUpdate }) => {
   const navigate = useNavigate();
@@ -13,6 +16,35 @@ const SectionClient = ({ onFreteUpdate }) => {
   const [userAddress, setUserAddress] = useState(null);
   const [frete, setFrete] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Verifica se existe um token no localStorage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      fetchUserData(); // Busca os dados do usuário
+    }
+  }, []);
+
+  const fetchUserData = async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token'); // Obtém o token
+    if (userId) {
+      try {
+        const response = await axios.get(`${Api_VariavelGlobal}/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        message.error('Erro ao carregar os dados do usuário.');
+        } finally {
+          setLoading(false);
+        }
+    }
+  };  
 
   // Função para atualizar o valor do frete
   const atualizarFrete = useCallback((novoFrete) => {
@@ -88,8 +120,47 @@ const SectionClient = ({ onFreteUpdate }) => {
   }, [userAddress]);
 
   const handleClose = () => {
-    setTimeout(() => navigate('/profile'), 300);
+    setShowLogin(false);
+    navigate(0);
   };
+
+  const handleLogin = async (values) => {
+    const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
+
+    try {
+      setLoading(true);
+      const response = await axios.post(`${Api_VariavelGlobal}/api/login/`, {
+        EMAIL: values.EMAIL,
+        SENHA: hashedPassword,
+      });
+
+      // Armazena o token e o ID do usuário no localStorage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.user.ID_USUARIO); // Armazenando o ID do usuário
+      setIsAuthenticated(true);
+      message.success('Seja Bem Vindo!!!');
+      setShowLogin(false);
+      fetchUserData(); // Chama a função para buscar os dados do usuário após o login
+
+    } catch (error) {
+      if (error.response) {
+        message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
+      } else if (error.request) {
+        message.error('Erro: O servidor não respondeu.');
+      } else {
+        message.error('Erro: ' + error.message);
+      }
+    } setLoading(false);
+  };
+
+  if (loading) {
+    return <>
+    <div className="loading-screen-orders loading-screen">
+      <Flex className='loading-icon-screen' align="center">
+        <Spin size="large" />
+      </Flex>
+    </div></>;
+  }
 
   return (
     <div className="">
@@ -111,7 +182,7 @@ const SectionClient = ({ onFreteUpdate }) => {
               </div>
             ) : (
               <div className="subtitulo-home">
-                <p>Endereço não encontrado...</p>
+                <p>Endereço não encontrado... <Link to='/checkout'>Atualizar</Link></p>
               </div>
             )}
             <div className="subtitulo-home">
@@ -119,37 +190,46 @@ const SectionClient = ({ onFreteUpdate }) => {
             </div>
           </div>
         ) : (
-          <>
+          <div className='center'>
             <p>Cliente não identificado, favor identificar-se!!!</p>
             <Space>
-              <Button size="large" onClick={() => setShowLogin(true)}>
+              <Button className='bottom10' onClick={() => setShowLogin(true)}>
                 <FaRegUser /> Já sou Cliente
               </Button>
-              <Button size="large" onClick={() => setShowNewLogin(true)}>
+              <Button className='bottom10' type='primary' onClick={() => setShowNewLogin(true)}>
                 <FaUserPlus /> Novo Cliente
-              </Button>
+            </Button>
             </Space>
-          </>
+          </div>
         )}
       </div>
 
       {/* Modal de Login */}
-      <Modal
-        open={showLogin}
-        onCancel={() => setShowLogin(false)}
-        footer={null}
-      >
-        
+      <Modal open={showLogin} onCancel={() => setShowLogin(false)} footer={null}>
+      <Form onFinish={handleLogin}>
+        <div className=''>
+       <h1 className="titulo-home"><FaUserCheck /> Já Sou Cliente</h1>
+        <p>Seja Bem vindo !!!</p>
+        <Form.Item name="EMAIL">
+          <Input required type='text' size='large' placeholder='Email' />
+        </Form.Item>
+
+        <Form.Item name="SENHALOGIN">                
+          <Input.Password required type='password' size='large' placeholder="Senha" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>                
+        </Form.Item>
+
+        <div className='container center'>
+          <div className='flex_profile'>
+          <Button type="default" size='large' htmlType="submit">Efetuar Login</Button>
+          </div>
+        </div> 
+        </div>
+        </Form>
       </Modal>
 
       {/* Modal de Novo Cliente */}
-      <Modal
-        title="Novo Cliente"
-        open={showNewLogin}
-        onCancel={() => setShowNewLogin(false)}
-        footer={null}
-      >
-        <p>Criar novo cadastro.</p>
+      <Modal open={showNewLogin} onCancel={() => setShowNewLogin(false)} footer={null}>
+        <ClientForm />
       </Modal>
     </div>
   );

@@ -136,8 +136,7 @@ const Checkout = () => {
         <h3><FaMapMarkerAlt /> Opções de Entrega</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
-          <Radio.Group 
-            size='large' 
+          <Radio.Group className='bottom10 center'  
             name='ENTREGA' 
             value={orderData.ENTREGA} 
             buttonStyle="solid" 
@@ -152,8 +151,7 @@ const Checkout = () => {
         <h3><FaMoneyCheck /> Modelo de Pagamento</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
-          <Radio.Group 
-            size='large' 
+          <Radio.Group className='bottom10 center'
             name='PAGAMENTO' 
             value={orderData.PAGAMENTO} 
             buttonStyle="solid" 
@@ -177,8 +175,7 @@ const Checkout = () => {
         </ul>
       </div>
 
-      <div className=''>
-        
+      <div className=''>        
         <Form
           onFinish={handleSubmit}
           initialValues={{

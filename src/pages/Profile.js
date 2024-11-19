@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserPlus, FaArrowLeft } from "react-icons/fa";
+import { FaUserLock, FaUserPlus } from "react-icons/fa";
 import axios from 'axios';
-import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Form, Button, Input, message, Flex, Spin } from 'antd';
-import { useNavigate, Link } from 'react-router-dom';
+import { Form, Button, Input, message, Flex, Spin, Modal } from 'antd';
+import {  Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
+import ClientForm from '../components/ClientForm';
 
 const Profile = () => {
-  const [TELEFONE, setTelefone] = useState('');
-  const [LOGIN, setNome] = useState('');
-  const [EMAIL, setEmail] = useState('');
-  const [SENHA, setSenha] = useState('');
-  const [REPSENHA, setRepsenha] = useState('');
   const [userData, setUserData] = useState(null); // Para armazenar os dados do usuário
-  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para controle de autenticação
   const [loading, setLoading] = useState(false);
+  const [showNewLogin, setShowNewLogin] = useState(false);
 
   useEffect(() => {
     // Verifica se existe um token no localStorage
@@ -49,43 +44,6 @@ const Profile = () => {
         }
     }
   };  
-
-  const handleSubmit = async () => {
-    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA) {
-      message.error('Todos os campos obrigatórios devem ser preenchidos!');
-      return;
-    }
-
-    if (SENHA !== REPSENHA) {
-      message.error('As senhas não coincidem!');
-      return;
-    }
-
-    const telefoneNumeros = TELEFONE.replace(/\D/g, '');
-
-    const formData = {
-      LOGIN,
-      NASCIMENTO: '00/00/0000',
-      STATUS: '1',
-      NIVEL_ACESSO: '0',
-      TELEFONE: telefoneNumeros,
-      EMAIL,
-      SENHA,
-      REPSENHA: SENHA,
-      DATA: new Date().toISOString(),
-    };
-
-    try {
-      setLoading(true);
-      const response = await axios.post(`${Api_VariavelGlobal}/api/register`, formData);
-      message.success(response.data.message);
-      navigate('/cadastro-confirmation');
-    } catch (error) {
-      message.error('Erro ao cadastrar usuário.');
-      } finally {
-        setLoading(false);
-      }
-  };
 
   const handleLogin = async (values) => {
     const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
@@ -135,12 +93,15 @@ const Profile = () => {
   return (
     <div className='section-auth container'>
       <div className="left-arrow">
-        <Link className="secondary" to='/'><FaArrowLeft /></Link>
+        <FaUserLock />
       </div>
       <h1 className="titulo-home"> Cliente</h1>
       {!isAuthenticated ? ( // Renderiza as seções de login e cadastro se não estiver autenticado
         <>
             <p>Efetuar Login</p>
+            <Button className='bottom10' type='primary' onClick={() => setShowNewLogin(true)}>
+              <FaUserPlus /> Novo Cliente
+            </Button>
             <Form onFinish={handleLogin}>
               <Form.Item name="EMAIL">
                 <Input required type='text' size='large' placeholder='Email' />
@@ -164,40 +125,7 @@ const Profile = () => {
               </div>
             </Form>
           
-            <Form onFinish={handleSubmit}>
-              <h1 className="titulo-home"><FaUserPlus /> Novo Cliente</h1>
-              <p>Dados somente para identificar pedido.</p>
-              <Form.Item>
-                <Input size='large' required name='LOGIN' placeholder='Nome' value={LOGIN} onChange={(e) => setNome(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item>
-                <InputMask mask="(99) 99999-9999" value={TELEFONE} onChange={(e) => setTelefone(e.target.value)}>
-                  {() => <Input required size="large" name="TELEFONE" placeholder="Telefone" />}
-                </InputMask>
-              </Form.Item>
-
-              <Form.Item>
-                <Input size='large' required name='EMAIL' placeholder='Email' value={EMAIL} onChange={(e) => setEmail(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item style={{ marginBottom: 0 }}>
-                <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 12px)' }}>
-                  <Input.Password size='large' type='password' required name='SENHA' 
-                  placeholder="Senha" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} onChange={(e) => setSenha(e.target.value)}/> 
-                </Form.Item>
-                <Form.Item style={{ display: 'inline-block', marginLeft: '23px', width: 'calc(50% - 12px)' }}>
-                  <Input.Password size='large' type='password' required name='REPSENHA' 
-                  placeholder="Repita Senha" iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} onChange={(e) => setRepsenha(e.target.value)}/> 
-                </Form.Item>
-              </Form.Item>
-
-              <div className='container center'>
-                <div className='flex_profile'>
-                  <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
-                </div>
-              </div>
-            </Form>
+            
           
         </>
       ) : ( // Renderiza a nova seção quando o usuário está autenticado
@@ -217,6 +145,9 @@ const Profile = () => {
               </div>      
         </>
       )}
+      <Modal open={showNewLogin} onCancel={() => setShowNewLogin(false)} footer={null}>
+        <ClientForm />
+      </Modal>
     </div>
   );
 };
