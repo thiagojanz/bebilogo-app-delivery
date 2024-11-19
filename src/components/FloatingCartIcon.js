@@ -22,8 +22,8 @@ const FloatingCartIcon = () => {
         style={{
           cursor: 'pointer',
           position: 'fixed',
-          top: '8px',
-          right: '13px',
+          top: '10px',
+          right: '15px',
           zIndex: 998,
           background: '#f3f3f3f3',
           padding: '10px 11px 6px 9px',
@@ -35,8 +35,8 @@ const FloatingCartIcon = () => {
           <span
             style={{
               position: 'absolute',
-              top: '-10px',
-              right: '-10px',
+              top: '-8px',
+              right: '-8px',
               backgroundColor: 'red',
               color: 'white',
               borderRadius: '50%',

@@ -95,7 +95,7 @@ text-decoration: none;
   display: flex;
   overflow-x: auto; /* Permite o scroll horizontal */
   scroll-snap-type: x mandatory; /* Faz com que o scroll "trave" nos itens */
-  gap: 15px; /* Espaçamento entre os itens */
+  gap: 1px; /* Espaçamento entre os itens */
   padding: 10px 0; /* Padding para dar um respiro ao redor */
 }
 

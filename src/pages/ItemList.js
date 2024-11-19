@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaTag } from 'react-icons/fa';
+import { FaCubes, FaTag } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
 import { Tag, Space, Spin, Flex, Button } from 'antd';
@@ -8,7 +8,7 @@ const ItemList = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
   const [selectedTag, setSelectedTag] = useState('Todos');
   const [loading, setLoading] = useState(true); // Estado de carregamento
 
@@ -59,7 +59,7 @@ const ItemList = ({ searchQuery }) => {
 
   return (
     <div className="Itens-section">
-      <h2 className="titulo-home"> Todos os Produtos</h2>
+      <h2 className="titulo-home"><FaCubes/> Todos os Produtos</h2>
 
       {/* Filtro de categorias */}
       <Space size="small" wrap>
