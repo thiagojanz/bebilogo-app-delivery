@@ -13,7 +13,7 @@ const Search = () => {
       <h1 className="titulo-home">Buscar</h1>
       <SearchResults /> 
 
-      <div className='center'>
+      <div className='center bottom10'>
         <Link to='/ProductsAll' className="continue-shopping">
           Listar Todos os Produtos
         </Link>
