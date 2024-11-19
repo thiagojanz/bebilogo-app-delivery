@@ -134,7 +134,9 @@ const Orders: React.FC = () => {
               {/* Status */}
               <div className="order-id">Status: {order.STATUS}</div>
               {/* Pagamento */}
-              <div className="order-address">Pagamento: {order.PAGAMENTO}</div>
+              <div className="order-pay">Pagamento: {order.PAGAMENTO}</div>
+              {/* Entrega */}
+              <div className="order-delivery">Entrega: {order.ENTREGA}</div>
               {/* Total */}
               <div className="order-total">Total: R$ {order.TOTAL}</div>
             </div>

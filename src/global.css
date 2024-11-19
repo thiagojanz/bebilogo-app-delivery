@@ -909,7 +909,8 @@ text-decoration: none;
   display: grid;
   grid-template-areas:
     "date id"
-    "address total"
+    "pay delivery"
+    "empty total"
     "empty status";
   grid-gap: 8px;
 }
@@ -924,8 +925,13 @@ text-decoration: none;
   text-align: right;
 }
 
-.order-address {
-  grid-area: address;
+.order-pay {
+  grid-area: pay;
+}
+
+.order-delivery {
+  grid-area: delivery;
+  text-align: right;
 }
 
 .order-total {
