@@ -17,7 +17,6 @@ const SearchResults = () => {
   const [value, setValue] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
-  const totalPages = Math.ceil(products.length / itemsPerPage);
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
@@ -81,7 +80,7 @@ const SearchResults = () => {
 
   const desc = ['Muito Ruim', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
-  // Obter produtos da página atual
+  const totalPages = Math.ceil(products.length / itemsPerPage);
   const currentProducts = products.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -100,60 +99,62 @@ const SearchResults = () => {
             </Flex>
           </div>
         ) : currentProducts.length > 0 ? (
-          currentProducts.map((product) => {
-            const productCategory = categories.find(
-              (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
-            );
+          <>
+            {currentProducts.map((product) => {
+              const productCategory = categories.find(
+                (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
+              );
 
-            return (
-              <div className="item-card" key={product.ID_PRODUTO}>
-                {product.imageUrl ? (
-                  <Link to={`/product/${product.ID_PRODUTO}`} className="text-decoration">
-                    <img
-                      src={`https://bebilogo.com.br/uploads/${product.imageUrl}`}
-                      alt={product.PRODUTO}
-                      className="item-image"
-                    />
-                  </Link>
-                ) : (
-                  <p>Imagem não disponível</p>
-                )}
-                <div className="item-info">
-                  <h4 className="item-name">{product.PRODUTO}</h4>
-                  <div className="item-category">
-                    <FaTag /> {productCategory?.CATEGORIA || 'Categoria não encontrada'}
-                  </div>
-                  <div className="flex">
-                    <div className="item-current-price">
-                      <b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b>
-                      <Flex gap="middle" vertical>
-                        <Rate tooltips={desc} onChange={setValue} value={value} />
-                      </Flex>
+              return (
+                <div className="item-card" key={product.ID_PRODUTO}>
+                  {product.imageUrl ? (
+                    <Link to={`/product/${product.ID_PRODUTO}`} className="text-decoration">
+                      <img
+                        src={`https://bebilogo.com.br/uploads/${product.imageUrl}`}
+                        alt={product.PRODUTO}
+                        className="item-image"
+                      />
+                    </Link>
+                  ) : (
+                    <p>Imagem não disponível</p>
+                  )}
+                  <div className="item-info">
+                    <h4 className="item-name">{product.PRODUTO}</h4>
+                    <div className="item-category">
+                      <FaTag /> {productCategory?.CATEGORIA || 'Categoria não encontrada'}
                     </div>
-
-                    <div className="quantity-control">
-                      <button onClick={() => decreaseQuantity(product.ID_PRODUTO)}>-</button>
-                      <span>{quantities[product.ID_PRODUTO] || 1}</span>
-                      <button onClick={() => increaseQuantity(product.ID_PRODUTO)}>+</button>
+                    <div className="flex">
+                      <div className="item-current-price">
+                        <b>
+                          R${' '}
+                          {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}
+                        </b>
+                        <Flex gap="middle" vertical>
+                          <Rate tooltips={desc} onChange={setValue} value={value} />
+                        </Flex>
+                      </div>
+                      <div className="quantity-control">
+                        <button onClick={() => decreaseQuantity(product.ID_PRODUTO)}>-</button>
+                        <span>{quantities[product.ID_PRODUTO] || 1}</span>
+                        <button onClick={() => increaseQuantity(product.ID_PRODUTO)}>+</button>
+                      </div>
+                    </div>
+                    <div className="item-actions">
+                      <Button className="buy-button" onClick={() => handleBuy(product)}>
+                        Comprar
+                      </Button>
+                      <Button
+                        className="add-to-cart-button"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Adicionar ao Carrinho
+                      </Button>
                     </div>
                   </div>
+                </div>
+              );
+            })}
 
-                  <div className="item-actions">
-                    <Button className="buy-button" onClick={() => handleBuy(product)}>
-                      Comprar
-                    </Button>
-                    <Button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>
-                      Adicionar ao Carrinho
-                    </Button>
-                  </div>
-                </div>      
-              </div>
-            );
-          })
-        ) : (
-          <p>Nenhum produto encontrado na busca!</p>
-        )}
-      <>
             <div className="pagination">
               <Button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -161,9 +162,9 @@ const SearchResults = () => {
               >
                 Anterior
               </Button>
-      
-              <span className="pagination-info">{currentPage} de {totalPages}</span>
-      
+              <span className="pagination-info">
+                Página {currentPage} de {totalPages}
+              </span>
               <Button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
@@ -171,10 +172,15 @@ const SearchResults = () => {
                 Próxima
               </Button>
             </div>
-            </>
+          </>
+        ) : (
+          <p>Nenhum produto encontrado na busca!</p>
+        )}
       </div>
       <div className="continue-shopping center bottom30">
-        <Link style={{color:"#000"}} to="/">Continuar comprando</Link>
+        <Link style={{ color: '#000' }} to="/">
+          Continuar comprando
+        </Link>
       </div>
     </div>
   );

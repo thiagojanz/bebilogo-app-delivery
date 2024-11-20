@@ -175,7 +175,7 @@ const Checkout = () => {
         </ul>
       </div>
 
-      <div className=''>        
+      <div className='bottom30'>        
         <Form
           onFinish={handleSubmit}
           initialValues={{
@@ -198,13 +198,13 @@ const Checkout = () => {
 
           {/* Botão desabilitado se o carrinho estiver vazio */}
           <Button 
-            htmlType="submit" 
-            className="checkout-button" 
-            size="large" 
-            disabled={cartItems.length === 0} // Desabilita o botão se não houver itens no carrinho
-          >
-            Fazer Pedido
-          </Button>
+  htmlType="submit" 
+  className="checkout-button" 
+  size="large" 
+  disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0} // Verifica se o frete é válido
+>
+  Fazer Pedido
+</Button>
         </Form>
       </div>
       </div>

@@ -190,8 +190,11 @@ const SectionClient = ({ onFreteUpdate }) => {
             </div>
           </div>
         ) : (
+          <>
           <div className='center'>
             <p>Cliente não identificado, favor identificar-se!!!</p>
+          </div>
+          <div className='center'>
             <Space>
               <Button className='bottom10' onClick={() => setShowLogin(true)}>
                 <FaRegUser /> Já sou Cliente
@@ -201,6 +204,7 @@ const SectionClient = ({ onFreteUpdate }) => {
             </Button>
             </Space>
           </div>
+          </>
         )}
       </div>
 
