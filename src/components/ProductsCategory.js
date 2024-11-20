@@ -149,8 +149,8 @@ const ProductsCategory = () => {
                   </div>
                 </div>
                 <div className="item-actions">
-                  <Button onClick={() => handleBuy(product)}>Comprar</Button>
-                  <Button onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
+                  <Button className='buy-button' onClick={() => handleBuy(product)}>Comprar</Button>
+                  <Button className='add-to-cart-button' onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                 </div>
               </div>
             </div>

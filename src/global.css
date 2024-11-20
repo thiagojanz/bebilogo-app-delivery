@@ -408,15 +408,15 @@ text-decoration: none;
 
 .buy-button {
   margin-bottom: 10px;
-  font-size: 1.1em;
-  background-color: #007bff; /* Cor do botão */
-  color: white; /* Cor do texto */
+  background-color: #ffffff; /* Cor do botão */
+  color: #060606; /* Cor do texto */
   border: none;
   border-radius: 5px; /* Bordas arredondadas */
   padding: 10px 10px 10px 0px; /* Espaçamento interno do botão */
   margin: 10px 5px; /* Espaçamento entre os botões */
   cursor: pointer; /* Cursor em forma de mão ao passar */
   transition: background-color 0.3s; /* Transição suave na mudança de cor */
+  border: 1px solid #d9d9d9;
 }
 .buy-button-2 {
   margin-bottom: 10px;
@@ -430,21 +430,21 @@ text-decoration: none;
 }
 
 .add-to-cart-button {
-  margin-bottom: 10px;
-  font-size: 1.1em;  
-  background-color: #007bff; /* Cor do botão */
-  color: white; /* Cor do texto */
+  margin-bottom: 10px; 
+  background-color: #ffffff; /* Cor do botão */
+  color: #060606; /* Cor do texto */
   border: none;
   border-radius: 5px; /* Bordas arredondadas */
   padding: 10px 15px; /* Espaçamento interno do botão */
   margin: 10px 5px; /* Espaçamento entre os botões */
   cursor: pointer; /* Cursor em forma de mão ao passar */
   transition: background-color 0.3s; /* Transição suave na mudança de cor */
+  border: 1px solid #d9d9d9;
 }
 
 .add-to-cart-button-2 {
   margin-bottom: 10px;
-  background-color: #ececec; /* Cor do botão */
+  background-color: #007bff; /* Cor do botão */
   color: rgb(0, 0, 0); /* Cor do texto */
   border: none;
   border-radius: 5px; /* Bordas arredondadas */
