@@ -164,8 +164,8 @@ const ItemList = ({ searchQuery }) => {
                     </div>
 
                     <div className="">
-                      <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
-                      <Button className="add-to-cart-button-2" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
+                      <Button className="buy-button" onClick={() => handleBuy(product)}>Comprar</Button>
+                      <Button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                     </div>
                   </div>
                 </div>
@@ -181,13 +181,17 @@ const ItemList = ({ searchQuery }) => {
             >
               Anterior
             </Button>
-            <span> {currentPage} de {totalPages} </span>
+            <span className='pagination-info'> {currentPage} de {totalPages} </span>
             <Button 
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
             >
               Próxima
             </Button>
+          </div>
+
+          <div className="continue-shopping center bottom30">
+            <Link to="/">Continuar comprando</Link>
           </div>
         </>
       )}

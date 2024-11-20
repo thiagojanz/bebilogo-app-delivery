@@ -152,7 +152,7 @@ const Orders: React.FC = () => {
       <div>
       {orders.map((order) => (
           <div className='orders-card' key={order.ID_PEDIDO}>
-            <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width: '100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
+            <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width:'100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
               <div className="order-content">
                 {/* Data */}
                 <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>

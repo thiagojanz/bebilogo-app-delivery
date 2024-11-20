@@ -93,23 +93,13 @@ const ProductsCategory = () => {
 
   const desc = ['Muito Ruim', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
-  if (loading) {
-    return (
-      <div className="loading-screen-orders loading-screen">
-        <Flex className="loading-icon-screen" align="center">
-          <Spin indicator={<LoadingOutlined spin />} size="large" />
-        </Flex>
-      </div>
-    );
-  }
-
   if (!products || products.length === 0) {
     return (
       <div className="container">
         <div className="left-arrow">
           <Link className="secondary" to='/'><FaArrowLeft /></Link>
         </div>
-        <h2 className="titulo-home">Produtos por Categoria</h2>
+        <h2 className="titulo-home center">Produtos por Categoria</h2>
         <p>Nenhum produto encontrado para esta categoria.</p>
       </div>
     );
@@ -120,8 +110,15 @@ const ProductsCategory = () => {
       <div className="left-arrow">
         <Link className="secondary" to='/'><FaArrowLeft /></Link>
       </div>
-      <h2 className="titulo-home">Produtos por Categoria</h2>
-
+      <h2 className="titulo-home center">Produtos por Categoria</h2>
+      {loading ? (
+        <div className="loading-screen-orders loading-screen">
+        <Flex className='loading-icon-screen' align="center">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
+        </Flex>
+      </div>
+      ) : (
+        <>
       <div className="items-list">
         {currentItems.map(product => {
           const productCategory = categories.find(category => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA));
@@ -159,7 +156,7 @@ const ProductsCategory = () => {
           );
         })}
       </div>
-
+            
       <div className="pagination">
         <Button 
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
@@ -167,7 +164,7 @@ const ProductsCategory = () => {
         >
           Anterior
         </Button>
-        <span>{currentPage} de {totalPages}</span>
+        <span className='pagination-info'>{currentPage} de {totalPages}</span>
         <Button 
           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
@@ -176,9 +173,11 @@ const ProductsCategory = () => {
         </Button>
       </div>
 
-      <div className="continue-shopping center">
+      <div className="continue-shopping center bottom30">
         <Link to="/">Continuar comprando</Link>
       </div>
+      </>
+      )}
     </div>
   );
 };

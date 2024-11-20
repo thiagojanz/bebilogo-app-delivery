@@ -93,26 +93,14 @@ const ProductsByBrand = () => {
 
   const desc = ['Muito Ruim', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
-  if (loading) {
-    return (
-      <div className="loading-screen-orders loading-screen">
-        <Flex className="loading-icon-screen" align="center">
-          <Spin indicator={<LoadingOutlined spin />} size="large" />
-        </Flex>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <div className="container">
         <div className="left-arrow">
           <Link className="secondary" to="/"><FaArrowLeft /></Link>
         </div>
-        <h2 className="titulo-home">Produtos da Marca</h2>
-        <div className="items-list">
-          <p>Nenhum produto encontrado para esta marca.</p>
-        </div>
+        <h2 className="titulo-home">Produtos por Marca</h2>
+        <p>Nenhum produto encontrado para esta marca.</p>
       </div>
     );
   }
@@ -123,13 +111,19 @@ const ProductsByBrand = () => {
         <Link className="secondary" to="/"><FaArrowLeft /></Link>
       </div>
       <h2 className="titulo-home">Produtos por Marca</h2>
-
+      {loading ? (
+        <div className="loading-screen-orders loading-screen">
+        <Flex className="loading-icon-screen" align="center">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
+        </Flex>
+      </div>
+      ) : (
+      <>
       <div className="items-list">
         {products.map((product) => {
           const productCategory = categories.find(
             (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
           );
-
           return (
             <div className="item-card" key={product.ID_PRODUTO}>
               {product.imageUrl ? (
@@ -175,7 +169,7 @@ const ProductsByBrand = () => {
           Anterior
         </Button>
 
-        <span>{currentPage} de {totalPages}</span>
+        <span className='pagination-info'>{currentPage} de {totalPages}</span>
 
         <Button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
@@ -185,9 +179,11 @@ const ProductsByBrand = () => {
         </Button>
       </div>
 
-      <div className="continue-shopping center">
+      <div className="continue-shopping center bottom30">
         <Link to="/">Continuar comprando</Link>
       </div>
+      </>
+      )}
     </div>
   );
 };

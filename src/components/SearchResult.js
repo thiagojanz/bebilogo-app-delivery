@@ -15,6 +15,9 @@ const SearchResults = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
   const [value, setValue] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
@@ -24,7 +27,7 @@ const SearchResults = () => {
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
           fetch(`${Api_VariavelGlobal}/api/produtos/search/?query=${encodeURIComponent(query)}`),
-          fetch(`${Api_VariavelGlobal}/api/categorias`)
+          fetch(`${Api_VariavelGlobal}/api/categorias`),
         ]);
 
         const productsData = await productsResponse.json();
@@ -57,8 +60,8 @@ const SearchResults = () => {
     navigate('/checkout', {
       state: {
         totalAmount: product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1),
-        isOpen: true
-      }
+        isOpen: true,
+      },
     });
   };
 
@@ -78,6 +81,12 @@ const SearchResults = () => {
 
   const desc = ['Muito Ruim', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
+  // Obter produtos da página atual
+  const currentProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="search-results">
       <SearchComponent />
@@ -90,8 +99,8 @@ const SearchResults = () => {
               <Spin indicator={<LoadingOutlined spin />} size="large" />
             </Flex>
           </div>
-        ) : products.length > 0 ? (
-          products.map((product) => {
+        ) : currentProducts.length > 0 ? (
+          currentProducts.map((product) => {
             const productCategory = categories.find(
               (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
             );
@@ -130,10 +139,10 @@ const SearchResults = () => {
                   </div>
 
                   <div className="item-actions">
-                    <Button className="buy-button-2" onClick={() => handleBuy(product)}>
+                    <Button className="buy-button" onClick={() => handleBuy(product)}>
                       Comprar
                     </Button>
-                    <Button className="add-to-cart-button-2" onClick={() => handleAddToCart(product)}>
+                    <Button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>
                       Adicionar ao Carrinho
                     </Button>
                   </div>
@@ -144,6 +153,29 @@ const SearchResults = () => {
         ) : (
           <p>Nenhum produto encontrado na busca!</p>
         )}
+      </div>
+
+      {/* Componente de Paginação */}
+      <div className="pagination">
+        <Button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </Button>
+
+        <span className="pagination-info">{currentPage} de {totalPages}</span>
+
+        <Button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Próxima
+        </Button>
+      </div>
+
+      <div className="continue-shopping center bottom30">
+        <Link to="/">Continuar comprando</Link>
       </div>
     </div>
   );
