@@ -10,7 +10,7 @@ const Search = () => {
       <div className="left-arrow">
       <Link className="secondary" to='/'><FaArrowLeft /></Link>
       </div>
-      <h1 className="titulo-home">Buscar</h1>
+      <h1 className="titulo-home center">Buscar</h1>
       <SearchResults /> 
     </div>
   );

@@ -174,7 +174,7 @@ const ProductsCategory = () => {
       </div>
 
       <div className="continue-shopping center bottom30">
-        <Link to="/">Continuar comprando</Link>
+        <Link style={{color:"#000"}} to="/">Continuar comprando</Link>
       </div>
       </>
       )}

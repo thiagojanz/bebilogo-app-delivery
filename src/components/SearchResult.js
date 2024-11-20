@@ -146,36 +146,35 @@ const SearchResults = () => {
                       Adicionar ao Carrinho
                     </Button>
                   </div>
-                </div>
+                </div>      
               </div>
             );
           })
         ) : (
           <p>Nenhum produto encontrado na busca!</p>
         )}
+      <>
+            <div className="pagination">
+              <Button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </Button>
+      
+              <span className="pagination-info">{currentPage} de {totalPages}</span>
+      
+              <Button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                Próxima
+              </Button>
+            </div>
+            </>
       </div>
-
-      {/* Componente de Paginação */}
-      <div className="pagination">
-        <Button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Anterior
-        </Button>
-
-        <span className="pagination-info">{currentPage} de {totalPages}</span>
-
-        <Button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        >
-          Próxima
-        </Button>
-      </div>
-
       <div className="continue-shopping center bottom30">
-        <Link to="/">Continuar comprando</Link>
+        <Link style={{color:"#000"}} to="/">Continuar comprando</Link>
       </div>
     </div>
   );

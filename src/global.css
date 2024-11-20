@@ -715,6 +715,7 @@ text-decoration: none;
   margin-top: 15px;
   float: left;
   padding-right: 15px;
+  position: absolute;
 }
 
 .address-card {

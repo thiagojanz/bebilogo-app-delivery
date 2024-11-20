@@ -47,7 +47,7 @@ const Cart = ({ isOpen, onClose }) => {
         <div className="left-arrow">
           <Link className="secondary" onClick={onClose}><FaArrowLeft /></Link>
         </div>
-        <h1 className="titulo-home">Carrinho de Compras</h1>
+        <h1 className="titulo-home center">Carrinho de Compras</h1>
         <div className="Cart-list">
           {cartItems.length === 0 ? (
             <p className='center'>O carrinho está vazio</p>

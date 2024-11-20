@@ -84,7 +84,7 @@ const Profile = () => {
       <div className="left-arrow">
         <FaUserLock />
       </div>
-      <h1 className="titulo-home"> Cliente</h1>
+      <h1 className="titulo-home center"> Cliente</h1>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
         <Flex className='loading-icon-screen' align="center">

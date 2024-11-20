@@ -93,13 +93,13 @@ const ProductsByBrand = () => {
 
   const desc = ['Muito Ruim', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
-  if (!products || products.length === 0) {
+  if (!products === 0) {
     return (
       <div className="container">
         <div className="left-arrow">
           <Link className="secondary" to="/"><FaArrowLeft /></Link>
         </div>
-        <h2 className="titulo-home">Produtos por Marca</h2>
+        <h2 className="titulo-home center">Produtos por Marca</h2>
         <p>Nenhum produto encontrado para esta marca.</p>
       </div>
     );
@@ -110,7 +110,7 @@ const ProductsByBrand = () => {
       <div className="left-arrow">
         <Link className="secondary" to="/"><FaArrowLeft /></Link>
       </div>
-      <h2 className="titulo-home">Produtos por Marca</h2>
+      <h2 className="titulo-home center">Produtos por Marca</h2>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
         <Flex className="loading-icon-screen" align="center">
@@ -180,7 +180,7 @@ const ProductsByBrand = () => {
       </div>
 
       <div className="continue-shopping center bottom30">
-        <Link to="/">Continuar comprando</Link>
+        <Link style={{color:"#000"}} to="/">Continuar comprando</Link>
       </div>
       </>
       )}

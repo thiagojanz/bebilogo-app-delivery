@@ -128,7 +128,7 @@ const Checkout = () => {
       <div className="left-arrow">
         <Link onClick={handleClose} className="secondary" to='/'><FaArrowLeft /></Link>
       </div>
-      <h1 className="titulo-home">Resumo do Pedido</h1>
+      <h1 className="titulo-home center">Resumo do Pedido</h1>
 
       <SectionClient onFreteUpdate={handleFreteUpdate} />
 
