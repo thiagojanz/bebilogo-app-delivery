@@ -17,8 +17,8 @@ const SplashScreen = ({ onFinish }) => {
     <div className="splash-screen">
       <img src={logo} alt="Logo" /> {/* Use a logomarca importada */}
       <div className="loading-screen-orders loading-screen">
-        <Flex className='loading-icon-screen' align="center">
-          <Spin size="large" />
+        <Flex className="loading-icon-screen" align="center">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
         </Flex>
       </div>
     </div>

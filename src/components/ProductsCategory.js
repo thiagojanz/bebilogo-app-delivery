@@ -96,7 +96,9 @@ const ProductsCategory = () => {
   if (loading) {
     return (
       <div className="loading-screen-orders loading-screen">
-        <Spin indicator={<LoadingOutlined spin />} size="large" />
+        <Flex className="loading-icon-screen" align="center">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
+        </Flex>
       </div>
     );
   }
