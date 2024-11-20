@@ -12,7 +12,7 @@ const FloatingCartIcon = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const toggleCart = () => {
-    setCartOpen(!cartOpen);
+    setCartOpen((prev) => !prev);
   };
 
   return (
@@ -48,7 +48,7 @@ const FloatingCartIcon = () => {
           </span>
         )}
       </div>
-      <Cart isOpen={cartOpen} onClose={toggleCart} />
+      <Cart isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );
 };

@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
-import { Spin, Button, Flex, Rate } from 'antd';
+import { Spin, Button, Rate } from 'antd';
 import { FaArrowLeft, FaTag } from 'react-icons/fa';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useCart } from '../CartContext';
 
 const ProductsCategory = () => {
-  const { idCategoria } = useParams(); // Captura o idCategoria da URL
+  const { idCategoria } = useParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Página atual
-  const itemsPerPage = 4; // Número de produtos por página
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
   const [selectedTag] = useState('Todos');
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const [quantities, setQuantities] = useState({});
-  const [value, setValue] = useState(5); // Avaliação de produto
+  const [value, setValue] = useState(5);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Produtos por categoria
-        const productsResponse = await fetch(`${Api_VariavelGlobal}/api/produtos/categoria/${idCategoria}?page=${currentPage}&limit=${itemsPerPage}`, {
+        const productsResponse = await fetch(`${Api_VariavelGlobal}/api/produtos/categoria/${idCategoria}`, {
           headers: { 'ngrok-skip-browser-warning': 'true' },
         });
         const productsData = await productsResponse.json();
-        setProducts(productsData.products);
+        setProducts(productsData.products || []);
 
-        // Categorias
         const categoriesResponse = await fetch(`${Api_VariavelGlobal}/api/categorias`, {
           headers: { 'ngrok-skip-browser-warning': 'true' },
         });
         const categoriesData = await categoriesResponse.json();
-        setCategories([{ CATEGORIA: 'Todos', ID_CATEGORIA: null }, ...categoriesData]);
+        setCategories([{ CATEGORIA: 'Todos', ID_CATEGORIA: null }, ...(categoriesData || [])]);
 
-        // Quantidades iniciais
         const initialQuantities = {};
-        productsData.products.forEach(product => {
+        (productsData.products || []).forEach(product => {
           initialQuantities[product.ID_PRODUTO] = 1;
         });
         setQuantities(initialQuantities);
@@ -51,13 +48,19 @@ const ProductsCategory = () => {
     };
 
     fetchData();
-  }, [idCategoria, currentPage]);
+  }, [idCategoria]);
 
+  // Filtrar produtos pela tag selecionada
   const filteredProducts = products.filter(product => {
     if (selectedTag === 'Todos') return true;
     const productCategory = categories.find(category => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA));
     return productCategory && selectedTag === productCategory.CATEGORIA;
   });
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  // Calcular itens da página atual
+  const currentItems = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleAddToCart = (product) => {
     addToCart({
@@ -93,14 +96,12 @@ const ProductsCategory = () => {
   if (loading) {
     return (
       <div className="loading-screen-orders loading-screen">
-        <Flex className='loading-icon-screen' align="center">
-          <Spin indicator={<LoadingOutlined spin />} size="large" />
-        </Flex>
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
       </div>
     );
   }
 
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <div className="container">
         <div className="left-arrow">
@@ -112,9 +113,6 @@ const ProductsCategory = () => {
     );
   }
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const currentItems = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   return (
     <div className="container">
       <div className="left-arrow">
@@ -123,7 +121,7 @@ const ProductsCategory = () => {
       <h2 className="titulo-home">Produtos por Categoria</h2>
 
       <div className="items-list">
-        {currentItems.map((product) => {
+        {currentItems.map(product => {
           const productCategory = categories.find(category => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA));
           return (
             <div className="item-card" key={product.ID_PRODUTO}>
@@ -139,26 +137,20 @@ const ProductsCategory = () => {
                 <div className="item-category">
                   <FaTag /> {productCategory ? productCategory.CATEGORIA : 'Categoria não encontrada'}
                 </div>
-
                 <div className="flex">
                   <div className="item-current-price">
-                    <div><b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b></div>
-                    <Flex gap="middle" vertical>
-                      <Rate tooltips={desc} onChange={setValue} value={value} />
-                    </Flex>
+                    <b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b>
+                    <Rate tooltips={desc} onChange={setValue} value={value} />
                   </div>
-
-                  {/* Controle de quantidade */}
                   <div className="quantity-control">
                     <button onClick={() => decreaseQuantity(product.ID_PRODUTO)}>-</button>
                     <span>{quantities[product.ID_PRODUTO]}</span>
                     <button onClick={() => increaseQuantity(product.ID_PRODUTO)}>+</button>
                   </div>
                 </div>
-
                 <div className="item-actions">
-                  <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
-                  <Button className="add-to-cart-button-2" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
+                  <Button onClick={() => handleBuy(product)}>Comprar</Button>
+                  <Button onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                 </div>
               </div>
             </div>
@@ -166,7 +158,6 @@ const ProductsCategory = () => {
         })}
       </div>
 
-      {/* Paginação */}
       <div className="pagination">
         <Button 
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
@@ -174,9 +165,7 @@ const ProductsCategory = () => {
         >
           Anterior
         </Button>
-        
         <span>{currentPage} de {totalPages}</span>
-
         <Button 
           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}

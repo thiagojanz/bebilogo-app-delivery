@@ -10,7 +10,7 @@ const ItemList = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
   const [selectedTag, setSelectedTag] = useState('Todos');
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();

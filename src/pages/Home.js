@@ -10,10 +10,8 @@ const Home = () => {
     <div className="container">
       <h1 className="titulo-home">Thiago Janz</h1>
       <SearchComponent />
-
-      <BrandList />
-
       <CategoryList />
+      <BrandList />
     </div>
   );
 };

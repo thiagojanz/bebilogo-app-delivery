@@ -94,7 +94,6 @@ const Profile = () => {
       ) : (
         !isAuthenticated ? (
           <>
-            <p>Efetuar Login</p>
             <Button className='bottom10' type='primary' onClick={() => setShowNewLogin(true)}>
               <FaUserPlus /> Novo Cliente
             </Button>

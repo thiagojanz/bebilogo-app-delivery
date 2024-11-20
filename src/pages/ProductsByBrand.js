@@ -11,45 +11,51 @@ const ProductsByBrand = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
-  const [selectedTag] = useState('Todos');
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
   const [quantities, setQuantities] = useState({});
   const [value, setValue] = useState(5);
   const navigate = useNavigate();
+  const [totalPages, setTotalPages] = useState(1); // Total de páginas
+  const itemsPerPage = 3; // Itens por página
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [productsResponse, categoriesResponse] = await Promise.all([
-          fetch(`${Api_VariavelGlobal}/api/produtos/marca/${brandId}?page=${currentPage}&limit=${itemsPerPage}`, { headers: { 'ngrok-skip-browser-warning': 'true' } }),
-          fetch(`${Api_VariavelGlobal}/api/categorias`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
-        ]);
-
+        // Requisição para produtos com paginação
+        const productsResponse = await fetch(
+          `${Api_VariavelGlobal}/api/produtos/marca/${brandId}?page=${currentPage}&limit=${itemsPerPage}`,
+          { headers: { 'ngrok-skip-browser-warning': 'true' } }
+        );
         const productsData = await productsResponse.json();
+
+        // Requisição para categorias
+        const categoriesResponse = await fetch(
+          `${Api_VariavelGlobal}/api/categorias`,
+          { headers: { 'ngrok-skip-browser-warning': 'true' } }
+        );
         const categoriesData = await categoriesResponse.json();
 
-        setProducts(productsData.products);
         setCategories([{ CATEGORIA: 'Todos', ID_CATEGORIA: null }, ...categoriesData]);
+
+        // Verificando se a resposta contém os dados dos produtos
+        if (productsData && productsData.products) {
+          setProducts(productsData.products);
+          setTotalPages(Math.ceil(productsData.totalProducts / itemsPerPage)); // Calculando total de páginas
+        } else {
+          setProducts([]); // Nenhum produto encontrado
+        }
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
+        setProducts([]); // Caso haja erro, limpa os produtos
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [brandId, currentPage]);
-
-  const filteredProducts = products.filter(product => {
-  if (selectedTag === 'Todos') return true; // Exibe todos os produtos
-  const productCategory = categories.find(category => 
-    String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
-  );
-  return productCategory?.CATEGORIA === selectedTag; // Filtra produtos pela categoria selecionada
-});
+  }, [brandId, currentPage]); // Dependências: quando brandId ou currentPage mudar, refaz a requisição
 
   const handleAddToCart = (product) => {
     addToCart({
@@ -72,14 +78,14 @@ const ProductsByBrand = () => {
   };
 
   const increaseQuantity = (id) => {
-    setQuantities(prev => ({
+    setQuantities((prev) => ({
       ...prev,
       [id]: (prev[id] || 1) + 1,
     }));
   };
 
   const decreaseQuantity = (id) => {
-    setQuantities(prev => ({
+    setQuantities((prev) => ({
       ...prev,
       [id]: Math.max((prev[id] || 1) - 1, 1),
     }));
@@ -111,67 +117,59 @@ const ProductsByBrand = () => {
     );
   }
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const currentItems = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   return (
     <div className="container">
       <div className="left-arrow">
         <Link className="secondary" to="/"><FaArrowLeft /></Link>
       </div>
-      <h2 className="titulo-home">Produtos da Marca</h2>
+      <h2 className="titulo-home">Produtos por Marca</h2>
 
       <div className="items-list">
-        {currentItems.map((product) => {
-  // Tenta encontrar a categoria correspondente pelo ID
-  const productCategory = categories.find(category => 
-    String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
-  );
+        {products.map((product) => {
+          const productCategory = categories.find(
+            (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
+          );
 
-  return (
-    <div className="item-card" key={product.ID_PRODUTO}>
-      {product.imageUrl ? (
-        <Link to={`/product/${product.ID_PRODUTO}`} className="text-decoration">
-          <img src={`https://bebilogo.com.br/uploads/${product.imageUrl}`} alt={product.PRODUTO} className="item-image" />
-        </Link>
-      ) : (
-        <p>No Image</p>
-      )}
-      <div className="item-info">
-        <h4 className="item-name">{product.PRODUTO}</h4>
-        <div className="item-category">
-          <FaTag /> {productCategory?.CATEGORIA || 'Categoria não encontrada'}
-        </div>
-
-        <div className="flex">
-          <div className="item-current-price">
-            <b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b>
-            <Flex gap="middle" vertical>
-              <Rate tooltips={desc} onChange={setValue} value={value} />
-            </Flex>
-          </div>
-
-          {/* Controle de quantidade */}
-          <div className="quantity-control">
-            <button onClick={() => decreaseQuantity(product.ID_PRODUTO)}>-</button>
-            <span>{quantities[product.ID_PRODUTO] || 1}</span>
-            <button onClick={() => increaseQuantity(product.ID_PRODUTO)}>+</button>
-          </div>
-        </div>
-
-        <div className="item-actions">
-          <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
-          <Button className="add-to-cart-button-2" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
-        </div>
-      </div>
-    </div>
-  );
-})}
+          return (
+            <div className="item-card" key={product.ID_PRODUTO}>
+              {product.imageUrl ? (
+                <Link to={`/product/${product.ID_PRODUTO}`} className="text-decoration">
+                  <img src={`https://bebilogo.com.br/uploads/${product.imageUrl}`} alt={product.PRODUTO} className="item-image" />
+                </Link>
+              ) : (
+                <p>No Image</p>
+              )}
+              <div className="item-info">
+                <h4 className="item-name">{product.PRODUTO}</h4>
+                <div className="item-category">
+                  <FaTag /> {productCategory?.CATEGORIA || 'Categoria não encontrada'}
+                </div>
+                <div className="flex">
+                  <div className="item-current-price">
+                    <b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b>
+                    <Flex gap="middle" vertical>
+                      <Rate tooltips={desc} onChange={setValue} value={value} />
+                    </Flex>
+                  </div>
+                  <div className="quantity-control">
+                    <button onClick={() => decreaseQuantity(product.ID_PRODUTO)}>-</button>
+                    <span>{quantities[product.ID_PRODUTO] || 1}</span>
+                    <button onClick={() => increaseQuantity(product.ID_PRODUTO)}>+</button>
+                  </div>
+                </div>
+                <div className="item-actions">
+                  <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
+                  <Button className="add-to-cart-button-2" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="pagination">
         <Button
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           Anterior
@@ -180,7 +178,7 @@ const ProductsByBrand = () => {
         <span>{currentPage} de {totalPages}</span>
 
         <Button
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
           Próxima
