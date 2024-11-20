@@ -38,6 +38,7 @@ const Cart = ({ isOpen, onClose }) => {
   }, [cartItems, calculateTotal]);
 
   const handleCheckout = () => {
+    onClose(true);
     navigate('/checkout', { state: { totalAmount, isOpen: true } });
   };
 

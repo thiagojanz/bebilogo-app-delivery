@@ -19,7 +19,7 @@ const OrderConfirmation = () => {
       <h1 className="titulo-home">Pedido Concluído</h1>
       {orderData ? (
         <div>
-          <div className='center'>
+          <div className='center-page'>
             <FaCheckCircle size={50} />
           </div>
           <h2>Obrigado pela Preferência!</h2>
@@ -31,7 +31,7 @@ const OrderConfirmation = () => {
       ) : (
         <p>Informações do pedido não disponíveis.</p>
       )}
-      <div className='center'>
+      <div className='center-page'>
       <button onClick={handleBackToHome} className="back-home-button">Voltar para Início</button>
       </div>
       </div>

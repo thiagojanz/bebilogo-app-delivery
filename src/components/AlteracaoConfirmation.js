@@ -16,7 +16,7 @@ const AlteracaoConfirmation = () => {
       <button onClick={handleClose} className="close-button">
           <FaTimes size={30} />
       </button>
-      <div className="center">
+      <div className="center-page">
       <FaHistory className='default' size={80} />
       <h1>Cadastro alterado<br/> com sucesso!</h1>
       <p>Seus dados foram registrados com sucesso.</p>

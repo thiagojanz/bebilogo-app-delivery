@@ -84,7 +84,8 @@ const Profile = () => {
       <div className="left-arrow">
         <FaUserLock />
       </div>
-      <h1 className="titulo-home center"> Cliente</h1>
+      <h1 className="titulo-home center"> Perfil</h1>
+      <p>Dados do Usuário</p>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
         <Flex className='loading-icon-screen' align="center">
@@ -116,12 +117,12 @@ const Profile = () => {
                 <div className='flex_profile'>
                   <Button type="default" size='large' htmlType="submit">Efetuar Login</Button>
                 </div>
-                <div className='center link-reset-password'>
+              </div>
+              <div className='center'>
                   <Link to='/' className="continue-shopping">
                     Esqueci a Senha
                   </Link>
                 </div>
-              </div>
             </Form>
           </>
         ) : (

@@ -698,6 +698,13 @@ text-decoration: none;
   align-items: center;
 }
 
+.center-page {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .success {
   color: green;
 }

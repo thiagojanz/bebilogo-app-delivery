@@ -17,6 +17,7 @@ const SectionClient = ({ onFreteUpdate }) => {
   const [frete, setFrete] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     // Verifica se existe um token no localStorage
@@ -126,22 +127,32 @@ const SectionClient = ({ onFreteUpdate }) => {
 
   const handleLogin = async (values) => {
     const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
-
     try {
       setLoading(true);
       const response = await axios.post(`${Api_VariavelGlobal}/api/login/`, {
         EMAIL: values.EMAIL,
         SENHA: hashedPassword,
       });
-
-      // Armazena o token e o ID do usuário no localStorage
+  
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.user.ID_USUARIO); // Armazenando o ID do usuário
+      localStorage.setItem('userId', response.data.user.ID_USUARIO);
       setIsAuthenticated(true);
       message.success('Seja Bem Vindo!!!');
+      
+      // Fecha o modal login
       setShowLogin(false);
-      fetchUserData(); // Chama a função para buscar os dados do usuário após o login
-
+      
+      // Exibir o modal de sucesso
+      setShowSuccessModal(true);
+  
+      // Recarregar a página de checkout após 2 segundos
+      // Redirecionar para o checkout após 2 segundos
+      setTimeout(() => {
+        navigate('/checkout'); // Redireciona para a página de checkout
+        setShowSuccessModal(false);
+      }, 4000);
+  
+      fetchUserData();
     } catch (error) {
       if (error.response) {
         message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
@@ -150,8 +161,33 @@ const SectionClient = ({ onFreteUpdate }) => {
       } else {
         message.error('Erro: ' + error.message);
       }
-    } setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleProfile = async () => {
+    try {            
+      // Redirecionar para o checkout após 2 segundos
+      setTimeout(() => {
+        navigate('/profile'); // Redireciona para a página de checkout
+      }, 10);
+  
+      fetchUserData();
+    } catch (error) {
+      if (error.response) {
+        message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
+      } else if (error.request) {
+        message.error('Erro: O servidor não respondeu.');
+      } else {
+        message.error('Erro: ' + error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
   if (loading) {
     return <>
@@ -182,7 +218,7 @@ const SectionClient = ({ onFreteUpdate }) => {
               </div>
             ) : (
               <div className="subtitulo-home">
-                <p>Endereço não encontrado... <Link to='/checkout'>Atualizar</Link></p>
+                <p>Endereço não encontrado... <Link onClick={handleProfile}>Incluir Endereço</Link></p>
               </div>
             )}
             <div className="subtitulo-home">
@@ -234,6 +270,17 @@ const SectionClient = ({ onFreteUpdate }) => {
       {/* Modal de Novo Cliente */}
       <Modal open={showNewLogin} onCancel={() => setShowNewLogin(false)} footer={null}>
         <ClientForm />
+      </Modal>
+
+      {/* Modal de Sucesso */}
+      <Modal
+        open={showSuccessModal}
+        onCancel={() => setShowSuccessModal(false)}
+        footer={null}
+        closable={false}
+      >
+        <h2>Login Bem-Sucedido!</h2>
+        <p>Carregando seu dados...</p>
       </Modal>
     </div>
   );

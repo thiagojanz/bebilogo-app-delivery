@@ -8,9 +8,9 @@ import '../global.css';
 import { useNavigate, Link } from 'react-router-dom';
 import SectionClient from '../components/SectionClient';
 
-const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
-
 const Checkout = () => {
+  const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
+  const [isFreteLoading, setIsFreteLoading] = useState(true);
   const { cartItems, clearCart } = useCart(); // Adicione a função clearCart do contexto
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -18,16 +18,22 @@ const Checkout = () => {
   const [orderData, setOrderData] = useState({
     STATUS: '3',
     OBS: 'Pedido pelo Ap',
-    ENTREGA: '1',
-    PAGAMENTO: '1',
+    ENTREGA: '0',
+    PAGAMENTO: '0',
     TOKEN: generateRandomToken(),
-    ID_LOJA: '2',
-    ID_USUARIO: '26',
+    ID_LOJA: '0',
+    ID_USUARIO: localStorage.getItem('userId'),
     SUBTOTAL: '0.00',
     TOTAL: '0.00',
     FRETE: '0.00',
     DATA: new Date().toISOString(),
   });
+
+  useEffect(() => {
+    if (frete) {
+      setIsFreteLoading(false);
+    }
+  }, [frete]);
 
   useEffect(() => {
     setTimeout(() => setIsOpen(true), 50);
@@ -136,12 +142,7 @@ const Checkout = () => {
         <h3><FaMapMarkerAlt /> Opções de Entrega</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
-          <Radio.Group className='bottom10 center'  
-            name='ENTREGA' 
-            value={orderData.ENTREGA} 
-            buttonStyle="solid" 
-            onChange={handleDeliveryChange}
-          >
+          <Radio.Group defaultValue="1" className='bottom10 center' name='ENTREGA' buttonStyle="solid" onChange={handleDeliveryChange}>
             <Radio.Button value="1">Delivery</Radio.Button>
           </Radio.Group>
         </Flex>
@@ -151,12 +152,7 @@ const Checkout = () => {
         <h3><FaMoneyCheck /> Modelo de Pagamento</h3>
         <p className='subtitulo-home'>Clique no botão para alterar.</p>
         <Flex vertical gap="middle">
-          <Radio.Group className='bottom10 center'
-            name='PAGAMENTO' 
-            value={orderData.PAGAMENTO} 
-            buttonStyle="solid" 
-            onChange={handlePaymentChange}
-          >
+          <Radio.Group defaultValue="1" className='bottom10 center' name='PAGAMENTO' buttonStyle="solid" onChange={handlePaymentChange}>
             <Radio.Button value="1">Dinheiro</Radio.Button>
             <Radio.Button value="2">Cartão</Radio.Button>
             <Radio.Button value="3">Pix</Radio.Button>
@@ -187,9 +183,11 @@ const Checkout = () => {
             <div className='left-form'><b>Subtotal</b></div>
             <div className='right-form'><b>R$ {orderData.SUBTOTAL}</b></div>
           </div>
-          <div className='flex'>
-            <div className='left-form'><b>Frete</b></div>
-            <div className='right-form'><b>R$ {frete}</b></div>
+          <div className="flex">
+            <div className="left-form"><b>Frete</b></div>
+            <div className="right-form">
+              <b>{isFreteLoading ? 'Aguardando...' : `R$ ${frete}`}</b>
+            </div>
           </div>
           <div className='flex'>
             <div className='left-form'><b>Total</b></div>
