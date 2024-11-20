@@ -16,7 +16,7 @@ const CadastroConfirmation = () => {
       <button onClick={handleClose} className="close-button">
           <FaTimes size={30} />
       </button>
-      <div className="center">
+      <div className="center-page">
       <FaCheckCircle className='success' size={80} />
       <h1>Pedido realizado<br/> com sucesso!</h1>
       <h4>Seu pedido foi recebido.</h4><p>Já estamos preparando...</p>
