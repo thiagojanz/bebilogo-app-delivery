@@ -1,7 +1,7 @@
 // App.js
 import React, { useState } from 'react';
 import { AuthProvider } from './context/AuthContext';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ProductDetails from './pages/ProductDetails';
 import BrandList from './pages/BrandList';
 import CategoryList from './pages/CategoryList';
@@ -65,6 +65,7 @@ const App = () => {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/confirmacao" element={<Confirmacao />} />
           <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
       <Footer />

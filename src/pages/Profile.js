@@ -81,10 +81,7 @@ const Profile = () => {
 
   return (
     <div className='section-auth container'>
-      <div className="left-arrow">
-        <FaUserLock />
-      </div>
-      <h1 className="titulo-home center"> Perfil</h1>
+      <h1 className="titulo-home"><FaUserLock /> Perfil</h1>
       <p>Dados do Usuário</p>
       {loading ? (
         <div className="loading-screen-orders loading-screen">

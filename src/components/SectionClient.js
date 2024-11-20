@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaUserClock, FaRegUser, FaUserPlus, FaPen, FaUserCheck } from 'react-icons/fa';
+import { FaUserClock, FaRegUser, FaUserPlus, FaUserCheck } from 'react-icons/fa';
 import { Button, Space, Modal, message, Input, Form, Flex, Spin } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Api_VariavelGlobal } from '../global';
@@ -120,11 +120,6 @@ const SectionClient = ({ onFreteUpdate }) => {
     }
   }, [userAddress]);
 
-  const handleClose = () => {
-    setShowLogin(false);
-    navigate(0);
-  };
-
   const handleLogin = async (values) => {
     const hashedPassword = CryptoJS.MD5(values.SENHALOGIN).toString();
     try {
@@ -214,11 +209,12 @@ const SectionClient = ({ onFreteUpdate }) => {
             {userAddress ? (
               <div className="subtitulo-home">
                 <p><b>Endereço:</b> {userAddress.ENDERECO} {userAddress.NUMERO}<br/>
-                {userAddress.COMPLEMENTO} {userAddress.CIDADE}/{userAddress.UF} <FaPen className='default' onClick={handleClose}/></p>
+                {userAddress.COMPLEMENTO} {userAddress.CIDADE}/{userAddress.UF} <span>| </span>
+                <Link style={{paddingleft:10}} onClick={handleProfile}>Alterar Endereço</Link></p>
               </div>
             ) : (
               <div className="subtitulo-home">
-                <p>Endereço não encontrado... <Link onClick={handleProfile}>Incluir Endereço</Link></p>
+                <p>Endereço não encontrado... <span>| </span><Link onClick={handleProfile}>Incluir Endereço</Link></p>
               </div>
             )}
             <div className="subtitulo-home">
