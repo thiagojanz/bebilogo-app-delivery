@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
-import { Spin, Button, Rate } from 'antd';
+import { Spin, Button, Rate, Flex } from 'antd';
 import { FaArrowLeft, FaTag } from 'react-icons/fa';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useCart } from '../CartContext';

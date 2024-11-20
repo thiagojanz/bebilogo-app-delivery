@@ -412,7 +412,7 @@ text-decoration: none;
   color: #060606; /* Cor do texto */
   border: none;
   border-radius: 5px; /* Bordas arredondadas */
-  padding: 10px 10px 10px 0px; /* Espaçamento interno do botão */
+  padding: 10px 10px 10px 10px; /* Espaçamento interno do botão */
   margin: 10px 5px; /* Espaçamento entre os botões */
   cursor: pointer; /* Cursor em forma de mão ao passar */
   transition: background-color 0.3s; /* Transição suave na mudança de cor */
