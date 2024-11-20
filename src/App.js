@@ -65,7 +65,7 @@ const App = () => {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/confirmacao" element={<Confirmacao />} />
           <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="%" element={<Navigate to="/" />} />
         </Routes>
       </div>
       <Footer />
