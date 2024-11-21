@@ -1,7 +1,6 @@
-// App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import ProductDetails from './pages/ProductDetails';
 import BrandList from './pages/BrandList';
 import CategoryList from './pages/CategoryList';
@@ -34,47 +33,63 @@ const App = () => {
       console.log('Cart Open:', !prev); // Log para verificar o estado
       return !prev;
     });
-  }; 
+  };
 
   const handleSplashFinish = () => {
     setShowSplash(false);
   };
 
   return (
-    <AuthProvider>
-    <CartProvider>
     <Router>
-      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
-      <div translate="no" style={{ paddingBottom: '60px' }}>
-        <Routes>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/ProductsAll" element={<ProductsAll />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/cadastro-confirmation" element={<CadastroConfirmation />} />
-          <Route path="/endereco-confirmation" element={<EnderecoConfirmation />} />
-          <Route path="/alteracao-confirmation" element={<AlteracaoConfirmation />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/brands" element={<BrandList />} />
-          <Route path="/produtos/categoria/:idCategoria" element={<ProductsCategory />} />
-          <Route path="/" element={<CategoryList />} />
-          <Route path="/categories" element={<CategoryList />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/confirmacao" element={<Confirmacao />} />
-          <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </div>
-      <Footer />
-      <FloatingCartIcon onClick={toggleCart} />
-      {cartOpen && <Cart onClose={toggleCart} />}
+      <AuthProvider>
+        <CartProvider>
+          {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+          <div translate="no" style={{ paddingBottom: '60px' }}>
+            <CheckRoute>
+              <Routes>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/ProductsAll" element={<ProductsAll />} />
+                <Route path="/cadastro-confirmation" element={<CadastroConfirmation />} />
+                <Route path="/endereco-confirmation" element={<EnderecoConfirmation />} />
+                <Route path="/alteracao-confirmation" element={<AlteracaoConfirmation />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/brands" element={<BrandList />} />
+                <Route path="/produtos/categoria/:idCategoria" element={<ProductsCategory />} />
+                <Route path="/categories" element={<CategoryList />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                <Route path="/confirmacao" element={<Confirmacao />} />
+                <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
+                {/* Rota para página não encontrada */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </CheckRoute>
+          </div>
+          <Footer />
+          <FloatingCartIcon onClick={toggleCart} />
+          {cartOpen && <Cart onClose={toggleCart} />}
+        </CartProvider>
+      </AuthProvider>
     </Router>
-    </CartProvider>
-  </AuthProvider>
   );
 };
+
+function CheckRoute({ children }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Se a localização não corresponder a nenhuma rota definida
+    if (location.pathname === "/404") {
+      navigate("/");
+      alert("Página não encontrada. Você foi redirecionado para a página inicial.");
+    }
+  }, [location, navigate]);
+
+  return children;
+}
 
 export default App;
