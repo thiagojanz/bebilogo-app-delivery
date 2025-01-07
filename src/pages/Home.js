@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <h1 className="titulo-home">Seja Bem Vindo!</h1>
+      <h1 className="titulo-home">Market App</h1>
       <SearchComponent />
       <CategoryList />
     </div>
