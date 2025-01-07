@@ -5,6 +5,7 @@ import { Api_VariavelGlobal } from '../global';
 import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList } from 'react-icons/fa';
 import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState([]);
@@ -127,7 +128,7 @@ const Orders: React.FC = () => {
     return (
       <div className='container'>
         <h1 className="titulo-home"><FaClipboardList /> Meu(s) Pedido(s)</h1>
-        <p>Usuário não autenticado! <br />Por favor, faça login para ver seus pedidos.</p>
+        <p>Usuário não autenticado! <br />Por favor, faça <Link to={'/Profile'}>login</Link> para ver seus pedidos.</p>
       </div>
     );
   }
