@@ -103,30 +103,39 @@ const ProductDetails = () => {
           <Link className="secondary" to='/'><FaArrowLeft /></Link>
         </div>
         <div className="center" style={{marginTop:60}}>
-      <h2 className="product-title">{product.PRODUTO}</h2>
-      {product.imageUrl ? (
-        <img 
-          src={`https://bebilogo.com.br/uploads/${product.imageUrl}`} 
-          alt={product.PRODUTO} 
-          className="product-image" 
-        />
-      ) : (
+          <h2 className="product-title">{product.PRODUTO}</h2>
+        </div>
+        
+        <div className="center" style={{marginTop:10}}>
+        {product.imageUrl ? ( <img src={`https://bebilogo.com.br/uploads/${product.imageUrl}`}  alt={product.PRODUTO} className="product-image"/>
+        ) : (
         <p>Imagem não disponível</p>
-      )}
-      <div className="quantity-control">
-        <button onClick={decreaseQuantity}>-</button>
-        <span>{quantity}</span>
-        <button onClick={increaseQuantity}>+</button>
-      </div>
-      <p className="product-price">Preço: R$ {finalPrice.toFixed(2)}</p> {/* Exibe o preço final */}
-      <div className="pagination">
-        <Button className="buy-button-2" onClick={handleBuy}>Comprar</Button>
-        <Button className="add-to-cart-button-2" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
-      </div>
-      <button onClick={() => navigate(-1)} className="continue-shopping">
-            Continuar comprando
-      </button>
-    </div>
+        )}
+        </div>
+        
+        <div className="center" style={{marginTop:10}}>
+          <div className="quantity-control">
+            <button onClick={decreaseQuantity}>-</button>
+            <span>{quantity}</span>
+            <button onClick={increaseQuantity}>+</button>
+          </div>
+        </div>
+
+        <div className="center" style={{marginTop:10}}>
+          <p className="product-price">Preço: R$ {finalPrice.toFixed(2)}</p> {/* Exibe o preço final */}
+        </div>
+      
+        <div className="center" style={{marginTop:10}}>
+          <Button className="buy-button-2" onClick={handleBuy}>Comprar</Button>
+          <Button className="add-to-cart-button-2" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
+        </div>
+        
+        <div className="center" style={{marginTop:10}}>
+          <button onClick={() => navigate(-1)} className="continue-shopping">
+                Continuar comprando
+          </button>
+        </div>
+    
     </div>
   );
 };
