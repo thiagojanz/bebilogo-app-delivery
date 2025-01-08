@@ -5,6 +5,7 @@ import { useCart } from '../CartContext';
 import { Flex, Spin, Button } from 'antd';
 import '../global.css'; 
 import { Api_VariavelGlobal } from '../global';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -22,11 +23,7 @@ const ProductDetails = () => {
     const fetchProductDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${Api_VariavelGlobal}/api/produtos-imagens/${id}`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'true'
-          }
-        });
+        const response = await fetch(`${Api_VariavelGlobal}/api/produtos-imagens/${id}`);
 
         if (!response.ok) {
           throw new Error('Erro ao buscar detalhes do produto');
@@ -91,10 +88,10 @@ const ProductDetails = () => {
   if (loading) {
     return <>
     <div className="loading-screen-orders loading-screen">
-      <Flex className='loading-icon-screen' align="center">
-        <Spin size="large" />
-      </Flex>
-    </div></>;
+        <Flex className='loading-icon-screen' align="center">
+          <Spin indicator={<LoadingOutlined spin />} size="large" />
+        </Flex>
+      </div></>;
   }
 
   return (
@@ -129,13 +126,10 @@ const ProductDetails = () => {
           <Button className="buy-button-2" onClick={handleBuy}>Comprar</Button>
           <Button className="add-to-cart-button-2" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
         </div>
-        
-        <div className="center" style={{marginTop:10}}>
-          <button onClick={() => navigate(-1)} className="continue-shopping">
-                Continuar comprando
-          </button>
-        </div>
-    
+
+        <div className="center">
+            <Link onClick={() => navigate(-1)} className="continue-shopping" style={{color:"#000"}}>Continuar comprando</Link>
+        </div>    
     </div>
   );
 };

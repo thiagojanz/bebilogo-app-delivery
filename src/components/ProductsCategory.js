@@ -100,7 +100,7 @@ const ProductsCategory = () => {
           <Link className="secondary" to='/'><FaArrowLeft /></Link>
         </div>
         <h2 className="titulo-home center">Produtos por Categoria</h2>
-        <p>Nenhum produto encontrado para esta categoria.</p>
+        <p>Nenhum produto encontrado...</p>
       </div>
     );
   }
