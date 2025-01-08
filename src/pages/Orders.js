@@ -32,8 +32,9 @@ const Orders: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        // Ordena os pedidos pelo 'ID_PEDIDO' em ordem decrescente
         const sortedOrders = response.data.sort(
-          (a, b) => new Date(b.DATA).getTime() - new Date(a.DATA).getTime()
+          (a, b) => b.ID_PEDIDO - a.ID_PEDIDO // Ordenando do maior para o menor
         );
 
         setOrders(sortedOrders);
@@ -82,19 +83,21 @@ const Orders: React.FC = () => {
   };
   
   const getPaymentMethod = (value) => {
-    switch (value) {
-      case '1': return 'Dinheiro';
-      case '2': return 'Cartão';
-      case '3': return 'Pix';
+    const numericValuePay = Number(value); // Converte para número
+    switch (numericValuePay) {
+      case 1: return 'Dinheiro';
+      case 2: return 'Cartão';
+      case 3: return 'Pix';
       default: return 'Desconhecido';
     }
   };
   
   const getDeliveryMethod = (value) => {
-    switch (value) {
-      case '1': return 'Delivery';
-      case '2': return 'Buscar na Loja';
-      case '3': return 'Agendamento';
+    const numericValueDelivery = Number(value); // Converte para número
+    switch (numericValueDelivery) {
+      case 1: return 'Delivery';
+      case 2: return 'Buscar na Loja';
+      case 3: return 'Agendamento';
       default: return 'Desconhecido';
     }
   };

@@ -100,7 +100,7 @@ const ProductsByBrand = () => {
           <Link className="secondary" to="/"><FaArrowLeft /></Link>
         </div>
         <h2 className="titulo-home center">Produtos por Marca</h2>
-        <p>Nenhum produto encontrado para esta marca.</p>
+        <p>Nenhum produto encontrado.</p>
       </div>
     );
   }

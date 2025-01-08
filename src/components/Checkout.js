@@ -18,8 +18,8 @@ const Checkout = () => {
   const [orderData, setOrderData] = useState({
     STATUS: '3',
     OBS: 'Pedido pelo Ap',
-    ENTREGA: '0',
-    PAGAMENTO: '0',
+    ENTREGA: '1',
+    PAGAMENTO: '1',
     TOKEN: generateRandomToken(),
     ID_LOJA: '0',
     ID_USUARIO: localStorage.getItem('userId'),
