@@ -382,6 +382,7 @@ text-decoration: none;
 
 .product-image {
   max-width: 80%;
+  width: 200px;
 }
 
 .product-price {
@@ -445,7 +446,7 @@ text-decoration: none;
 .add-to-cart-button-2 {
   margin-bottom: 10px;
   background-color: #007bff; /* Cor do botão */
-  color: rgb(0, 0, 0); /* Cor do texto */
+  color: rgb(255, 255, 255); /* Cor do texto */
   border: none;
   border-radius: 5px; /* Bordas arredondadas */
   margin: 10px 5px; /* Espaçamento entre os botões */
