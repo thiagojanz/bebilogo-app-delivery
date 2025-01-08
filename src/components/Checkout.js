@@ -9,6 +9,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import SectionClient from '../components/SectionClient';
 
 const Checkout = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
   const [isFreteLoading, setIsFreteLoading] = useState(true);
   const { cartItems, clearCart } = useCart(); // Adicione a função clearCart do contexto
@@ -76,11 +77,12 @@ const Checkout = () => {
 
   const handleSubmit = async () => {
     if (cartItems.length === 0) {
-      // Mostra uma mensagem de erro se o carrinho estiver vazio
       message.error('Seu carrinho está vazio. Adicione produtos antes de finalizar o pedido.');
       return;
     }
-
+  
+    setIsSubmitting(true); // Ativa o estado de carregamento
+  
     const pedidoData = {
       ...orderData,
       produtos: cartItems.map(item => ({
@@ -89,28 +91,25 @@ const Checkout = () => {
         precoUnitario: item.PRECO_ATUAL,
       })),
     };
-
-    console.log('Pedido Data:', pedidoData);
-
+  
     try {
       const response = await fetch(`${Api_VariavelGlobal}/api/pedidos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pedidoData),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
-        // Limpa o carrinho após o pedido ser realizado
-        clearCart(); // Chama a função para limpar o carrinho
-
-        // Redireciona para a página de confirmação
-        navigate('/confirmacao'); // Substitua '/confirmacao' com a rota correta para a tela de confirmação
+        clearCart(); // Limpa o carrinho
+        navigate('/confirmacao'); // Redireciona para a tela de confirmação
       } else {
         alert('Erro ao realizar o pedido: ' + data.error);
       }
     } catch (error) {
       console.error('Erro de comunicação com a API:', error);
+    } finally {
+      setIsSubmitting(false); // Desativa o estado de carregamento
     }
   };
 
@@ -195,11 +194,12 @@ const Checkout = () => {
           </div>
 
           {/* Botão desabilitado se o carrinho estiver vazio */}
-          <Button 
-  htmlType="submit" 
-  className="checkout-button" 
-  size="large" 
-  disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0} // Verifica se o frete é válido
+          <Button
+  htmlType="submit"
+  className="checkout-button"
+  size="large"
+  disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0}
+  loading={isSubmitting} // Mostra a animação de carregamento
 >
   Fazer Pedido
 </Button>
