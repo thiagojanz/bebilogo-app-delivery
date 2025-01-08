@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { FaCubes, FaTag } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
 import { Tag, Space, Spin, Flex, Button, Rate } from 'antd';
 import { useCart } from '../CartContext'; 
 import { LoadingOutlined } from '@ant-design/icons';
+import '../global.css'; // Para estilos
 
 const ItemList = ({ searchQuery }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
-  const [selectedTag, setSelectedTag] = useState('Todos');
+  const itemsPerPage = 10;
+  const [selectedTag, setSelectedTag] = useState(null);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const navigate = useNavigate();
@@ -27,19 +28,24 @@ const ItemList = ({ searchQuery }) => {
         const searchUrl = searchQuery
           ? `${Api_VariavelGlobal}/api/produtos/?search=${searchQuery}`
           : `${Api_VariavelGlobal}/api/produtos`;
-
+  
         const productsResponse = await fetch(searchUrl, {
           headers: { 'ngrok-skip-browser-warning': 'true' }
         });
         const productsData = await productsResponse.json();
         setProducts(productsData);
-
+  
         const categoriesResponse = await fetch(`${Api_VariavelGlobal}/api/categorias`, {
           headers: { 'ngrok-skip-browser-warning': 'true' }
         });
         const categoriesData = await categoriesResponse.json();
-        setCategories([{ CATEGORIA: 'Todos', ID_CATEGORIA: null }, ...categoriesData]);
-
+        setCategories(categoriesData);
+  
+        // Inicializar a primeira categoria como selecionada
+        if (categoriesData.length > 0) {
+          setSelectedTag(categoriesData[0].CATEGORIA);
+        }
+  
         // Inicializar as quantidades com 1 para cada produto
         const initialQuantities = {};
         productsData.forEach(product => {
@@ -52,9 +58,10 @@ const ItemList = ({ searchQuery }) => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [searchQuery]);
+  
 
   const handleChange = (category) => {
     setSelectedTag(category);
@@ -62,7 +69,7 @@ const ItemList = ({ searchQuery }) => {
   };
 
   const filteredProducts = products.filter(product => {
-    if (selectedTag === 'Todos') return true;
+    if (!selectedTag) return true;
     const productCategory = categories.find(category => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA));
     return productCategory && selectedTag === productCategory.CATEGORIA;
   });
@@ -105,20 +112,34 @@ const ItemList = ({ searchQuery }) => {
 
   return (
     <div className="Itens-section">
-      <h2 className="titulo-home"><FaCubes /> Todos os Produtos</h2>
+      <h2 className="titulo-home">Cardápio</h2>
+      <div style={{ width: '100%', overflowX: 'auto', whiteSpace: 'nowrap' }}>
+      <Space 
+  size="size" 
+  wrap={false}  // Desabilita o wrap para garantir alinhamento horizontal
+  style={{
+    paddingBottom: '15px', 
+    overflowX: 'auto',        // Habilita o scroll horizontal
+    whiteSpace: 'nowrap',      // Impede o quebra de linha
+    display: 'flex',
+  }}
+>
+  {categories.map((category) => (
+    <Tag.CheckableTag
+      key={category.CATEGORIA}
+      checked={selectedTag === category.CATEGORIA}
+      onChange={() => handleChange(category.CATEGORIA)}
+      style={{ marginRight: '10px', display: 'inline-block', fontSize: '15px', }}  // Garante que cada tag esteja no mesmo eixo horizontal
+    >
+      {category.CATEGORIA}
+    </Tag.CheckableTag>
+  ))}
+</Space>
 
-      {/* Filtro de categorias */}
-      <Space size="small" wrap>
-        {categories.map((category) => (
-          <Tag.CheckableTag
-            key={category.CATEGORIA}
-            checked={selectedTag === category.CATEGORIA}
-            onChange={() => handleChange(category.CATEGORIA)}
-          >
-            {category.CATEGORIA}
-          </Tag.CheckableTag>
-        ))}
-      </Space>
+</div>
+
+
+
 
       {/* Exibição de loading enquanto os dados são carregados */}
       {loading ? (
@@ -188,10 +209,6 @@ const ItemList = ({ searchQuery }) => {
             >
               Próxima
             </Button>
-          </div>
-
-          <div className="continue-shopping center bottom30">
-            <Link style={{color:"#000"}} to="/">Continuar comprando</Link>
           </div>
         </>
       )}

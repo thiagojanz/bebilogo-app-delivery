@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spin, Alert, Modal, Button, Card, Flex } from 'antd';
+import { Spin, Alert, Modal, Button, Card, Flex, Pagination } from 'antd';
 import { Api_VariavelGlobal } from '../global';
 import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList } from 'react-icons/fa';
 import moment from 'moment';
@@ -9,13 +9,14 @@ import { Link } from 'react-router-dom';
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // Página atual
+  const [itemsPerPage] = useState(5); // Número de pedidos por página
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedOrderItems, setSelectedOrderItems] = useState([]);
-  const [modalLoading, setModalLoading] = useState(false); // Estado para controlar o carregamento do modal
+  const [modalLoading, setModalLoading] = useState(false);
 
-  // Obter o token de autenticação
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
@@ -32,11 +33,7 @@ const Orders: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Ordena os pedidos pelo 'ID_PEDIDO' em ordem decrescente
-        const sortedOrders = response.data.sort(
-          (a, b) => b.ID_PEDIDO - a.ID_PEDIDO // Ordenando do maior para o menor
-        );
-
+        const sortedOrders = response.data.sort((a, b) => b.ID_PEDIDO - a.ID_PEDIDO);
         setOrders(sortedOrders);
       } catch (err) {
         setError(`Erro ao carregar pedidos: ${err.response ? err.response.data.message : err.message}`);
@@ -48,29 +45,27 @@ const Orders: React.FC = () => {
     fetchOrders();
   }, [token, userId]);
 
-  // Função para buscar os itens de um pedido específico
   const fetchOrderItems = async (orderId) => {
-    setModalLoading(true); // Inicia o carregamento no modal
+    setModalLoading(true);
     try {
       const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/${userId}/itens/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setSelectedOrderItems(response.data || []); // Ajuste aqui para acessar diretamente response.data
+      setSelectedOrderItems(response.data || []);
     } catch (err) {
       setError(`Erro ao carregar itens do pedido: ${err.response ? err.response.data.message : err.message}`);
     } finally {
-      setModalLoading(false); // Finaliza o carregamento
+      setModalLoading(false);
     }
   };
 
   const handleOrderClick = async (order) => {
-    await fetchOrderItems(order.ID_PEDIDO); // Buscar os itens do pedido
-    setIsModalVisible(true); // Garantir que o modal seja aberto
+    await fetchOrderItems(order.ID_PEDIDO);
+    setIsModalVisible(true);
   };
 
-  // Mapeamento de nomenclaturas
   const getStatus = (value) => {
-    const numericValue = Number(value); // Converte para número
+    const numericValue = Number(value);
     switch (numericValue) {
       case 1: return '';
       case 2: return 'Intenção de Compra';
@@ -81,9 +76,9 @@ const Orders: React.FC = () => {
       default: return 'Desconhecido';
     }
   };
-  
+
   const getPaymentMethod = (value) => {
-    const numericValuePay = Number(value); // Converte para número
+    const numericValuePay = Number(value);
     switch (numericValuePay) {
       case 1: return 'Dinheiro';
       case 2: return 'Cartão';
@@ -91,9 +86,9 @@ const Orders: React.FC = () => {
       default: return 'Desconhecido';
     }
   };
-  
+
   const getDeliveryMethod = (value) => {
-    const numericValueDelivery = Number(value); // Converte para número
+    const numericValueDelivery = Number(value);
     switch (numericValueDelivery) {
       case 1: return 'Delivery';
       case 2: return 'Buscar na Loja';
@@ -101,8 +96,6 @@ const Orders: React.FC = () => {
       default: return 'Desconhecido';
     }
   };
-  
-  
 
   const renderOrderItems = () => {
     if (modalLoading) {
@@ -140,12 +133,16 @@ const Orders: React.FC = () => {
     return <Alert message={error} type="error" />;
   }
 
+  // Cálculo dos pedidos da página atual
+  const indexOfLastOrder = currentPage * itemsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
   return (
     <div className='container'>
       <h1 className="titulo-home"><FaClipboardList /> Meu(s) Pedido(s)</h1>
       <p>Pedidos Realizados</p>
 
-      {/* Exibindo os pedidos */}
       {loading ? (
         <div className="loading-screen-orders loading-screen">
           <Flex className='loading-icon-screen' align="center">
@@ -153,26 +150,29 @@ const Orders: React.FC = () => {
           </Flex>
         </div>
       ) : (
-      <div>
-      {orders.map((order) => (
-          <div style={{background: '#ededed'}} className='orders-card' key={order.ID_PEDIDO}>
-            <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width:'100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
-              <div className="order-content">
-                {/* Data */}
-                <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
-                {/* Status */}
-                <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
-                {/* Pagamento */}
-                <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
-                {/* Entrega */}
-                <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
-                {/* Total */}
-                <div className="order-total">Total: R$ {order.TOTAL}</div>
-              </div>
-            </Card>
-          </div>
-        ))}
-      </div>
+        <div style={{paddingBottom: '30px'}}>
+          {currentOrders.map((order) => (
+            <div style={{ background: '#ededed' }} className='orders-card' key={order.ID_PEDIDO}>
+              <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width: '100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
+                <div className="order-content">
+                  <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
+                  <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
+                  <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
+                  <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
+                  <div className="order-total">Total: R$ {order.TOTAL}</div>
+                </div>
+              </Card>
+            </div>
+          ))}
+          {/* Paginação */}
+          <Pagination
+            current={currentPage}
+            total={orders.length}
+            pageSize={itemsPerPage}
+            onChange={(page) => setCurrentPage(page)}
+            style={{ textAlign: 'center', marginTop: '20px' }}
+          />
+        </div>
       )}
 
       {/* Modal de Itens do Pedido */}

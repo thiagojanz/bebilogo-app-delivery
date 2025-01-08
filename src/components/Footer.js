@@ -1,6 +1,6 @@
 // src/components/Footer.js
 import React from 'react';
-import { FaHome, FaCubes, FaClipboardList, FaUser } from 'react-icons/fa';
+import { FaHome, FaClipboardList, FaUser } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import './Footer.css';
 
@@ -12,10 +12,6 @@ const Footer = () => {
       <Link to="/" className={`footer-item ${location.pathname === '/' ? 'active' : ''}`}>
         <FaHome />
         <span>Início</span>
-      </Link>
-      <Link to="/ProductsAll" className={`footer-item ${location.pathname === '/ProductsAll' ? 'active' : ''}`}>
-        <FaCubes />
-        <span>Produtos</span>
       </Link>
       <Link to="/orders" className={`footer-item ${location.pathname === '/orders' ? 'active' : ''}`}>
         <FaClipboardList />

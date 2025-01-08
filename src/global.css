@@ -996,3 +996,17 @@ text-decoration: none;
   margin-top: 30px;
 }
 
+.itens-section {
+  width: 100%;  /* Garante que o espaço ocupe toda a largura disponível */
+  overflow-x: auto;  /* Permite o scroll horizontal */
+  white-space: nowrap; /* Impede que as tags quebrem para a próxima linha */
+}
+
+.ant-space {
+  display: flex;
+  flex-wrap: nowrap;  /* As tags não vão quebrar para a linha seguinte */
+}
+
+.ant-tag {
+  margin-right: 10px;  /* Adiciona um pequeno espaço entre as tags */
+}
