@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Flex, Radio, Form, Button, message, Card } from 'antd';
 import MD5 from 'crypto-js/md5';
 import { useCart } from '../CartContext'; // Certifique-se de que o CartContext tem uma função para limpar o carrinho
-import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaClipboardList } from "react-icons/fa";
+import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaCubes } from "react-icons/fa";
 import { Api_VariavelGlobal } from '../global';
 import '../global.css';
 import { useNavigate, Link } from 'react-router-dom';
@@ -164,18 +164,8 @@ const Checkout = () => {
       </div>
 
       <div className=''>
-      <Card 
-  title={
-    <>
-      <FaClipboardList size={20} /> 
-      <h3 style={{ display: 'contents' }}>{'Produtos Selecionados'}</h3> 
-      <br /> 
-      <p className="subtitulo-home">{'Lista com seus produtos:'}</p>
-    </>
-  }
-  bordered={true} 
-  style={{ width: '100%', marginBottom: '20px' }}
->
+      <Card title={<><FaCubes size={20} /> <h3 style={{display:'contents'}}>{'Produto(s) Selecionado(s)'}</h3> <br/> <p className="subtitulo-home"> {'Lista com seus produtos:'} </p></>} 
+      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
   <Flex vertical>
     <ul className="product-list-checkout" style={{ listStyle: 'none', padding: 0 }}>
       {cartItems.length > 0 ? (
@@ -189,7 +179,7 @@ const Checkout = () => {
             }}
           >
             <span>
-              {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} x {item.quantity}
+            {item.quantity} x {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} 
             </span>
             <span style={{ fontWeight: 'bold' }}>
               R$ {(parseFloat(item.PRECO_ATUAL) * item.quantity).toFixed(2)}
@@ -213,17 +203,17 @@ const Checkout = () => {
             FRETE: frete
           }}
         >   
-          <div className='flex' style={{fontSize: '20px', padding:'0px 10px 0px 10px'}}>
+          <div className='flex' style={{fontSize: '18px', padding:'0px 10px 0px 10px'}}>
             <div className='left-form'><b>Subtotal</b></div>
             <div className='right-form'><b>R$ {orderData.SUBTOTAL}</b></div>
           </div>
-          <div className="flex" style={{fontSize: '20px', padding:'0px 10px 10px 10px'}}>
+          <div className="flex" style={{fontSize: '18px', padding:'0px 10px 10px 10px'}}>
             <div className="left-form"><b>Frete</b></div>
             <div className="right-form">
               <b>{isFreteLoading ? 'Aguardando...' : `R$ ${frete}`}</b>
             </div>
           </div>
-          <div className="flex" style={{fontSize: '24px', backgroundColor:'black', borderRadius: '10px', color: 'white', padding:'10px 10px 10px 10px'}}>
+          <div className="flex" style={{fontSize: '20px', backgroundColor:'black', borderRadius: '10px', color: 'white', padding:'10px 10px 10px 10px'}}>
             <div className='left-form'><b>Total</b></div>
             <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
           </div>
@@ -237,7 +227,6 @@ const Checkout = () => {
             loading={isSubmitting} // Mostra a animação de carregamento
             style={{
               marginTop: '30px', // Adiciona espaço acima
-              marginBottom: '60px', // Adiciona espaço abaixo
               padding: '16px 100px', // Aumenta o tamanho do botão
               fontSize: '16px', // Mantém o tamanho da fonte
             }}
@@ -247,6 +236,9 @@ const Checkout = () => {
         </Form>
       </div>
       </div>
+      <div className="center">
+            <Link onClick={() => navigate(-1)} className="continue-shopping" style={{color:"#000", marginBottom: '60px'}}>Continuar comprando</Link>
+        </div> 
     </div>
   );
 };

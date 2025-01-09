@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { useCart } from '../CartContext'; 
-import { Flex, Spin, Button } from 'antd';
+import { Flex, Spin, Button, notification  } from 'antd';
 import '../global.css'; 
 import { Api_VariavelGlobal } from '../global';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -63,6 +63,17 @@ const ProductDetails = () => {
         PRECO_ATUAL: product.PRECO_ATUAL,
         imageUrl: product.imageUrl,
         quantity,
+      });
+      // Exibe a notificação
+      notification.success({
+        message: 'Produto adicionado ao carrinho!',
+        placement: 'topRight', // Localização: canto superior direito
+        duration: 3, // Tempo de exibição: 3 segundos
+        style: {
+          backgroundColor: '#d4edda', // Verde claro
+          borderColor: '#c3e6cb',
+          color: '#155724',
+        },
       });
     }
   };

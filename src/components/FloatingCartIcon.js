@@ -1,17 +1,11 @@
 // src/components/FloatingCartIcon.js
 import React, { useState } from 'react';
-import { FaShoppingCart, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Cart from '../pages/Cart';
-import { useCart } from '../CartContext'; // Importa o contexto do carrinho
 
 const FloatingCartIcon = () => {
-  const [cartOpen, setCartOpen] = useState(false);
-  const { cartItems } = useCart(); // Obtém os itens do carrinho
-
-  // Calcula o número total de itens no carrinho
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  const toggleCart = () => {
+const [cartOpen, setCartOpen] = useState(false);  
+const toggleCart = () => {
     setCartOpen((prev) => !prev);
   };
 
@@ -28,25 +22,10 @@ const FloatingCartIcon = () => {
           background: '#f3f3f3f3',
           padding: '10px 11px 6px 9px',
           borderRadius: '30px',
+          display:'none',
         }}
       >
-        {cartOpen ? <FaChevronRight size={25} /> : <FaShoppingCart size={25} />}
-        {totalItems > 0 && (
-          <span
-            style={{
-              position: 'absolute',
-              top: '-8px',
-              right: '-8px',
-              backgroundColor: 'red',
-              color: 'white',
-              borderRadius: '50%',
-              padding: '5px 8px',
-              fontSize: '12px',
-            }}
-          >
-            {totalItems}
-          </span>
-        )}
+        {cartOpen ? <FaChevronRight size={25} /> : <FaChevronLeft size={25} />}
       </div>
       <Cart isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>

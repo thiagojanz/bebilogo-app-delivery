@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
 import SearchComponent from '../components/SearchComponent';
-import { Spin, Button, Flex, Rate } from 'antd';
+import { Spin, Button, Flex, Rate, notification } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useCart } from '../CartContext';
-import { FaTag } from 'react-icons/fa';
 
 const SearchResults = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get('query');
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
   const [value, setValue] = useState(5);
@@ -24,16 +22,14 @@ const SearchResults = () => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const [productsResponse, categoriesResponse] = await Promise.all([
+        const [productsResponse] = await Promise.all([
           fetch(`${Api_VariavelGlobal}/api/produtos/search/?query=${encodeURIComponent(query)}`),
           fetch(`${Api_VariavelGlobal}/api/categorias`),
         ]);
 
         const productsData = await productsResponse.json();
-        const categoriesData = await categoriesResponse.json();
 
         setProducts(productsData);
-        setCategories([{ CATEGORIA: 'Todos', ID_CATEGORIA: null }, ...categoriesData]);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
       } finally {
@@ -51,6 +47,17 @@ const SearchResults = () => {
       PRECO_ATUAL: product.PRECO_ATUAL,
       imageUrl: product.imageUrl,
       quantity: quantities[product.ID_PRODUTO] || 1,
+    });
+    // Exibe a notificação
+    notification.success({
+      message: 'Produto adicionado ao carrinho!',
+      placement: 'topRight', // Localização: canto superior direito
+      duration: 3, // Tempo de exibição: 3 segundos
+      style: {
+        backgroundColor: '#d4edda', // Verde claro
+        borderColor: '#c3e6cb',
+        color: '#155724',
+      },
     });
   };
 
@@ -101,9 +108,7 @@ const SearchResults = () => {
         ) : currentProducts.length > 0 ? (
           <>
             {currentProducts.map((product) => {
-              const productCategory = categories.find(
-                (category) => String(category.ID_CATEGORIA) === String(product.ID_CATEGORIA)
-              );
+
 
               return (
                 <div className="item-card" key={product.ID_PRODUTO}>
@@ -120,9 +125,6 @@ const SearchResults = () => {
                   )}
                   <div className="item-info">
                     <h4 className="item-name">{product.PRODUTO}</h4>
-                    <div className="item-category">
-                      <FaTag /> {productCategory?.CATEGORIA || 'Categoria não encontrada'}
-                    </div>
                     <div className="flex">
                       <div className="item-current-price">
                         <b>

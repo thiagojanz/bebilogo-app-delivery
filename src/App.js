@@ -7,6 +7,7 @@ import CategoryList from './pages/CategoryList';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Orders from './pages/Orders';
+import Shoppingcart from './pages/Shoppingcart';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart'; // Importa o componente do carrinho
 import Footer from './components/Footer';
@@ -51,6 +52,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/shoppingcart" element={<Shoppingcart />} />
                 <Route path="/ProductsAll" element={<ProductsAll />} />
                 <Route path="/cadastro-confirmation" element={<CadastroConfirmation />} />
                 <Route path="/endereco-confirmation" element={<EnderecoConfirmation />} />

@@ -8,7 +8,8 @@ const Home = () => {
 
   return (
     <div className="container">
-      <h1 className="titulo-home">Market App</h1>
+      <span className="titulo-home h1" style={{fontSize:'28px'}}>Bebilogo</span><br/>
+      <span className="subtitulo-home p">Rua Capanema 5, Marambaia, Belém/PA</span>
       <SearchComponent />
       <CategoryList />
       <ItemList />

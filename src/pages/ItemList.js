@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaTag } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { Api_VariavelGlobal } from '../global';
-import { Tag, Space, Spin, Flex, Button, Rate } from 'antd';
+import { Tag, Space, Spin, Flex, Button, Rate, notification } from 'antd';
 import { useCart } from '../CartContext'; 
 import { LoadingOutlined } from '@ant-design/icons';
 import '../global.css'; // Para estilos
@@ -87,6 +87,17 @@ const ItemList = ({ searchQuery }) => {
       imageUrl: product.imageUrl,
       quantity: quantities[product.ID_PRODUTO] || 1,
     });
+    // Exibe a notificação
+    notification.success({
+      message: 'Produto adicionado ao carrinho!',
+      placement: 'topRight', // Localização: canto superior direito
+      duration: 3, // Tempo de exibição: 3 segundos
+      style: {
+        backgroundColor: '#d4edda', // Verde claro
+        borderColor: '#c3e6cb',
+        color: '#155724',
+      },
+    });
   };
 
   const handleBuy = (product) => {
@@ -137,11 +148,6 @@ const ItemList = ({ searchQuery }) => {
 </Space>
 
 </div>
-
-
-
-
-      {/* Exibição de loading enquanto os dados são carregados */}
       {loading ? (
         <div className="loading-screen-orders loading-screen">
           <Flex className='loading-icon-screen' align="center">
