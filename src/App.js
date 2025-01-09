@@ -23,7 +23,6 @@ import ProductsCategory from './components/ProductsCategory';
 import ProductsAll from './components/ProductsAll';
 import ProductsByBrand from './pages/ProductsByBrand';
 import './global.css';
-
 import { CartProvider } from './CartContext'; // Certifique-se de importar o provider
 
 const App = () => {

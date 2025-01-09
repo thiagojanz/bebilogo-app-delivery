@@ -1,17 +1,16 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Flex, Form, Button, message, Card, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useCart } from '../CartContext'; // Adjust the path accordingly
+import { Flex, Form, Button, message, Card } from 'antd';
 import MD5 from 'crypto-js/md5';
-import { useCart } from '../CartContext'; 
 import { SlTrash } from "react-icons/sl";
 import { Api_VariavelGlobal } from '../global';
 import '../global.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaArrowCircleRight, FaCubes } from "react-icons/fa";
 
-const Shoppingcart = () => {   
+const Shoppingcart = () => { 
+  const { cartItems, addToCart, removeFromCart, updateCartItemQuantity, calculateTotal } = useCart();  
   const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
-  const { cartItems, removeFromCart, setCartItems } = useCart();
-
   const navigate = useNavigate();
   const [setLoading] = useState(true);
   const [orderData, setOrderData] = useState({
@@ -29,12 +28,6 @@ const Shoppingcart = () => {
 
   // Gerenciamento de quantidade por produto
   const [quantities, setQuantities] = useState({});
-
-  const calculateTotal = useCallback(() => {
-    return cartItems
-      .reduce((total, item) => total + (parseFloat(item.PRECO_ATUAL) || 0) * (quantities[item.id] || 1), 0)
-      .toFixed(2);
-  }, [cartItems, quantities]);
 
   useEffect(() => {
     const calculatedTotal = calculateTotal();
@@ -94,35 +87,46 @@ const Shoppingcart = () => {
     navigate('/checkout', { state: { isOpen: true } });
   };
 
-  const handleClearCart = () => {
-    setCartItems([]); // Limpa os itens no carrinho
-    setQuantities({}); // Limpa as quantidades
-
-    notification.info({
-      message: 'Todos os produtos foram removidos.',
-      placement: 'topRight',
-      duration: 3,
-      style: {
-        backgroundColor: '#d1ecf1', 
-        borderColor: '#bee5eb',
-        color: '#0c5460',
-      },
-    });
-  };
-
   const increaseQuantity = (itemId) => {
+    // Atualiza a quantidade local (não no carrinho diretamente)
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [itemId]: (prevQuantities[itemId] || 1) + 1,
+      [itemId]: (prevQuantities[itemId] || 1) + 1, // Incrementa a quantidade local
     }));
+  
+    // Atualiza o carrinho com a nova quantidade
+    const existingItem = cartItems.find((item) => item.id === itemId);
+    if (existingItem) {
+      // Se o item já está no carrinho, atualiza a quantidade
+      updateCartItemQuantity(itemId, existingItem.quantity + 1);
+    } else {
+      // Se o item não existe no carrinho, adiciona com a nova quantidade
+      addToCart({
+        id: itemId,
+        quantity: 1, // Adiciona com quantidade 1
+      });
+    }
   };
+  
 
   const decreaseQuantity = (itemId) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [itemId]: Math.max((prevQuantities[itemId] || 1) - 1, 1),
+      [itemId]: Math.max((prevQuantities[itemId] || 1) - 1, 1), // Decrementa a quantidade local
     }));
+  
+    const existingItem = cartItems.find((item) => item.id === itemId);
+    if (existingItem) {
+      // Se a quantidade for 1, removemos o item do carrinho
+      if (existingItem.quantity === 1) {
+        removeFromCart(itemId);
+      } else {
+        // Caso contrário, atualizamos a quantidade no carrinho
+        updateCartItemQuantity(itemId, existingItem.quantity - 1);
+      }
+    }
   };
+  
 
   return (
     <div className="">
@@ -171,7 +175,9 @@ const Shoppingcart = () => {
       >
         -
       </button>
-      <span>{quantities[item.id] || 1}</span>
+      <span>{item.quantity}</span>
+      
+      
       <button 
         onClick={() => increaseQuantity(item.id)} 
         style={{ fontSize: '20px', margin: '0 5px' }}
@@ -196,14 +202,6 @@ const Shoppingcart = () => {
 ))) : (
 <p style={{ color: 'red' }}>Nenhum item no carrinho...</p>
 )}
-<div className="center" style={{ marginTop: '10px', textAlign: 'center', width: '100%' }}>
-    <Link 
-      onClick={handleClearCart} 
-      className="continue-shopping" 
-      style={{ color: "#000", fontSize: '16px' }}>
-  Limpar Carrinho
-  </Link>
-</div>
               </ul>
             </Flex>
           </Card>  
@@ -213,7 +211,7 @@ const Shoppingcart = () => {
           <Form onFinish={handleSubmit} initialValues={{ ...orderData }}>
             <div className="flex" style={{fontSize: '24px', borderRadius: '10px', padding:'10px 10px 10px 10px'}}>
               <div className='left-form'><b>Total</b></div>
-              <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
+              <div className='right-form'><b>R$ {calculateTotal()}</b></div>
             </div>
 
             {/* Botão desabilitado se o carrinho estiver vazio */}

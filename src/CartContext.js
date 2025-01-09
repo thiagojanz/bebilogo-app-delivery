@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Outras funções do contexto, como adicionar e remover itens do carrinho
+  // Função para adicionar ao carrinho
   const addToCart = (item) => {
     const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
     if (existingItem) {
@@ -25,14 +25,38 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Função para remover do carrinho
   const removeFromCart = (itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
+  // Função para limpar o carrinho
   const clearCart = () => setCartItems([]);
 
+  // Função para calcular o total do carrinho
+  const calculateTotal = () => {
+    return cartItems
+      .reduce((total, item) => total + (parseFloat(item.PRECO_ATUAL)) * (item.quantity), 0)
+      .toFixed(2);
+  };
+
+  // Função para calcular o total de itens no carrinho
+  const calculateTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, clearCart, removeFromCart, updateCartItemQuantity }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        clearCart,
+        removeFromCart,
+        updateCartItemQuantity,
+        calculateTotal,
+        calculateTotalItems
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
