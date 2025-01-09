@@ -8,22 +8,8 @@ import '../global.css';
 
 const Cart = ({ isOpen, onClose }) => {
   const [totalAmount, setTotalAmount] = useState(0);
-  const { cartItems, updateCartItemQuantity, removeFromCart } = useCart();
+  const { cartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
-
-  const increaseQuantity = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    if (item) {
-      updateCartItemQuantity(itemId, item.quantity + 1);
-    }
-  };
-
-  const decreaseQuantity = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    if (item && item.quantity > 1) {
-      updateCartItemQuantity(itemId, item.quantity - 1);
-    }
-  };
 
   const calculateItemSubtotal = (item) => {
     return (parseFloat(item.PRECO_ATUAL) || 0) * (item.quantity || 0);
@@ -44,7 +30,7 @@ const Cart = ({ isOpen, onClose }) => {
 
   return (
     <div className={`cart-slide-in ${isOpen ? 'open' : ''}`}>
-      <div className="container Cart-section">
+      <div className="container">
         <div className="left-arrow">
           <Link className="secondary" onClick={onClose}><FaArrowLeft /></Link>
         </div>
@@ -70,11 +56,6 @@ const Cart = ({ isOpen, onClose }) => {
                   <button onClick={() => removeFromCart(item.id)} className="remove-item-button">
                     <SlTrash size={20} />
                   </button>
-                  <div className="quantity-control">
-                    <button onClick={() => decreaseQuantity(item.id)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => increaseQuantity(item.id)}>+</button>
-                  </div>
                   <p className="item-total">
                     R$ {calculateItemSubtotal(item).toFixed(2)}
                   </p>
@@ -85,10 +66,17 @@ const Cart = ({ isOpen, onClose }) => {
         </div>
         <div className="container center">
           <div className="flex_profile">
+            <p className="cart-total">
+              Total do Carrinho: <strong style={{fontSize: '20px'}}>R$ {totalAmount}</strong>
+            </p>
+          </div>
+        </div>
+        <div className="container center">
+          <div className="flex_profile" style={{paddingTop:'30px'}}>
             <Button type="default" size="large" onClick={handleCheckout}>
-              Finalizar Pedido <span style={{ marginLeft: 10 }}>
+              Finalizar Pedido <p style={{ marginLeft: 10 }}>
                 <FaArrowCircleRight size={22} />
-              </span>
+              </p>
             </Button>
           </div>
         </div>

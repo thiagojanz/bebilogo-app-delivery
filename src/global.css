@@ -308,7 +308,7 @@ text-decoration: none;
 
 /* Nome do item */
 .item-name {
-  font-weight: bold;
+  font-weight: 400;
   margin: 0;
   width: 200px;
   display: contents;
