@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Flex, Radio, Form, Button, message } from 'antd';
+import { Flex, Radio, Form, Button, message, Card } from 'antd';
 import MD5 from 'crypto-js/md5';
 import { useCart } from '../CartContext'; // Certifique-se de que o CartContext tem uma função para limpar o carrinho
 import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaClipboardList } from "react-icons/fa";
@@ -138,39 +138,74 @@ const Checkout = () => {
       <SectionClient onFreteUpdate={handleFreteUpdate} />
 
       <div className=''>
-        <h3><FaMapMarkerAlt /> Opções de Entrega</h3>
-        <p className='subtitulo-home'>Clique no botão para alterar.</p>
+      <Card title={<><FaMapMarkerAlt size={20} /> <h3 style={{display:'contents'}}>{'Opções de Entrega'}</h3> <br/> <p className="subtitulo-home"> {'Clique no botão para alterar:'} </p></>} 
+      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
         <Flex vertical gap="middle">
           <Radio.Group defaultValue="1" className='bottom10 center' name='ENTREGA' buttonStyle="solid" onChange={handleDeliveryChange}>
             <Radio.Button value="1">Delivery</Radio.Button>
+            <Radio.Button disabled value="2">Buscar na Loja</Radio.Button>
+            <Radio.Button disabled value="3">Agendado</Radio.Button>
           </Radio.Group>
         </Flex>
+        </Card>
       </div>
 
-      <div style={{paddingTop:10}} className=''>
-        <h3><FaMoneyCheck /> Modelo de Pagamento</h3>
-        <p className='subtitulo-home'>Clique no botão para alterar.</p>
+      <div className=''>
+      <Card title={<><FaMoneyCheck size={20} /> <h3 style={{display:'contents'}}>{'Modelo de Pagamento'}</h3> <br/> <p className="subtitulo-home"> {'Clique no botão para alterar:'} </p></>} 
+      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
         <Flex vertical gap="middle">
-          <Radio.Group defaultValue="1" className='bottom10 center' name='PAGAMENTO' buttonStyle="solid" onChange={handlePaymentChange}>
+        <Radio.Group defaultValue="1" className='bottom10 center' name='PAGAMENTO' buttonStyle="solid" onChange={handlePaymentChange}>
             <Radio.Button value="1">Dinheiro</Radio.Button>
             <Radio.Button value="2">Cartão</Radio.Button>
             <Radio.Button value="3">Pix</Radio.Button>
           </Radio.Group>
         </Flex>
+        </Card>
       </div>
 
-      <div style={{paddingTop:10}} className=''>
-        <h3><FaClipboardList /> Produtos Selecionados</h3>
-        <ul className='product-list-checkout'>
-          {cartItems.length > 0 ? cartItems.map((item) => (
-            <li key={item.id}>
+      <div className=''>
+      <Card 
+  title={
+    <>
+      <FaClipboardList size={20} /> 
+      <h3 style={{ display: 'contents' }}>{'Produtos Selecionados'}</h3> 
+      <br /> 
+      <p className="subtitulo-home">{'Lista com seus produtos:'}</p>
+    </>
+  }
+  bordered={true} 
+  style={{ width: '100%', marginBottom: '20px' }}
+>
+  <Flex vertical>
+    <ul className="product-list-checkout" style={{ listStyle: 'none', padding: 0 }}>
+      {cartItems.length > 0 ? (
+        cartItems.map((item) => (
+          <li 
+            key={item.id} 
+            style={{
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              marginBottom: '8px',
+            }}
+          >
+            <span>
               {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} x {item.quantity}
-            </li>
-          )) : <p>Nenhum item no carrinho...</p>}
-        </ul>
+            </span>
+            <span style={{ fontWeight: 'bold' }}>
+              R$ {(parseFloat(item.PRECO_ATUAL) * item.quantity).toFixed(2)}
+            </span>
+          </li>
+        ))
+      ) : (
+        <p style={{ color: 'red' }}>Nenhum item no carrinho...</p>
+      )}
+    </ul>
+  </Flex>
+</Card>
+
       </div>
 
-      <div className='bottom30'>        
+      <div className=''>        
         <Form
           onFinish={handleSubmit}
           initialValues={{
@@ -178,31 +213,37 @@ const Checkout = () => {
             FRETE: frete
           }}
         >   
-          <div className='flex'>
+          <div className='flex' style={{fontSize: '20px', padding:'0px 10px 0px 10px'}}>
             <div className='left-form'><b>Subtotal</b></div>
             <div className='right-form'><b>R$ {orderData.SUBTOTAL}</b></div>
           </div>
-          <div className="flex">
+          <div className="flex" style={{fontSize: '20px', padding:'0px 10px 10px 10px'}}>
             <div className="left-form"><b>Frete</b></div>
             <div className="right-form">
               <b>{isFreteLoading ? 'Aguardando...' : `R$ ${frete}`}</b>
             </div>
           </div>
-          <div className='flex'>
+          <div className="flex" style={{fontSize: '24px', backgroundColor:'black', borderRadius: '10px', color: 'white', padding:'10px 10px 10px 10px'}}>
             <div className='left-form'><b>Total</b></div>
             <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
           </div>
 
           {/* Botão desabilitado se o carrinho estiver vazio */}
           <Button
-  htmlType="submit"
-  className="checkout-button"
-  size="large"
-  disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0}
-  loading={isSubmitting} // Mostra a animação de carregamento
->
-  Fazer Pedido
-</Button>
+            htmlType="submit"
+            className="checkout-button"
+            size="large"
+            disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0}
+            loading={isSubmitting} // Mostra a animação de carregamento
+            style={{
+              marginTop: '30px', // Adiciona espaço acima
+              marginBottom: '60px', // Adiciona espaço abaixo
+              padding: '16px 100px', // Aumenta o tamanho do botão
+              fontSize: '16px', // Mantém o tamanho da fonte
+            }}
+          >
+          Fazer Pedido
+        </Button>
         </Form>
       </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaUserClock, FaRegUser, FaUserPlus, FaUserCheck } from 'react-icons/fa';
-import { Button, Space, Modal, message, Input, Form, Flex, Spin } from 'antd';
+import { Button, Space, Modal, message, Input, Form, Flex, Spin, Card } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Api_VariavelGlobal } from '../global';
 import axios from 'axios';
@@ -195,8 +195,8 @@ const SectionClient = ({ onFreteUpdate }) => {
 
   return (
     <div className="">
-      <h3><FaUserClock /> Dados do Cliente</h3>
-      <p className="subtitulo-home">Este pedido será entregue a:</p>
+      <Card title={<><FaUserClock size={20} /> <h3 style={{display:'contents'}}>{'Dados do Cliente'}</h3> <br/> <p className="subtitulo-home"> {'Este pedido será entregue a:'} </p></>} 
+      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
       <div className="radio-list">
         {isAuthenticated ? (
           <div className="">
@@ -224,7 +224,7 @@ const SectionClient = ({ onFreteUpdate }) => {
         ) : (
           <>
           <div className='center'>
-            <p>Cliente não identificado, favor identificar-se!!!</p>
+            <p style={{color:'red'}}>Cliente não identificado, favor identificar-se!!!</p>
           </div>
           <div className='center'>
             <Space>
@@ -278,6 +278,7 @@ const SectionClient = ({ onFreteUpdate }) => {
         <h2>Login Bem-Sucedido!</h2>
         <p>Carregando seu dados...</p>
       </Modal>
+      </Card>
     </div>
   );
 };
