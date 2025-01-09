@@ -14,6 +14,7 @@ const ClientForm = () => {
   const [EMAIL, setEmail] = useState('');
   const [SENHA, setSenha] = useState('');
   const [REPSENHA, setRepsenha] = useState('');
+  const [NIVEL_ACESSO, setNivel_Acesso] = useState('1');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -65,6 +66,14 @@ const ClientForm = () => {
       <Form onFinish={handleSubmit}>
         <h1 className="titulo-home"><FaUserPlus /> Novo Cliente</h1>
         <p>Dados somente para identificar pedido.</p>
+
+        <Form.Item name="NIVEL_ACESSO">
+          <Input 
+            type='hidden' 
+            value={NIVEL_ACESSO}
+            onChange={(e) => setNivel_Acesso(e.target.value)}/>
+          
+        </Form.Item>
 
         <Form.Item name="LOGIN">
           <Input
