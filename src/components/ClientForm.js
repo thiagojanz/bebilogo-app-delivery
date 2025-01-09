@@ -14,7 +14,7 @@ const ClientForm = () => {
   const [EMAIL, setEmail] = useState('');
   const [SENHA, setSenha] = useState('');
   const [REPSENHA, setRepsenha] = useState('');
-  const [NIVEL_ACESSO, setNivel_Acesso] = useState('1');
+  const [NIVEL_ACESSO, setNivel_Acesso] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const ClientForm = () => {
     setLoading(true); // Ativa o estado de carregamento
   
     // Validações locais
-    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA) {
+    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA || !NIVEL_ACESSO) {
       setLoading(false);
       return message.error('Todos os campos obrigatórios devem ser preenchidos!');
     }
@@ -35,16 +35,17 @@ const ClientForm = () => {
     const telefoneNumeros = TELEFONE.replace(/\D/g, ''); // Remove caracteres especiais
   
     const hashedPassword = CryptoJS.MD5(SENHA).toString(); // Cria o hash MD5 da senha
+    const hashedREPassword = CryptoJS.MD5(REPSENHA).toString(); // Cria o hash MD5 da resenha
   
     const formData = {
       LOGIN,
       NASCIMENTO: '00/00/0000',
       STATUS: '1',
-      NIVEL_ACESSO: '0',
+      NIVEL_ACESSO: '1',
       TELEFONE: telefoneNumeros,
       EMAIL,
       SENHA: hashedPassword, // Envia a senha hashada
-      REPSENHA: hashedPassword, // Garante que o campo REPSENHA também use o hash
+      REPSENHA: hashedREPassword, // Garante que o campo REPSENHA também use o hash
       DATA: new Date().toISOString(),
     };
   
@@ -115,6 +116,7 @@ const ClientForm = () => {
               onChange={(e) => setSenha(e.target.value)}
             />
           </Form.Item>
+          
           <Form.Item name="REPSENHA" style={{ display: 'inline-block', marginLeft: '23px', width: 'calc(50% - 12px)' }}>
             <Input.Password
               size="large"
