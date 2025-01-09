@@ -225,6 +225,9 @@ const Shoppingcart = () => {
           </Form>
         </div>  
       </div>
+      <div className="center">
+            <Link onClick={() => navigate(-1)} className="continue-shopping" style={{color:"#000"}}>Continuar comprando</Link>
+        </div> 
     </div>
   );
 };
