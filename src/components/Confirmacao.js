@@ -19,7 +19,7 @@ const CadastroConfirmation = () => {
       <div className="center-page">
       <FaCheckCircle className='success' size={80} />
       <h1>Pedido realizado<br/> com sucesso!</h1>
-      <h4>Seu pedido foi recebido.</h4><p>Já estamos preparando...</p>
+      <h4>Seu pedido foi recebido.</h4>
       <Button onClick={() => navigate('/orders')}>Acompanhar Pedido</Button>
       </div>
     </div>

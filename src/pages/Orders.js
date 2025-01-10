@@ -144,36 +144,48 @@ const Orders: React.FC = () => {
       <p>Pedidos Realizados</p>
 
       {loading ? (
-        <div className="loading-screen-orders loading-screen">
-          <Flex className='loading-icon-screen' align="center">
-            <Spin indicator={<LoadingOutlined spin />} size="large" />
-          </Flex>
-        </div>
-      ) : (
-        <div style={{paddingBottom: '30px'}}>
-          {currentOrders.map((order) => (
-            <div style={{ background: '#ededed' }} className='orders-card' key={order.ID_PEDIDO}>
-              <Card title={`Pedido #${order.ID_PEDIDO}`} bordered={false} style={{ width: '100%' }} className="list-orders" onClick={() => handleOrderClick(order)}>
-                <div className="order-content">
-                  <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
-                  <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
-                  <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
-                  <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
-                  <div className="order-total">Total: R$ {order.TOTAL}</div>
-                </div>
-              </Card>
-            </div>
-          ))}
-          {/* Paginação */}
-          <Pagination
-            current={currentPage}
-            total={orders.length}
-            pageSize={itemsPerPage}
-            onChange={(page) => setCurrentPage(page)}
-            style={{ textAlign: 'center', marginTop: '20px' }}
-          />
-        </div>
-      )}
+  <div className="loading-screen-orders loading-screen">
+    <Flex className="loading-icon-screen" align="center">
+      <Spin indicator={<LoadingOutlined spin />} size="large" />
+    </Flex>
+  </div>
+) : currentOrders.length === 0 ? ( // Verifica se a lista está vazia
+  <div style={{ textAlign: 'center', marginTop: '20px' }}>
+    <h3>Nenhum pedido encontrado.</h3>
+    <p>Você ainda não realizou nenhum pedido.</p>
+  </div>
+) : (
+  <div style={{ paddingBottom: '30px' }}>
+    {currentOrders.map((order) => (
+      <div style={{ background: '#ededed' }} className="orders-card" key={order.ID_PEDIDO}>
+        <Card
+          title={`Pedido #${order.ID_PEDIDO}`}
+          bordered={false}
+          style={{ width: '100%' }}
+          className="list-orders"
+          onClick={() => handleOrderClick(order)}
+        >
+          <div className="order-content">
+            <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
+            <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
+            <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
+            <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
+            <div className="order-total">Total: R$ {order.TOTAL}</div>
+          </div>
+        </Card>
+      </div>
+    ))}
+    {/* Paginação */}
+    <Pagination
+      current={currentPage}
+      total={orders.length}
+      pageSize={itemsPerPage}
+      onChange={(page) => setCurrentPage(page)}
+      style={{ textAlign: 'center', marginTop: '20px' }}
+    />
+  </div>
+)}
+
 
       {/* Modal de Itens do Pedido */}
       <Modal

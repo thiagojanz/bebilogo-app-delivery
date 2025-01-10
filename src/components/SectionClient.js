@@ -214,7 +214,7 @@ const SectionClient = ({ onFreteUpdate }) => {
               </div>
             ) : (
               <div className="subtitulo-home">
-                <p>Endereço não encontrado... <span>| </span><Link onClick={handleProfile}>Incluir Endereço</Link></p>
+                <p>Endereço não encontrado... <span>| </span><Link style={{color:'red'}} onClick={handleProfile}>Incluir Endereço</Link></p>
               </div>
             )}
             <div className="subtitulo-home">
