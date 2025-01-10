@@ -122,7 +122,7 @@ const ProductDetails = () => {
         </div>
         
         <div className="center" style={{marginTop:10}}>
-          <div className="quantity-control">
+          <div className="quantity-control center">
             <button onClick={decreaseQuantity}>-</button>
             <span>{quantity}</span>
             <button onClick={increaseQuantity}>+</button>
@@ -135,7 +135,7 @@ const ProductDetails = () => {
       
         <div className="center" style={{marginTop:10}}>
           <Button className="buy-button-2" onClick={handleBuy}>Comprar</Button>
-          <Button className="add-to-cart-button-2" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
+          <Button className="add-to-cart-button-1" onClick={handleAddToCart}>Adicionar ao Carrinho</Button>
         </div>
 
         <div className="center">

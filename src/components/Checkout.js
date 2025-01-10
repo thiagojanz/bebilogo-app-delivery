@@ -178,12 +178,9 @@ const Checkout = () => {
               marginBottom: '8px',
             }}
           >
-            <span>
-            {item.quantity} x {item.PRODUTO} - R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)} 
-            </span>
-            <span style={{ fontWeight: 'bold' }}>
-              R$ {(parseFloat(item.PRECO_ATUAL) * item.quantity).toFixed(2)}
-            </span>
+            <span><span style={{ fontWeight: 'bold' }}>{item.PRODUTO}</span>
+            <br/><span style={{fontWeight:'300px'}}>{item.quantity}</span> x R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)}</span>
+            <span style={{ fontWeight: 'bold' }}>R$ {(parseFloat(item.PRECO_ATUAL) * item.quantity).toFixed(2)}</span>
           </li>
         ))
       ) : (

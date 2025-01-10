@@ -132,7 +132,7 @@ const SearchResults = () => {
                           {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}
                         </b>
                         <Flex gap="middle" vertical>
-                          <Rate tooltips={desc} onChange={setValue} value={value} />
+                          <Rate vertical style={{width:'max-content'}} tooltips={desc} onChange={setValue} value={value} />
                         </Flex>
                       </div>
                       <div className="quantity-control">
@@ -142,15 +142,8 @@ const SearchResults = () => {
                       </div>
                     </div>
                     <div className="item-actions">
-                      <Button className="buy-button" onClick={() => handleBuy(product)}>
-                        Comprar
-                      </Button>
-                      <Button
-                        className="add-to-cart-button"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        Adicionar ao Carrinho
-                      </Button>
+                      <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
+                      <Button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                     </div>
                   </div>
                 </div>

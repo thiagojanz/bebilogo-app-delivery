@@ -91,11 +91,11 @@ const ItemList = ({ searchQuery }) => {
     notification.success({
       message: 'Produto adicionado ao carrinho!',
       placement: 'topRight', // Localização: canto superior direito
-      duration: 3, // Tempo de exibição: 3 segundos
+      duration: 5, // Tempo de exibição: 3 segundos
       style: {
-        backgroundColor: '#d4edda', // Verde claro
+        backgroundColor: '#ffffff', // Verde claro
         borderColor: '#c3e6cb',
-        color: '#155724',
+        borderRadius: '10px',
       },
     });
   };
@@ -191,7 +191,7 @@ const ItemList = ({ searchQuery }) => {
                     </div>
 
                     <div className="">
-                      <Button className="buy-button" onClick={() => handleBuy(product)}>Comprar</Button>
+                      <Button className="buy-button-2" onClick={() => handleBuy(product)}>Comprar</Button>
                       <Button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                     </div>
                   </div>

@@ -138,7 +138,7 @@ const Profile = () => {
             )}
             <div className='container center'>
               <div className='flex_profile' style={{paddingBottom: '30px'}}>
-                <Button onClick={handleLogout} type="default" size='large'>Sair (Logout)</Button>
+                <Button className='buy-button-2' onClick={handleLogout} type='default' size='large'>Sair (Logout)</Button>
               </div>
             </div>
           </>

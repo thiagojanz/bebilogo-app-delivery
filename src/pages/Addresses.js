@@ -130,7 +130,7 @@ const Addresses = () => {
   return (
     <div>
       <h3 className="bottom10" style={{marginTop:'20px'}}><FaMapMarkerAlt /> Meu(s) Endereço(s)</h3>
-      <Button onClick={openNewAddressModal}><FaPlus /> Novo Endereço</Button>
+      <Button className="buy-button-2" onClick={openNewAddressModal}><FaPlus /> Novo Endereço</Button>
 
       {error && <p>{error}</p>}
       {addresses.length > 0 ? (

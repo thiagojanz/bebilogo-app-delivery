@@ -217,7 +217,7 @@ const Shoppingcart = () => {
             {/* Botão desabilitado se o carrinho estiver vazio */}
             <div className="container center">
               <div className="flex_profile" style={{paddingTop:'30px'}}>
-                <Button type="default" size="large" onClick={handleCheckout}>Finalizar Pedido <p style={{ fontSize: '25px' }}><FaArrowCircleRight /></p></Button>
+                <Button className='buy-button-2' type="default" size="large" onClick={handleCheckout}>Finalizar Pedido <p style={{ fontSize: '25px' }}><FaArrowCircleRight /></p></Button>
               </div>
             </div>
           </Form>
