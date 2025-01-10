@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, Flex, Spin } from 'antd';
 import { FaMapMarkerAlt } from "react-icons/fa";
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { Api_VariavelGlobal } from '../global';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const AddressForm = () => {
   const [NUMERO, setNumero] = useState(''); // Use setNumero para atualizar o valor
@@ -16,6 +17,7 @@ const AddressForm = () => {
   const [COMPLEMENTO, setComplemento] = useState(''); // Inclua setComplemento
   const [CEP, setCep] = useState('');
   const [userData, setUserData] = useState(null);
+  const [loading, setloading] = useState('');
 
   const navigate = useNavigate();
 
@@ -47,17 +49,20 @@ const AddressForm = () => {
 
   const fetchAddressByCep = async (CEP) => {
     try {
+      setloading(true);
       const response = await axios.get(`https://viacep.com.br/ws/${CEP}/json/`);
-      if (response.data && !response.data.erro) {
+      if (response.data && !response.data.erro) {        
         setEndereco(response.data.logradouro || '');
         setBairro(response.data.bairro || '');
         setCidade(response.data.localidade || '');
         setUf(response.data.uf || '');
       } else {
-        console.error("CEP não encontrado");
+        message.error('Cep não encontrado.');
       }
     } catch (error) {
-      console.error('Erro ao buscar endereço:', error);
+      message.error('Endereço não encontrado.');
+    } finally {
+      setloading(false);
     }
   };
 
@@ -99,6 +104,15 @@ const AddressForm = () => {
       message.error(error.response.data.message);
     }
   };
+
+  if (loading) return (
+    <div className="Marcas-section loading-screen center">
+      <h3>Carregando endereço...</h3>
+      <Flex className='loading-icon-screen'>
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
+      </Flex>
+    </div>
+  );
   
   return (
     <Form onFinish={handleSubmit}>
