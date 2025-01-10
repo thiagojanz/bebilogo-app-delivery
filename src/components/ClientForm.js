@@ -14,15 +14,32 @@ const ClientForm = () => {
   const [EMAIL, setEmail] = useState('');
   const [SENHA, setSenha] = useState('');
   const [REPSENHA, setRepsenha] = useState('');
-  const [NIVEL_ACESSO, setNivel_Acesso] = useState('');
+  const [NIVEL_ACESSO] = useState(1);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values) => {
     setLoading(true); // Ativa o estado de carregamento
   
+    const telefoneNumeros = TELEFONE.replace(/\D/g, ''); // Remove caracteres especiais  
+    const hashedPassword = CryptoJS.MD5(SENHA).toString(); // Cria o hash MD5 da senha  
+    const formData = {
+      LOGIN,
+      NASCIMENTO: '00/00/0000',
+      STATUS: '1',
+      NIVEL_ACESSO,
+      TELEFONE: telefoneNumeros,
+      EMAIL,
+      SENHA: hashedPassword, // Envia a senha hashada
+      REPSENHA: hashedPassword, // Garante que o campo REPSENHA também use o hash
+      DATA: new Date().toISOString(),
+    };
+
+    // Adicionando log para inspecionar os campos
+    console.log('Dados enviados no POST:', formData);
+
     // Validações locais
-    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA || !NIVEL_ACESSO) {
+    if (!LOGIN || !EMAIL || !TELEFONE || !SENHA || !REPSENHA ) {
       setLoading(false);
       return message.error('Todos os campos obrigatórios devem ser preenchidos!');
     }
@@ -31,24 +48,7 @@ const ClientForm = () => {
       setLoading(false);
       return message.error('As senhas não coincidem!');
     }
-  
-    const telefoneNumeros = TELEFONE.replace(/\D/g, ''); // Remove caracteres especiais
-  
-    const hashedPassword = CryptoJS.MD5(SENHA).toString(); // Cria o hash MD5 da senha
-    const hashedREPassword = CryptoJS.MD5(REPSENHA).toString(); // Cria o hash MD5 da resenha
-  
-    const formData = {
-      LOGIN,
-      NASCIMENTO: '00/00/0000',
-      STATUS: '1',
-      NIVEL_ACESSO: '1',
-      TELEFONE: telefoneNumeros,
-      EMAIL,
-      SENHA: hashedPassword, // Envia a senha hashada
-      REPSENHA: hashedREPassword, // Garante que o campo REPSENHA também use o hash
-      DATA: new Date().toISOString(),
-    };
-  
+    
     try {
       const response = await axios.post(`${Api_VariavelGlobal}/api/register`, formData);
       message.success(response.data.message || 'Cadastro realizado com sucesso!');
@@ -67,14 +67,6 @@ const ClientForm = () => {
       <Form onFinish={handleSubmit}>
         <h1 className="titulo-home"><FaUserPlus /> Novo Cliente</h1>
         <p>Dados somente para identificar pedido.</p>
-
-        <Form.Item name="NIVEL_ACESSO">
-          <Input 
-            type='hidden' 
-            value={NIVEL_ACESSO}
-            onChange={(e) => setNivel_Acesso(e.target.value)}/>
-          
-        </Form.Item>
 
         <Form.Item name="LOGIN">
           <Input
