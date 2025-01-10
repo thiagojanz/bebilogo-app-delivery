@@ -114,7 +114,7 @@ const AddressForm = () => {
           </InputMask>
         </Form.Item>
         <Form.Item>
-          <Input required size='large' name='ENDERECO' value={ENDERECO} onChange={(e) => setEndereco(e.target.value)} placeholder="Endereço" />
+          <Input required readOnly  name='ENDERECO' size='large' value={ENDERECO} onChange={(e) => setEndereco(e.target.value)} placeholder="Endereço" />
         </Form.Item>
         <Form.Item style={{ marginBottom: 0 }}>
           <Form.Item style={{ display: 'inline-block', width: 'calc(30% - 0px)' }}>
