@@ -177,7 +177,7 @@ const ItemList = ({ searchQuery }) => {
                     <div className='flex'>
                     <div className="item-current-price">
                       <div><b>R$ {(product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1)).toFixed(2)}</b></div>
-                      <Flex gap="middle" vertical>
+                      <Flex gap="middle" vertical style={{width:'max-content'}}>
                         <Rate tooltips={desc} onChange={setValue} value={value} />
                       </Flex>
                     </div>
