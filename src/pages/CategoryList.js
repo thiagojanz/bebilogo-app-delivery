@@ -44,19 +44,24 @@ const CategoryList = () => {
     <div className="Categorias-section">
       <h2 className="titulo-home-categorias">Categorias</h2>
       <div className="Categorias-list">
-        {categories.map((item) => (
-          <div
-            key={item.ID_CATEGORIA}
-            className="Categorias-item"
-            onClick={() => handleCategoryClick(item.ID_CATEGORIA)} // Adiciona o clique
-          >
-            <img className="Categorias-item-img" src={`https://bebilogo.com.br/uploads_categorias/${item.IMAGEM}`} alt={item.CATEGORIA} />
-            <div>
-              <span>{item.CATEGORIA}</span>
-            </div>
-          </div>
-        ))}
+  {categories.map((item) => (
+    <div
+      key={item.ID_CATEGORIA}
+      className="Categorias-item"
+      onClick={() => handleCategoryClick(item.ID_CATEGORIA)}
+    >
+      <img
+        className="Categorias-item-img"
+        src={`https://bebilogo.com.br/uploads_categorias/${item.IMAGEM}`}
+        alt={item.CATEGORIA}
+      />
+      <div>
+        <span>{item.CATEGORIA}</span>
       </div>
+    </div>
+  ))}
+</div>
+
     </div>
   );
 };

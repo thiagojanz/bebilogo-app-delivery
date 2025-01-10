@@ -337,7 +337,7 @@ text-decoration: none;
 .item-current-price {
   color: black; /* Cor para indicar preço atual */
   float: left;
-  width: 145px;
+  width: auto;
 }
 
 /* Estilo para paginação */
@@ -1011,5 +1011,26 @@ text-decoration: none;
 .ant-tag {
   margin-right: 10px;  /* Adiciona um pequeno espaço entre as tags */
 }
+
+.Categorias-item-img {
+  width: 100%;           /* A imagem ocupa 100% do contêiner pai */
+  max-width: 150px;      /* Define o tamanho máximo da imagem */
+  height: auto;          /* Mantém a proporção da imagem */
+  object-fit: cover;     /* Ajusta o conteúdo para preencher o contêiner */
+  border-radius: 10px;   /* Deixa a imagem levemente arredondada */
+}
+
+@media screen and (max-width: 768px) {
+  .Categorias-item-img {
+    max-width: 100%;    /* Reduz o tamanho máximo em telas menores */
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .Categorias-item-img {
+    max-width: 90%;    /* Ainda menor para dispositivos muito pequenos */
+  }
+}
+
 
 
