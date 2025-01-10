@@ -163,7 +163,7 @@ const ItemList = ({ searchQuery }) => {
                 <div className="item-card" key={product.ID_PRODUTO}>
                   {product.imageUrl ? (
                     <Link to={`/product/${product.ID_PRODUTO}`} className='text-decoration'>
-                      <img src={`https://bebilogo.com.br/uploads/${product.imageUrl}`} alt={product.PRODUTO} className="item-image" />
+                      <img src={`https://bebilogo.com.br/uploads/${product.imageUrl}`} alt='' className="item-image" />
                     </Link>
                   ) : (
                     <p>Imagem não disponível</p>
