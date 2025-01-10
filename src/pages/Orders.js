@@ -141,8 +141,6 @@ const Orders: React.FC = () => {
   return (
     <div className='container'>
       <h1 className="titulo-home"><FaClipboardList /> Meu(s) Pedido(s)</h1>
-      <p>Pedidos Realizados</p>
-
       {loading ? (
   <div className="loading-screen-orders loading-screen">
     <Flex className="loading-icon-screen" align="center">
@@ -150,7 +148,7 @@ const Orders: React.FC = () => {
     </Flex>
   </div>
 ) : currentOrders.length === 0 ? ( // Verifica se a lista está vazia
-  <div style={{ textAlign: 'center', marginTop: '20px' }}>
+  <div style={{ textAlign: 'center', marginTop: '100px' }}>
     <h3>Nenhum pedido encontrado.</h3>
     <p>Você ainda não realizou nenhum pedido.</p>
   </div>

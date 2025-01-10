@@ -197,20 +197,20 @@ const SectionClient = ({ onFreteUpdate }) => {
     <div className="">
       <Card title={<><FaUserClock size={20} /> <h3 style={{display:'contents'}}>{'Dados do Cliente'}</h3> <br/> <p className="subtitulo-home"> {'Este pedido será entregue a:'} </p></>} 
       bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
-      <div className="radio-list">
+      <div>
         {isAuthenticated ? (
           <div className="">
             {userData && (
-              <div className="subtitulo-home">
-                <p><b>{userData.LOGIN}</b><br/>
-                {userData.TELEFONE}</p>
+              <div className="">
+                <b>{userData.LOGIN}</b><br/>
+                {userData.TELEFONE}
               </div>
             )}
             {userAddress ? (
               <div className="subtitulo-home">
-                <p><b>Endereço:</b> {userAddress.ENDERECO} {userAddress.NUMERO}<br/>
+                <b>Endereço:</b> {userAddress.ENDERECO} {userAddress.NUMERO}<br/>
                 {userAddress.COMPLEMENTO} {userAddress.CIDADE}/{userAddress.UF} <span>| </span>
-                <Link style={{paddingleft:10}} onClick={handleProfile}>Alterar Endereço</Link></p>
+                <Link style={{paddingleft:10}} onClick={handleProfile}>Alterar Endereço</Link>
               </div>
             ) : (
               <div className="subtitulo-home">

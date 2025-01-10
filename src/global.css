@@ -163,7 +163,7 @@ text-decoration: none;
 .Categorias-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 1px;
   justify-content: center;  
 }
 
@@ -176,7 +176,7 @@ text-decoration: none;
 .subtitulo-home {
   font-size: 14px;
   margin: 0px 0px 0px 0px;
-  font-weight:400;
+  font-weight:300;
 }
 
 .titulo-home-marcas {
@@ -200,10 +200,10 @@ text-decoration: none;
 }
 
 .Categorias-item {
-  min-width: 100px; /* Largura mínima para cada item */
+  min-width: 80px; /* Largura mínima para cada item */
   flex: 0 0 auto; /* Garante que os itens não encolham nem cresçam */
   align-items: center;
-  padding: 10px;
+  padding: 8px;
   transition: background-color 0.3s ease;
   scroll-snap-align: start; /* Faz com que o item "trave" no início ao rolar */
   flex-direction: column; /* Para que a imagem fique acima do texto */
@@ -215,7 +215,7 @@ text-decoration: none;
   width: 100px;  /* Largura da imagem */
   height: 100px; /* Altura igual à largura para ser circular */
   object-fit: cover; /* Garante que a imagem preencha a área circular */
-  margin-bottom: 10px; /* Espaço entre a imagem e o texto */
+  margin-bottom: 2px; /* Espaço entre a imagem e o texto */
   border-radius: 10px;
 }
 
@@ -337,7 +337,7 @@ text-decoration: none;
 .item-current-price {
   color: black; /* Cor para indicar preço atual */
   float: left;
-  width: auto;
+  width: -webkit-fill-available;
 }
 
 /* Estilo para paginação */
@@ -394,6 +394,7 @@ text-decoration: none;
 
 .quantity-control {
   align-items: center;
+  width: 100%;
 }
 
 .quantity-control button {

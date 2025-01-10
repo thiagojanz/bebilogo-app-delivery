@@ -129,7 +129,7 @@ const Addresses = () => {
 
   return (
     <div>
-      <h3 className="bottom10"><FaMapMarkerAlt /> Meu(s) Endereço(s)</h3>
+      <h3 className="bottom10" style={{marginTop:'20px'}}><FaMapMarkerAlt /> Meu(s) Endereço(s)</h3>
       <Button onClick={openNewAddressModal}><FaPlus /> Novo Endereço</Button>
 
       {error && <p>{error}</p>}

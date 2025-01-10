@@ -6,7 +6,7 @@ import { SlTrash } from "react-icons/sl";
 import { Api_VariavelGlobal } from '../global';
 import '../global.css';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaArrowCircleRight, FaCubes } from "react-icons/fa";
+import { FaArrowCircleRight, FaCubes, FaShoppingCart } from "react-icons/fa";
 
 const Shoppingcart = () => { 
   const { cartItems, addToCart, removeFromCart, updateCartItemQuantity, calculateTotal } = useCart();  
@@ -131,7 +131,7 @@ const Shoppingcart = () => {
   return (
     <div className="">
       <div className="container">
-        <h1 className="titulo-home center">Carrinho de Compra</h1>    
+        <h1 className="titulo-home"><FaShoppingCart/> Carrinho de Compra</h1>    
         <div className=''>
           <Card title={<><FaCubes size={20} /> <h3 style={{display:'contents'}}>{'Produto(s) Selecionado(s)'}</h3> <br/> <p className="subtitulo-home"> {'Lista com seus produtos:'} </p></>} 
             bordered={true} style={{ width: '100%', marginBottom: '20px' }}>
@@ -209,7 +209,7 @@ const Shoppingcart = () => {
 
         <div className=''>        
           <Form onFinish={handleSubmit} initialValues={{ ...orderData }}>
-            <div className="flex" style={{fontSize: '24px', borderRadius: '10px', padding:'10px 10px 10px 10px'}}>
+            <div className="flex" style={{fontSize: '20px', backgroundColor:'#f5f5f5', borderRadius: '10px', padding:'10px 10px 10px 10px'}}>
               <div className='left-form'><b>Total</b></div>
               <div className='right-form'><b>R$ {calculateTotal()}</b></div>
             </div>

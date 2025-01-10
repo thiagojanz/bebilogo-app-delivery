@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserLock, FaUserPlus } from "react-icons/fa";
+import { FaUserLock, FaUserPlus, FaUser } from "react-icons/fa";
 import axios from 'axios';
 import { Api_VariavelGlobal } from '../global';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Form, Button, Input, message, Spin, Modal, Flex } from 'antd';
+import { Form, Button, Input, message, Spin, Modal, Flex, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
@@ -82,7 +82,6 @@ const Profile = () => {
   return (
     <div className='section-auth container'>
       <h1 className="titulo-home"><FaUserLock /> Perfil</h1>
-      <p>Dados do Usuário</p>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
         <Flex className='loading-icon-screen' align="center">
@@ -126,9 +125,14 @@ const Profile = () => {
           <>
             {userData && (
               <div>
-                <p><strong>Nome:</strong> {userData.LOGIN}</p>
-                <p><strong>Email:</strong> {userData.EMAIL}</p>
-                <p><strong>Telefone:</strong> {userData.TELEFONE}</p>
+                <Card title={<><FaUser size={20} /> <h3 style={{display:'contents'}}>{'Cliente'}</h3> <br/> <p className="subtitulo-home"> {'Meus Dados:'} </p></>} 
+              bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
+                <Flex vertical gap="0">
+                <span><strong>Nome:</strong> {userData.LOGIN}</span>
+                <span><strong>Email:</strong> {userData.EMAIL}</span>
+                <span><strong>Telefone:</strong> {userData.TELEFONE}</span>
+                </Flex>
+                </Card>                
                 <Addresses />
               </div>
             )}

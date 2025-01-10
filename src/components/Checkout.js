@@ -213,7 +213,7 @@ const Checkout = () => {
               <b>{isFreteLoading ? 'Aguardando...' : `R$ ${frete}`}</b>
             </div>
           </div>
-          <div className="flex" style={{fontSize: '20px', backgroundColor:'black', borderRadius: '10px', color: 'white', padding:'10px 10px 10px 10px'}}>
+          <div className="flex" style={{fontSize: '20px', backgroundColor:'#f5f5f5', borderRadius: '10px', padding:'10px 10px 10px 10px'}}>
             <div className='left-form'><b>Total</b></div>
             <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
           </div>
