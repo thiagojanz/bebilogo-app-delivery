@@ -9,7 +9,7 @@ import Search from './pages/Search';
 import Orders from './pages/Orders';
 import Shoppingcart from './pages/Shoppingcart';
 import Profile from './pages/Profile';
-import ClientResetForm from './pages/ClientResetForm';
+import ResetPassword from './pages/ResetPassword';
 import Cart from './pages/Cart'; // Importa o componente do carrinho
 import Footer from './components/Footer';
 import FloatingCartIcon from './components/FloatingCartIcon';
@@ -49,7 +49,7 @@ const App = () => {
             <CheckRoute>
               <Routes>
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/reset-password-confirmation" element={<ClientResetForm />} />                
+                <Route path="/reset_password/:token" element={<ResetPassword />} />                
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/orders" element={<Orders />} />

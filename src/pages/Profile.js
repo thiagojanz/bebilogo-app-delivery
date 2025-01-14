@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
 import ClientForm from '../components/ClientForm';
-import ClientResetForm from '../pages/ClientResetForm';
 import { LoadingOutlined } from '@ant-design/icons';
+import ForgotPassword from './ForgotPassword';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -152,7 +152,7 @@ const Profile = () => {
       </Modal>
 
       <Modal open={showResetPassword} onCancel={() => setShowResetPassword(false)} footer={null}>
-        <ClientResetForm />
+        <ForgotPassword />
       </Modal>
     </div>
   );
