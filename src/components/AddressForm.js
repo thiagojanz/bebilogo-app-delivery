@@ -151,7 +151,7 @@ const AddressForm = () => {
         </Form.Item>
         <div className='container center'>
           <div className='flex_profile'>
-            <Button type="default" size='large' htmlType="submit">Cadastrar</Button>
+            <Button className='buy-button-2' type="primary" size='large' htmlType="submit">Cadastrar</Button>
           </div>
         </div> 
       </div>        

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserLock, FaUserPlus, FaUser } from "react-icons/fa";
+import { FaUserLock, FaUserPlus, FaUser, FaKey } from "react-icons/fa";
 import axios from 'axios';
 import { Api_VariavelGlobal } from '../global';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
 import ClientForm from '../components/ClientForm';
+import ClientResetForm from '../pages/ClientResetForm';
 import { LoadingOutlined } from '@ant-design/icons';
 
 const Profile = () => {
@@ -16,6 +17,7 @@ const Profile = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showNewLogin, setShowNewLogin] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -91,7 +93,7 @@ const Profile = () => {
       ) : (
         !isAuthenticated ? (
           <>
-            <Button className='bottom10' type='primary' onClick={() => setShowNewLogin(true)}>
+            <Button className='buy-button-2' type='primary' onClick={() => setShowNewLogin(true)}>
               <FaUserPlus /> Novo Cliente
             </Button>
             <Form onFinish={handleLogin}>
@@ -111,12 +113,12 @@ const Profile = () => {
 
               <div className='container center'>
                 <div className='flex_profile'>
-                  <Button type="default" size='large' htmlType="submit">Efetuar Login</Button>
+                  <Button className='buy-button-2' type="primary" size='large' htmlType="submit">Efetuar Login</Button>
                 </div>
               </div>
               <div className='center'>
-                  <Link to='/' className="continue-shopping">
-                    Esqueci a Senha
+                <Link className='continue-shopping' onClick={() => setShowResetPassword(true)}>
+                  <FaKey /> Esqueci a Senha
                   </Link>
                 </div>
             </Form>
@@ -147,6 +149,10 @@ const Profile = () => {
 
       <Modal open={showNewLogin} onCancel={() => setShowNewLogin(false)} footer={null}>
         <ClientForm />
+      </Modal>
+
+      <Modal open={showResetPassword} onCancel={() => setShowResetPassword(false)} footer={null}>
+        <ClientResetForm />
       </Modal>
     </div>
   );

@@ -122,7 +122,7 @@ const ClientForm = () => {
 
         <div className="container center">
           <div className="flex_profile">
-            <Button type="default" size="large" htmlType="submit" loading={loading}>
+            <Button className='buy-button-2' type="primary" size="large" htmlType="submit" loading={loading}>
               Cadastrar
             </Button>
           </div>
