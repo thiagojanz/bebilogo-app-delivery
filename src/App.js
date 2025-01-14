@@ -66,8 +66,9 @@ const App = () => {
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="/confirmacao" element={<Confirmacao />} />
                 <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />
-                {/* Rota para página não encontrada */}
+                {/* 
                 <Route path="*" element={<Navigate to="/" />} />
+                */}
               </Routes>
             </CheckRoute>
           </div>
