@@ -111,7 +111,9 @@ const ProductsCategory = () => {
           <Link className="secondary" to='/'><FaArrowLeft /></Link>
         </div>
         <h2 className="titulo-home center">Produtos por Categoria</h2>
-        <p>Nenhum produto encontrado...</p>
+        {!loading && filteredProducts.length === 0 && (
+          <p className="no-products-found">Nenhum produto encontrado...</p>
+        )}
       </div>
     );
   }
@@ -159,7 +161,7 @@ const ProductsCategory = () => {
                   </div>
                 </div>
                 <div className="item-actions">
-                  <Button className='buy-button' onClick={() => handleBuy(product)}>Comprar</Button>
+                  <Button className='buy-button-2' onClick={() => handleBuy(product)}>Comprar</Button>
                   <Button className='add-to-cart-button' onClick={() => handleAddToCart(product)}>Adicionar ao Carrinho</Button>
                 </div>
               </div>

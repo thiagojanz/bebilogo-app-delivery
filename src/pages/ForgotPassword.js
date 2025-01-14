@@ -11,24 +11,31 @@ const ForgotPassword = ({ closeModal }) => {  // closeModal será a função que
 
   // Função que será chamada ao enviar o formulário
   const handleSubmit = async (values) => {
-    const { email } = values; // Desestruturando o valor de email enviado pelo Form
+    const { email } = values;
     setLoading(true);
+  
     try {
-      // Enviar o e-mail para o backend para iniciar o processo de redefinição de senha
+      // Faz a requisição para o backend
       const response = await axios.post(`${Api_VariavelGlobal}/api/forgot-password`, { email });
-      setMessage(response.data.message);
-
-      // Fechar o modal (se aplicável)
-      if (closeModal) closeModal();
-
-      // Redirecionar para a página 'reset_senha'
-      history.push('/reset_senha');
+  
+      // Verifica se o status HTTP indica sucesso
+      if (response.status === 200 || response.status === 201) {
+        setMessage(response.data.message || "E-mail enviado com sucesso.");
+        if (closeModal) closeModal();
+        history('/reset_senha'); // Redireciona para a página de redefinição de senha
+      } else {
+        throw new Error(response.data.message || "Erro desconhecido.");
+      }
     } catch (error) {
-      setMessage("Erro ao enviar e-mail. Tente novamente.");
+      console.error("Erro:", error); // Log para depuração
+      setMessage(
+        error.response?.data?.message || "Erro ao enviar e-mail. Tente novamente."
+      );
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div style={{ maxWidth: 400, margin: "0 auto", padding: "20px" }}>
@@ -51,13 +58,7 @@ const ForgotPassword = ({ closeModal }) => {  // closeModal será a função que
         </Form.Item>
 
         <Form.Item>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            block 
-            loading={loading}
-            disabled={loading}
-          >
+          <Button className="buy-button-2" type="primary" htmlType="submit" block loading={loading} disabled={loading} onClick={handleSubmit}>
             {loading ? "Enviando..." : "Enviar Link de Redefinição"}
           </Button>
         </Form.Item>
