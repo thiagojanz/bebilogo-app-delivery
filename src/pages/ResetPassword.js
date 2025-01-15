@@ -2,23 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Form, Input, Button, Alert } from "antd";
+import { Api_VariavelGlobal } from '../global';
 
 const ResetPassword = () => {
   const { token: paramToken } = useParams(); // Captura o token da URL (rota dinâmica)
   const location = useLocation(); // Captura o query string da URL
   const navigate = useNavigate();
 
-  const [token, setToken] = useState(paramToken || ""); // Inicializa com o token
+  const [token, setToken] = useState(null); // Inicializa como null
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Extraindo o token da query string, se disponível
+  // Capturar o token da URL e da query string
   useEffect(() => {
-    if (!paramToken) {
+    if (paramToken) {
+      setToken(paramToken); // Se o token estiver na URL (parâmetro dinâmico), usa ele
+    } else {
       const queryParams = new URLSearchParams(location.search);
-      const queryToken = queryParams.get("token");
+      const queryToken = queryParams.get("token"); // Tenta pegar da query string
       if (queryToken) {
         setToken(queryToken);
       } else {
@@ -27,23 +30,31 @@ const ResetPassword = () => {
     }
   }, [location.search, paramToken]);
 
+  useEffect(() => {
+    if (!token) {
+      setMessage("Token inválido ou expirado.");
+    }
+  }, [token]);
+
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
       setMessage("As senhas não coincidem!");
       return;
     }
-
+  
     setLoading(true);
     try {
-      const response = await axios.post("/api/reset-password", { token, password });
+      console.log({ token, password });
+      const response = await axios.post( `${Api_VariavelGlobal}/api/reset_password`, { token, password });
       setMessage(response.data.message || "Senha redefinida com sucesso!");
-      setTimeout(() => navigate("/login"), 3000); // Redireciona para login após 3s
+      setTimeout(() => navigate("/alteracao-confirmation"), 3000); // Redireciona para login após 3s
     } catch (error) {
       setMessage("Erro ao redefinir a senha. Tente novamente.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div style={{ maxWidth: 400, margin: "0 auto", padding: "20px" }}>
