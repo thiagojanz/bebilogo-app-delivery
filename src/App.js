@@ -49,7 +49,7 @@ const App = () => {
             <CheckRoute>
               <Routes>
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/reset_password/:token" element={<ResetPassword />} />                
+                <Route path="/reset-password/:token" element={<ResetPassword />} />                
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/orders" element={<Orders />} />
