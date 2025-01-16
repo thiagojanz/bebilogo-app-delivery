@@ -161,10 +161,10 @@ text-decoration: none;
 }
 
 .Categorias-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
-  justify-content: center;  
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 itens por linha */
+  gap: 10px; /* Espaço entre os itens */
+  justify-content: center;
 }
 
 .titulo-home {
@@ -855,9 +855,22 @@ text-decoration: none;
     display: flex;
 }
 
+.button-trash-user {
+  color: #bebebe;
+    cursor: pointer;
+    float: left;
+    display: flex;
+}
+
 .button-switch-address {
   margin-right: 10px;
   float: right;
+}
+
+.button-edit-user {
+  margin-right: 10px;
+  float: right;
+  color: #1677ff;
 }
 
 .link-reset-password {

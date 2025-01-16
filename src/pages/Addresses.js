@@ -140,20 +140,15 @@ const Addresses = () => {
               <Card bordered={false} style={{ width: '100%' }}>
                 <div style={{ display: 'flow-root' }}>
                   <div className="button-trash-address">
-                    <FaTrash
-                      onClick={() => showDeleteModal(address.ID_ENDERECO)}
-                      size={20}
-                      style={{
+                    <FaTrash onClick={() => showDeleteModal(address.ID_ENDERECO)} size={20} 
+                    style={{
                         color: selectedAddressId === address.ID_ENDERECO ? 'gray' : 'red',
                         pointerEvents: selectedAddressId === address.ID_ENDERECO ? 'none' : 'auto'
                       }}
                     />
                   </div>
                   <div className="button-switch-address">
-                    <Switch
-                      checked={selectedAddressId === address.ID_ENDERECO}
-                      onChange={(checked) => handleSwitchChange(checked, address.ID_ENDERECO)}
-                    />
+                    <Switch checked={selectedAddressId === address.ID_ENDERECO} onChange={(checked) => handleSwitchChange(checked, address.ID_ENDERECO)}/>
                   </div>
                 </div>
                 <p className="item-name">{address.ENDERECO}, {address.NUMERO} | {address.BAIRRO}</p>

@@ -130,9 +130,10 @@ const ItemList = ({ searchQuery }) => {
   wrap={false}  // Desabilita o wrap para garantir alinhamento horizontal
   style={{
     paddingBottom: '15px', 
-    overflowX: 'auto',        // Habilita o scroll horizontal
+    overflowX: 'hidden',        // Habilita o scroll horizontal
     whiteSpace: 'nowrap',      // Impede o quebra de linha
     display: 'flex',
+    gap: '10px'
   }}
 >
   {categories.map((category) => (

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
-import { FaUserLock, FaUserPlus, FaUser, FaKey } from "react-icons/fa";
+import { FaUserLock, FaUserPlus, FaUser, FaKey, FaTrash, FaEdit } from "react-icons/fa";
 import axios from 'axios';
 import { Api_VariavelGlobal } from '../global';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Form, Button, Input, message, Spin, Modal, Flex, Card } from 'antd';
+import { Form, Button, Input, message, Spin, Modal, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
@@ -18,6 +18,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [showNewLogin, setShowNewLogin] = useState(false);
   const [showResetPassword, setShowResetPassword] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editedUserData, setEditedUserData] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -40,7 +43,7 @@ const Profile = () => {
         });
         setUserData(response.data);
       } catch (error) {
-        message.error('Erro ao carregar os dados do usuário.');
+        message.error('Erro ao carregar dados');
       } finally {
         setLoading(false);
       }
@@ -59,13 +62,13 @@ const Profile = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data.user.ID_USUARIO);
       setIsAuthenticated(true);
-      message.success('Seja Bem Vindo!!!');
+      message.success('Seja Bem Vindo');
       fetchUserData();
     } catch (error) {
       if (error.response) {
         message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
       } else if (error.request) {
-        message.error('Erro: O servidor não respondeu.');
+        message.error('Erro: O servidor não respondeu');
       } else {
         message.error('Erro: ' + error.message);
       }
@@ -74,11 +77,49 @@ const Profile = () => {
     }
   };
 
+  const handleEdit = () => {
+    setEditedUserData(userData); // Preenche os dados do modal com os dados atuais
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(`${Api_VariavelGlobal}/api/user/${userData.ID_USUARIO}`, editedUserData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      message.success('Dados atualizados com sucesso');
+      setShowEditModal(false);
+      fetchUserData();
+    } catch (error) {
+      message.error('Erro ao salvar alterações');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(`${Api_VariavelGlobal}/api/user/${userData.ID_USUARIO}/deactivate`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      message.success('Usuário Excluido com sucesso');
+      handleLogout();
+    } catch (error) {
+      message.error('Erro ao excluir usuário');
+    }
+  };
+  
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     setIsAuthenticated(false);
     setUserData(null);
+    message.success('Volte Sempre');
   };
 
   return (
@@ -86,10 +127,8 @@ const Profile = () => {
       <h1 className="titulo-home"><FaUserLock /> Perfil</h1>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
-        <Flex className='loading-icon-screen' align="center">
           <Spin indicator={<LoadingOutlined spin />} size="large" />
-        </Flex>
-      </div>
+        </div>
       ) : (
         !isAuthenticated ? (
           <>
@@ -116,27 +155,38 @@ const Profile = () => {
                   <Button className='buy-button-2' type="primary" size='large' htmlType="submit">Efetuar Login</Button>
                 </div>
               </div>
-              <div className='center'>
-                <Link className='continue-shopping' onClick={() => setShowResetPassword(true)}>
-                  <FaKey /> Esqueci a Senha
+
+              <div className='container center'>
+                <div className='flex_profile'>
+                  <Link className='continue-shopping' onClick={() => setShowResetPassword(true)}>
+                    <FaKey /> Esqueci a Senha
                   </Link>
                 </div>
+              </div>
             </Form>
           </>
         ) : (
           <>
             {userData && (
-              <div>
-                <Card title={<><FaUser size={20} /> <h3 style={{display:'contents'}}>{'Cliente'}</h3> <br/> <p className="subtitulo-home"> {'Meus Dados:'} </p></>} 
-              bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
-                <Flex vertical gap="0">
-                <span><strong>Nome:</strong> {userData.LOGIN}</span>
-                <span><strong>Email:</strong> {userData.EMAIL}</span>
-                <span><strong>Telefone:</strong> {userData.TELEFONE}</span>
-                </Flex>
-                </Card>                
+              <Card title={<><FaUser size={20} /> 
+              <h3 style={{display:'contents'}}>{'Cliente'}</h3> <br/> <p className="subtitulo-home"> {'Meus Dados:'} </p></>} 
+            bordered={true} style={{ width: '100%', marginBottom: '20px' }}> 
+                
+                <div style={{ display: 'flow-root' }}>
+                  <div className="button-trash-user">
+                    <FaTrash onClick={() => setShowDeleteModal(true)} size={20} style={{ cursor: 'pointer' }} />
+                  </div>
+                  <div className="button-edit-user">
+                    <FaEdit onClick={handleEdit} size={20} style={{ cursor: 'pointer' }} />
+                  </div>
+                  </div>
+                  
+                
+                <p><strong>Nome:</strong> {userData.LOGIN}</p>
+                <p><strong>Email:</strong> {userData.EMAIL}</p>
+                <p><strong>Telefone:</strong> {userData.TELEFONE}</p>
                 <Addresses />
-              </div>
+              </Card>
             )}
             <div className='container center'>
               <div className='flex_profile' style={{paddingBottom: '30px'}}>
@@ -146,6 +196,24 @@ const Profile = () => {
           </>
         )
       )}
+
+      <Modal open={showEditModal} onCancel={() => setShowEditModal(false)} onOk={handleSaveEdit}>
+        <Form layout="vertical">
+          <Form.Item label="Nome">
+            <Input value={editedUserData.LOGIN} onChange={(e) => setEditedUserData({ ...editedUserData, LOGIN: e.target.value })} />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input readOnly disabled value={editedUserData.EMAIL} onChange={(e) => setEditedUserData({ ...editedUserData, EMAIL: e.target.value })} />
+          </Form.Item>
+          <Form.Item label="Telefone">
+            <Input value={editedUserData.TELEFONE} onChange={(e) => setEditedUserData({ ...editedUserData, TELEFONE: e.target.value })} />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal open={showDeleteModal} onCancel={() => setShowDeleteModal(false)} onOk={handleDelete}>
+        <p>Tem certeza que deseja excluir sua conta?</p>
+      </Modal>
 
       <Modal open={showNewLogin} onCancel={() => setShowNewLogin(false)} footer={null}>
         <ClientForm />
