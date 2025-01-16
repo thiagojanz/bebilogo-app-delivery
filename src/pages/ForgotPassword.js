@@ -3,6 +3,7 @@ import axios from "axios";
 import { Api_VariavelGlobal } from '../global';
 import { Form, Input, Button, Alert } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom'; // Importando o useNavigate
 
 const ForgotPassword = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,7 @@ const ForgotPassword = ({ closeModal }) => {
   const [codeSent, setCodeSent] = useState(false); // Controle para exibir o campo de código
   const [verificationCode, setVerificationCode] = useState(''); // Armazena o código digitado
   const [email, setEmail] = useState(''); // Estado para armazenar o e-mail
+  const navigate = useNavigate(); // Hook para navegação programática
 
   // Preenche o campo de e-mail automaticamente se o usuário estiver logado
   useEffect(() => {
@@ -51,7 +53,7 @@ const ForgotPassword = ({ closeModal }) => {
       const response = await axios.post(`${Api_VariavelGlobal}/api/verify-code`, { token: verificationCode, email: email }); // Use o e-mail armazenado
 
       if (response.status === 200) {
-        window.location.href = `/reset-password/${verificationCode}`; // Redireciona para a página de redefinição
+        navigate(`/reset-password/${verificationCode}`); // Navega para a página de redefinição      
       } else {
         setMessage("Código inválido. Tente novamente.");
         setMessageColor('red');
