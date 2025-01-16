@@ -64,33 +64,46 @@ const ForgotPassword = ({ closeModal }) => {
     }
   };
 
+  // Função para voltar ao estado inicial e limpar os campos
+  const handleBackToEmail = () => {
+    setCodeSent(false);
+    setEmail('');
+    setVerificationCode('');
+  };
+
   return (
     <div style={{ maxWidth: 400, margin: "0 auto" }}>
       <h2 style={{ textAlign: "center" }}>Esqueci minha Senha</h2>
       {!codeSent ? (
-        <Form name="forgot-password" onFinish={handleSubmitEmail} layout="vertical">
-          <Form.Item
-            label="E-mail"
-            name="email"
-            initialValue={email} // Preenche o campo com o e-mail
-            rules={[
-              { required: true, message: "Por favor, insira seu e-mail!" },
-              { type: "email", message: "E-mail inválido!" },
-            ]}
-          >
-            <Input
-              type="email"
-              placeholder="Digite seu e-mail"
-              value={email} // Vincula o valor do campo ao estado `email`
-              onChange={(e) => setEmail(e.target.value)} // Atualiza o estado ao digitar
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block loading={loading} disabled={loading}>
-              {loading ? "Enviando..." : "Enviar Link de Redefinição"}
-            </Button>
-          </Form.Item>
-        </Form>
+        <div>
+          <Form name="forgot-password" onFinish={handleSubmitEmail} layout="vertical">
+            <Form.Item
+              label="E-mail"
+              name="email"
+              initialValue={email} // Preenche o campo com o e-mail
+              rules={[
+                { required: true, message: "Por favor, insira seu e-mail!" },
+                { type: "email", message: "E-mail inválido!" },
+              ]}
+            >
+              <Input
+                type="email"
+                placeholder="Digite seu e-mail"
+                value={email} // Vincula o valor do campo ao estado `email`
+                onChange={(e) => setEmail(e.target.value)} // Atualiza o estado ao digitar
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block loading={loading} disabled={loading}>
+                {loading ? "Enviando..." : "Enviar Link de Redefinição"}
+              </Button>
+            </Form.Item>
+          </Form>
+          {/* Adiciona o botão para "já tenho o código" */}
+          <Button type="link" block onClick={() => setCodeSent(true)}>
+            Já tenho o código
+          </Button>
+        </div>
       ) : (
         <div>
           <Form.Item label="Código de Verificação">
@@ -101,6 +114,14 @@ const ForgotPassword = ({ closeModal }) => {
               value={verificationCode}
             />
           </Form.Item>
+          <Form.Item label="Email">
+          <Input
+                type="email"
+                placeholder="Digite seu e-mail"
+                value={email} // Vincula o valor do campo ao estado `email`
+                onChange={(e) => setEmail(e.target.value)} // Atualiza o estado ao digitar
+              />
+          </Form.Item>
           <Button
             type="primary"
             block
@@ -109,6 +130,10 @@ const ForgotPassword = ({ closeModal }) => {
             onClick={handleVerifyCode}
           >
             {loading ? "Verificando..." : "Verificar Código"}
+          </Button>
+          {/* Botão "Voltar" para retornar ao campo de e-mail */}
+          <Button type="link" block onClick={handleBackToEmail}>
+            Voltar
           </Button>
         </div>
       )}
@@ -124,11 +149,7 @@ const ForgotPassword = ({ closeModal }) => {
             backgroundColor: "white",
             marginTop: "10px",
           }}
-          icon={
-            <ExclamationCircleOutlined
-              style={{ color: messageColor }}
-            />
-          }
+          icon={<ExclamationCircleOutlined style={{ color: messageColor }} />}
         />
       )}
     </div>
