@@ -44,20 +44,22 @@ const ResetPassword = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "0 auto", marginTop:'30px' }}>
+    <div className="container" style={{ maxWidth: 400, margin: "0 auto", marginTop:'30px' }}>
       <h2 style={{ textAlign: "center" }}>Redefinir Senha</h2>
-      <Form name="reset-password" onFinish={handleSubmit} layout="vertical">
+      <Form className="container" style={{padding:'20px'}} name="reset-password" onFinish={handleSubmit} layout="vertical">
         <Form.Item label="Nova Senha" name="password" rules={[{ required: true, message: "Digite sua nova senha!" }]}>
           <Input.Password placeholder="Nova Senha" />
         </Form.Item>
         <Form.Item label="Confirmar Senha" name="confirmPassword" rules={[{ required: true, message: "Confirme sua senha!" }]}>
           <Input.Password placeholder="Confirme sua Senha" />
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block loading={loading}>
-            {loading ? "Alterando..." : "Alterar Senha"}
-          </Button>
-        </Form.Item>
+
+        <div className='container center'>
+          <div className='flex_profile'>
+            <Button className='buy-button-2' type="primary" size='large' loading={loading} htmlType="submit"> {loading ? "Alterando..." : "Alterar Senha"}</Button>
+          </div>
+        </div>
+        
       </Form>
 
       {message && (

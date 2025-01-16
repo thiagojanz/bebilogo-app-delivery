@@ -74,7 +74,7 @@ const ForgotPassword = ({ closeModal }) => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "0 auto" }}>
+    <div className="container" style={{padding:'20px', maxWidth: 400, margin: "0 auto" }}>
       <h2 style={{ textAlign: "center" }}>Esqueci minha Senha</h2>
       {!codeSent ? (
         <div>
@@ -88,36 +88,39 @@ const ForgotPassword = ({ closeModal }) => {
                 { type: "email", message: "E-mail inválido!" },
               ]}
             >
-              <Input
+              <Input          
                 type="email"
+                size="large"
                 placeholder="Digite seu e-mail"
                 value={email} // Vincula o valor do campo ao estado `email`
                 onChange={(e) => setEmail(e.target.value)} // Atualiza o estado ao digitar
               />
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" block loading={loading} disabled={loading}>
-                {loading ? "Enviando..." : "Enviar Link de Redefinição"}
-              </Button>
-            </Form.Item>
+            <div className='container center'>
+                <Button className='buy-button-2' type="primary" size='large' loading={loading} disabled={loading} htmlType="submit">
+                  {loading ? "Enviando..." : "Enviar Link de Redefinição"}
+                </Button>
+            </div>
           </Form>
           {/* Adiciona o botão para "já tenho o código" */}
-          <Button type="link" block onClick={() => setCodeSent(true)}>
+          <Button style={{marginTop:'20px'}} type="link" block onClick={() => setCodeSent(true)}>
             Já tenho o código
           </Button>
         </div>
       ) : (
         <div>
-          <Form.Item label="Código de Verificação">
+          <Form.Item><br/>
+            <p>Código de Verificação:*</p>
             <Input
+              required
               placeholder="Digite o código de 6 dígitos"
               maxLength={6}
               onChange={(e) => setVerificationCode(e.target.value)}
               value={verificationCode}
-            />
-          </Form.Item>
-          <Form.Item label="Email">
+            />          
+            <p>Email:*</p>
           <Input
+                required
                 type="email"
                 placeholder="Digite seu e-mail"
                 value={email} // Vincula o valor do campo ao estado `email`
@@ -134,9 +137,11 @@ const ForgotPassword = ({ closeModal }) => {
             {loading ? "Verificando..." : "Verificar Código"}
           </Button>
           {/* Botão "Voltar" para retornar ao campo de e-mail */}
-          <Button type="link" block onClick={handleBackToEmail}>
+          <div className='container center'>
+          <Button style={{marginTop:'20px'}} className='center' type="link" size='large' onClick={handleBackToEmail}>
             Voltar
           </Button>
+          </div>
         </div>
       )}
 
