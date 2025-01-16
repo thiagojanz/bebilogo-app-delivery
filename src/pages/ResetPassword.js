@@ -57,7 +57,7 @@ const ResetPassword = () => {
   // Determina o tipo de mensagem: 'error' ou 'success'
   const getMessageType = () => {
     if (message.includes("Erro") || message.includes("inválido")) {
-      return "error"; // Cor vermelha para erro
+      return "error"; // Cor vermelha para error
     }
     return "success"; // Cor verde para sucesso
   };
