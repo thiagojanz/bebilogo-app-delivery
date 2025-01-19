@@ -50,11 +50,10 @@ const CategoryList = () => {
       className="Categorias-item"
       onClick={() => handleCategoryClick(item.ID_CATEGORIA)}
     >
-      <img
-        className="Categorias-item-img"
-        src={`https://bebilogo.com.br/uploads_categorias/${item.IMAGEM}`}
-        alt={item.CATEGORIA}
-      />
+    <img
+  className="Categorias-item-img"
+  src={`${process.env.PUBLIC_URL}/imagens/${item.IMAGEM}`} alt={item.CATEGORIA}
+/>
       <div>
         <span>{item.CATEGORIA}</span>
       </div>

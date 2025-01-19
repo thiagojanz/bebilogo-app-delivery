@@ -4,7 +4,7 @@ import { FaUserLock, FaUserPlus, FaUser, FaKey, FaTrash, FaEdit } from "react-ic
 import axios from 'axios';
 import { Api_VariavelGlobal } from '../global';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Form, Button, Input, message, Spin, Modal, Card } from 'antd';
+import { Form, Button, Input, message, Spin, Modal, Card, Flex } from 'antd';
 import { Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import Addresses from './Addresses';
@@ -21,7 +21,7 @@ const Profile = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editedUserData, setEditedUserData] = useState({});
-
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -41,7 +41,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUserData(response.data);
+        setUserData(response.userData);
       } catch (error) {
         message.error('Erro ao carregar dados');
       } finally {
@@ -59,14 +59,14 @@ const Profile = () => {
         SENHA: hashedPassword,
       });
 
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.user.ID_USUARIO);
+      localStorage.setItem('token', response.userData.token);
+      localStorage.setItem('userId', response.userData.user.ID_USUARIO);
       setIsAuthenticated(true);
       message.success('Seja Bem Vindo');
       fetchUserData();
     } catch (error) {
       if (error.response) {
-        message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
+        message.error('Erro: ' + (error.response.userData.message || 'Erro desconhecido'));
       } else if (error.request) {
         message.error('Erro: O servidor não respondeu');
       } else {
@@ -83,6 +83,10 @@ const Profile = () => {
   };
 
   const handleSaveEdit = async () => {
+    if (!editedUserData.LOGIN || !editedUserData.TELEFONE) {
+        message.error('Todos os campos devem ser preenchidos.');
+        return;
+      }
     try {
       const token = localStorage.getItem('token');
       await axios.put(`${Api_VariavelGlobal}/api/user/${userData.ID_USUARIO}`, editedUserData, {
@@ -127,8 +131,10 @@ const Profile = () => {
       <h1 className="titulo-home"><FaUserLock /> Perfil</h1>
       {loading ? (
         <div className="loading-screen-orders loading-screen">
+        <Flex className="loading-icon-screen" align="center">
           <Spin indicator={<LoadingOutlined spin />} size="large" />
-        </div>
+        </Flex>
+      </div>
       ) : (
         !isAuthenticated ? (
           <>

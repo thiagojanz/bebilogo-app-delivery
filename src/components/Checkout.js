@@ -104,10 +104,11 @@ const Checkout = () => {
         clearCart(); // Limpa o carrinho
         navigate('/confirmacao'); // Redireciona para a tela de confirmação
       } else {
-        alert('Erro ao realizar o pedido: ' + data.error);
+        message.error('Erro ao realizar o pedido, favor tentar novamente...');
+        //message.error('Erro ao realizar o pedido: ' + data.error);
       }
     } catch (error) {
-      console.error('Erro de comunicação com a API:', error);
+      message.error('Erro de comunicação com a API:', error);
     } finally {
       setIsSubmitting(false); // Desativa o estado de carregamento
     }

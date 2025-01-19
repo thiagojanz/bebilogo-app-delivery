@@ -2,7 +2,6 @@
 import React from 'react';
 import CategoryList from '../pages/CategoryList';
 import SearchComponent from '../components/SearchComponent';
-import ItemList from '../pages/ItemList';
 
 const Home = () => {
   return (
@@ -34,7 +33,6 @@ const Home = () => {
       <div>
         <SearchComponent />
         <CategoryList />
-        <ItemList />
       </div>
     </div>
   );
