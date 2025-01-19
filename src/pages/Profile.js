@@ -41,7 +41,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUserData(response.userData);
+        setUserData(response.data);
       } catch (error) {
         message.error('Erro ao carregar dados');
       } finally {
@@ -59,14 +59,14 @@ const Profile = () => {
         SENHA: hashedPassword,
       });
 
-      localStorage.setItem('token', response.userData.token);
-      localStorage.setItem('userId', response.userData.user.ID_USUARIO);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.user.ID_USUARIO);
       setIsAuthenticated(true);
       message.success('Seja Bem Vindo');
       fetchUserData();
     } catch (error) {
       if (error.response) {
-        message.error('Erro: ' + (error.response.userData.message || 'Erro desconhecido'));
+        message.error('Erro: ' + (error.response.data.message || 'Erro desconhecido'));
       } else if (error.request) {
         message.error('Erro: O servidor não respondeu');
       } else {
