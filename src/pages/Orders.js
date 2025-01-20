@@ -52,6 +52,26 @@ const Orders: React.FC = () => {
     }
   };
 
+  const getCardBackgroundColor = (value) => {
+    const numericValue = Number(value);
+    switch (numericValue) {
+      case 1:
+        return '#FFC107'; // Loja aberta ou pedido confirmado (cor verde)
+      case 2:
+        return '#FF9800'; // Intenção de compra (cor laranja)
+      case 3:
+        return '#2196F3'; // Aguardando confirmação (cor amarela)
+      case 4:
+        return '#FF5722 '; // Em preparação (cor azul)
+      case 5:
+        return '#4CAF50'; // Em entrega (cor vermelha)
+      case 6:
+        return '#9E9E9E'; // Concluído (cor cinza)
+      default:
+        return '#F44336'; // Cor padrão para status desconhecido (vermelho)
+    }
+  };
+
   const getPaymentMethod = (value) => {
     const numericValuePay = Number(value);
     switch (numericValuePay) {
@@ -182,11 +202,11 @@ const Orders: React.FC = () => {
       ) : (
         <div style={{ paddingBottom: '30px' }}>
           {currentOrders.map((order) => (
-            <div style={{ background: '#ededed' }} className="orders-card" key={order.ID_PEDIDO}>
+            <div className="orders-card" key={order.ID_PEDIDO}>
               <Card
                 title={`Pedido ${order.ID_PEDIDO}`}
                 bordered={false}
-                style={{ width: '100%' }}
+                style={{ width: '100%', backgroundColor: getCardBackgroundColor(order.STATUS) }}
                 className="list-orders"
                 onClick={() => handleOrderClick(order)}
               >
