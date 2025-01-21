@@ -48,13 +48,13 @@ const Orders = () => {
       case 2:
         return "Intenção de Compra";
       case 3:
-        return "Aguardando Confirmação";
+        return (<><FaClock style={{ marginRight: 5 }} /> Aguardando Confirmação</>);
       case 4:
-        return "Em Preparação";
+        return (<><FaClock style={{ marginRight: 5 }} /> Em Preparação</>);
       case 5:
-        return "Em Entrega";
+        return (<><FaClock style={{ marginRight: 5 }} /> Em Entrega</>);
       case 6:
-        return (<><FaClock style={{ marginRight: 5 }} /> Concluído</>);
+        return (<>style={{ marginRight: 5 }} /> Concluído</>);
       default:
         return "Status Desconhecido";
     }
@@ -88,7 +88,7 @@ const Orders = () => {
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 6:
-        backgroundColor = '#000000'; // Concluído (cor preto)
+        backgroundColor = 'rgb(104 104 104)'; // Concluído (cor preto)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       default:
