@@ -6,7 +6,7 @@ import { Api_VariavelGlobal } from '../global';
 
 const ToAccompany = ({ orderId }) => {
   const [status, setStatus] = useState(null); // Status do pedido
-
+  
   // Função para consultar o status do pedido na API
   const fetchOrderStatus = useCallback(async () => {
     try {
@@ -19,17 +19,12 @@ const ToAccompany = ({ orderId }) => {
       }
     } catch (err) {
       console.error('Erro ao carregar status do pedido:', err);
-    } finally {
-    }
+    } 
   }, [orderId]);
 
   useEffect(() => {
     fetchOrderStatus(); // Chama a função ao carregar o componente
-    const intervalId = setInterval(fetchOrderStatus, 10000); // Consulta a cada 10 segundos
-
-    // Limpar o intervalo quando o componente for desmontado
-    return () => clearInterval(intervalId);
-  }, [fetchOrderStatus]); // Adicionando 'fetchOrderStatus' como dependência
+  }, [fetchOrderStatus]);
 
   // Função para renderizar o título do passo, com ícone de carregamento se for o status atual
   const renderStepTitle = (stepTitle, stepStatus) => {
