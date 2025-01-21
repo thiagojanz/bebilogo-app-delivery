@@ -1,25 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Spin, Steps, Flex } from 'antd';
+import { Steps } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios'; // Caso queira utilizar axios para fazer requisição
 import { Api_VariavelGlobal } from '../global';
 
 const ToAccompany = ({ orderId }) => {
   const [status, setStatus] = useState(null); // Status do pedido
-  const [loading, setLoading] = useState(true); // Estado de carregamento
-
-  // Função para exibir o ícone de carregamento
-  const LoadingScreen = () => (
-    <div className="loading-screen-orders loading-screen">
-      <Flex className="loading-icon-screen" align="center">
-        <Spin indicator={<LoadingOutlined spin />} size="large" />
-      </Flex>
-    </div>
-  );
 
   // Função para consultar o status do pedido na API
   const fetchOrderStatus = useCallback(async () => {
-    setLoading(true); // Inicia o carregamento
     try {
       const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/status/${orderId}`);
       console.log('Resposta da API:', response.data);
@@ -31,7 +20,6 @@ const ToAccompany = ({ orderId }) => {
     } catch (err) {
       console.error('Erro ao carregar status do pedido:', err);
     } finally {
-      setLoading(false); // Finaliza o carregamento
     }
   }, [orderId]);
 
@@ -55,11 +43,6 @@ const ToAccompany = ({ orderId }) => {
     }
     return stepTitle;
   };
-
-  // Exibe o carregamento enquanto o status é obtido
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   // Define os passos com base no status do pedido
   const steps = [
