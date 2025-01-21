@@ -37,7 +37,11 @@ const ToAccompany = ({ orderId }) => {
 
   useEffect(() => {
     fetchOrderStatus(); // Chama a função ao carregar o componente
-  }, [fetchOrderStatus]);
+    const intervalId = setInterval(fetchOrderStatus, 10000); // Consulta a cada 10 segundos
+
+    // Limpar o intervalo quando o componente for desmontado
+    return () => clearInterval(intervalId);
+  }, [fetchOrderStatus]); // Adicionando 'fetchOrderStatus' como dependência
 
   // Função para renderizar o título do passo, com ícone de carregamento se for o status atual
   const renderStepTitle = (stepTitle, stepStatus) => {
