@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spin, Alert, Modal, Button, Card, Flex, Pagination } from 'antd';
 import { Api_VariavelGlobal } from '../global';
-import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList } from 'react-icons/fa';
+import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList, FaBiking } from 'react-icons/fa';
 import moment from 'moment';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 
@@ -48,11 +48,11 @@ const Orders = () => {
       case 2:
         return "Intenção de Compra";
       case 3:
-        return (<><FaClock style={{ marginRight: 5 }} /> Aguardando Confirmação</>);
+        return (<><FaClock style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Aguardando Confirmação</>);
       case 4:
-        return (<><FaClock style={{ marginRight: 5 }} /> Em Preparação</>);
+        return (<><SyncOutlined spin style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Em Preparação</>);
       case 5:
-        return (<><FaClock style={{ marginRight: 5 }} /> Em Entrega</>);
+        return (<><FaBiking style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Em Entrega</>);
       case 6:
         return (<>Concluído</>);
       default:
@@ -68,7 +68,7 @@ const Orders = () => {
   
     switch (numericValue) {
       case 1:
-        backgroundColor = '#4CAF50'; // Loja aberta ou pedido confirmado (cor verde)
+        backgroundColor = '#FFC107'; // Loja aberta ou pedido confirmado (cor verde)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 2:
@@ -84,7 +84,7 @@ const Orders = () => {
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 5:
-        backgroundColor = '#FFC107'; // Em entrega (cor vermelha)
+        backgroundColor = '#4CAF50'; // Em entrega (cor vermelha)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 6:
