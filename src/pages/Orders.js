@@ -52,7 +52,7 @@ const Orders = () => {
       case 4:
         return (<>Em Preparação <SyncOutlined spin style={{ marginLeft: 5, fontSize: 24, verticalAlign: 'sub' }} /></>);
       case 5:
-        return (<>Em Entrega <FaBiking style={{ marginLeft: 5, fontSize: 24, verticalAlign: 'sub' }} /></>);
+        return (<>Saiu para Entrega <FaBiking style={{ marginLeft: 5, fontSize: 24, verticalAlign: 'sub' }} /></>);
       case 6:
         return (<>Concluído</>);
       default:
