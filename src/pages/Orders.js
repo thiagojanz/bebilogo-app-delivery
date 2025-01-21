@@ -48,11 +48,11 @@ const Orders = () => {
       case 2:
         return "Intenção de Compra";
       case 3:
-        return (<><FaClock style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Aguardando Confirmação</>);
+        return (<>Aguardando Confirmação <FaClock style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /></>);
       case 4:
-        return (<><SyncOutlined spin style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Em Preparação</>);
+        return (<>Em Preparação <SyncOutlined spin style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /></>);
       case 5:
-        return (<><FaBiking style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /> Em Entrega</>);
+        return (<>Em Entrega <FaBiking style={{ marginRight: 10, fontSize: 24, verticalAlign: 'sub' }} /></>);
       case 6:
         return (<>Concluído</>);
       default:
