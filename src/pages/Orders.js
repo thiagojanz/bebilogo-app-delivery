@@ -54,7 +54,7 @@ const Orders = () => {
       case 5:
         return (<><FaClock style={{ marginRight: 5 }} /> Em Entrega</>);
       case 6:
-        return (<>style={{ marginRight: 5 }} /> Concluído</>);
+        return (<>Concluído</>);
       default:
         return "Status Desconhecido";
     }
