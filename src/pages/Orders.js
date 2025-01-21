@@ -76,15 +76,15 @@ const Orders = () => {
         color = '#FFFFFF'; // Cor do texto (preto)
         break;
       case 3:
-        backgroundColor = '#FF5722'; // Aguardando confirmação (cor azul)
+        backgroundColor = 'rgb(24, 144, 255)'; // Aguardando confirmação (cor azul)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 4:
-        backgroundColor = '#FF9800'; // Em preparação (cor laranja)
+        backgroundColor = 'rgb(255, 87, 34)'; // Em preparação (cor laranja)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 5:
-        backgroundColor = '#4CAF50'; // Em entrega (cor vermelha)
+        backgroundColor = 'rgb(76, 175, 80)'; // Em entrega (cor vermelha)
         color = '#FFFFFF'; // Cor do texto (branco)
         break;
       case 6:
