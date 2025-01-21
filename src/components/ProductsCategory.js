@@ -74,7 +74,7 @@ const ProductsCategory = () => {
     notification.success({
       message: 'Produto adicionado ao carrinho!',
       placement: 'topRight', // Localização: canto superior direito
-      duration: 3, // Tempo de exibição: 3 segundos
+      duration: 2, // Tempo de exibição: 3 segundos
       style: {
         backgroundColor: '#d4edda', // Verde claro
         borderColor: '#c3e6cb',

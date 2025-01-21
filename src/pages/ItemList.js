@@ -91,7 +91,7 @@ const ItemList = ({ searchQuery }) => {
     notification.success({
       message: 'Produto adicionado ao carrinho!',
       placement: 'topRight', // Localização: canto superior direito
-      duration: 5, // Tempo de exibição: 3 segundos
+      duration: 2, // Tempo de exibição: 3 segundos
       style: {
         backgroundColor: '#ffffff', // Verde claro
         borderColor: '#c3e6cb',

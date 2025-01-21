@@ -7,7 +7,8 @@ import moment from 'moment';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-const Orders: React.FC = () => {
+
+const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Página atual
   const [itemsPerPage] = useState(5); // Número de pedidos por página
@@ -39,38 +40,66 @@ const Orders: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const getStatus = (value) => {
-    const numericValue = Number(value);
-    switch (numericValue) {
-      case 1: return '';
-      case 2: return 'Intenção de Compra';
-      case 3: return 'Aguardando Confirmação';
-      case 4: return 'Em Preparação';
-      case 5: return 'Em Entrega';
-      case 6: return 'Concluído';
-      default: return 'Desconhecido';
-    }
-  };
-
-  const getCardBackgroundColor = (value) => {
+  const getStatusText = (value) => {
     const numericValue = Number(value);
     switch (numericValue) {
       case 1:
-        return '#FFC107'; // Loja aberta ou pedido confirmado (cor verde)
+        return "Pedido Confirmado";
       case 2:
-        return '#FF9800'; // Intenção de compra (cor laranja)
+        return "Intenção de Compra";
       case 3:
-        return '#2196F3'; // Aguardando confirmação (cor amarela)
+        return "Aguardando Confirmação";
       case 4:
-        return '#FF5722 '; // Em preparação (cor azul)
+        return "Em Preparação";
       case 5:
-        return '#4CAF50'; // Em entrega (cor vermelha)
+        return "Em Entrega";
       case 6:
-        return '#9E9E9E'; // Concluído (cor cinza)
+        return (<><FaClock style={{ marginRight: 5 }} /> Concluído</>);
       default:
-        return '#F44336'; // Cor padrão para status desconhecido (vermelho)
+        return "Status Desconhecido";
     }
   };
+  
+
+  const getCardStyles = (value) => {
+    const numericValue = Number(value);
+    let backgroundColor = '#F44336'; // Cor padrão para status desconhecido (vermelho)
+    let color = '#FFFFFF'; // Cor do texto padrão (branco)
+  
+    switch (numericValue) {
+      case 1:
+        backgroundColor = '#4CAF50'; // Loja aberta ou pedido confirmado (cor verde)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+      case 2:
+        backgroundColor = '#2196F3'; // Intenção de compra (cor amarelo)
+        color = '#FFFFFF'; // Cor do texto (preto)
+        break;
+      case 3:
+        backgroundColor = '#FF5722'; // Aguardando confirmação (cor azul)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+      case 4:
+        backgroundColor = '#FF9800'; // Em preparação (cor laranja)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+      case 5:
+        backgroundColor = '#FFC107'; // Em entrega (cor vermelha)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+      case 6:
+        backgroundColor = '#000000'; // Concluído (cor preto)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+      default:
+        backgroundColor = '#F44336'; // Cor padrão para status desconhecido (vermelho)
+        color = '#FFFFFF'; // Cor do texto (branco)
+        break;
+    }
+  
+    return { backgroundColor, color };
+  };
+  
 
   const getPaymentMethod = (value) => {
     const numericValuePay = Number(value);
@@ -200,19 +229,37 @@ const Orders: React.FC = () => {
           <p>Você ainda não realizou nenhum pedido.</p>
         </div>
       ) : (
-        <div style={{ paddingBottom: '30px' }}>
+        <div style={{ paddingBottom: '30px'}}>
           {currentOrders.map((order) => (
-            <div className="orders-card" key={order.ID_PEDIDO}>
+            <div className="orders-card" style={{backgroundColor:'transparent'}} key={order.ID_PEDIDO}>
               <Card
-                title={`Pedido ${order.ID_PEDIDO}`}
-                bordered={false}
-                style={{ width: '100%', backgroundColor: getCardBackgroundColor(order.STATUS) }}
-                className="list-orders"
-                onClick={() => handleOrderClick(order)}
-              >
+  key={order.ID_PEDIDO}
+  title={
+    <>
+      <span>{`Pedido ${order.ID_PEDIDO}`}</span>
+    </>
+  }
+  bordered={false}
+  style={{ width: '100%' }}
+  className="list-orders"
+  headStyle={{
+    backgroundColor: getCardStyles(order.STATUS).backgroundColor,
+    color: getCardStyles(order.STATUS).color
+  }}
+  extra={
+    <span
+      style={{
+        color: getCardStyles(order.STATUS).color,
+        fontWeight: 'bold'
+      }}
+    >
+      {getStatusText(order.STATUS)} {/* Aqui você pode customizar o texto do status */}
+    </span>
+  }
+  onClick={() => handleOrderClick(order)}
+>
                 <div className="order-content">
                   <div className="order-date"><FaCalendar /> {moment(order.DATA).format('DD/MM/YYYY HH:mm')}</div>
-                  <div className="order-id"><FaClock /> {getStatus(order.STATUS)}</div>
                   <div className="order-pay"><FaCreditCard /> {getPaymentMethod(order.PAGAMENTO)}</div>
                   <div className="order-delivery"><FaMotorcycle /> {getDeliveryMethod(order.ENTREGA)}</div>
                   <div className="order-total">Total: R$ {order.TOTAL}</div>

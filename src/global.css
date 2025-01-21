@@ -958,19 +958,13 @@ text-decoration: none;
 .order-content {
   display: grid;
   grid-template-areas:
-    "date id"
-    "pay status"
-    "delivery total"
-    "empty empty";
+    "pay date"
+    "delivery total";    
   grid-gap: 8px;
 }
 
 .order-date {
   grid-area: date;
-}
-
-.order-id {
-  grid-area: id;
   text-align: right;
 }
 
@@ -985,7 +979,7 @@ text-decoration: none;
 
 .order-total {
   grid-area: total;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   text-align: right;
 }
