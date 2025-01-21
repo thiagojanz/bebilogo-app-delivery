@@ -11,6 +11,7 @@ import ToAccompany from '../components/ToAccompany';
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [orderId, setOrderId] = useState(null);  // Definindo o estado do orderId
+  const [statusId, setStatusId] = useState([]);  // Definindo o estado do orderId
   const [currentPage, setCurrentPage] = useState(1); // Página atual
   const [itemsPerPage] = useState(5); // Número de pedidos por página
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,7 @@ const Orders = () => {
   const userId = localStorage.getItem('userId');  
 
 
-  const fetchOrderItems = useCallback(async (orderId) => {
+  const fetchOrderItems = useCallback(async (orderId, ) => {
     setModalLoading(true);
     try {
       const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/${userId}/itens/${orderId}`, {
@@ -149,10 +150,18 @@ const Orders = () => {
           const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+    
           const updatedOrders = response.data.sort((a, b) => b.ID_PEDIDO - a.ID_PEDIDO);
+    
           setOrders((prevOrders) =>
             prevOrders.map((order) => {
               const updatedOrder = updatedOrders.find((newOrder) => newOrder.ID_PEDIDO === order.ID_PEDIDO);
+    
+              // Atualize o estado do statusId apenas para o pedido atual no modal
+              if (order.ID_PEDIDO === orderId) {
+                setStatusId(updatedOrder ? updatedOrder.STATUS : order.STATUS);
+              }
+    
               return updatedOrder ? { ...order, STATUS: updatedOrder.STATUS } : order;
             })
           );
@@ -160,7 +169,9 @@ const Orders = () => {
           setError(`Erro ao atualizar pedidos: ${err.response ? err.response.data.message : err.message}`);
         }
       }
+      
     };
+    
   
     fetchOrders(); // Carregar os pedidos inicialmente
   
@@ -170,7 +181,7 @@ const Orders = () => {
     }, 10000);
   
     return () => clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
-  }, [token, userId]); // Adicionar apenas as dependências essenciais
+  }, [orderId, token, userId]); // Adicionar apenas as dependências essenciais
 
   const renderOrderItems = () => {
     if (modalLoading) {
@@ -304,14 +315,17 @@ const Orders = () => {
 
       {/* Modal de Itens do Pedido */}
       <Modal
-         title={`Pedido ${orderId}`}
-        open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={[<Button key="close" onClick={() => setIsModalVisible(false)}>Fechar</Button>]}
-      >
-        {renderOrderItems(orderId)}  {/* Passando o orderId */}
-        <ToAccompany orderId={orderId} />  {/* Passando o orderId para ToAccompany */}
-      </Modal>
+  title={`Pedido ${orderId}`}
+  open={isModalVisible}
+  onCancel={() => setIsModalVisible(false)}
+  footer={[
+    <Button key="close" onClick={() => setIsModalVisible(false)}>Fechar</Button>
+  ]}
+>
+  {renderOrderItems(orderId)} {/* Passando o orderId */}
+  <ToAccompany orderId={orderId} statusId={statusId} /> {/* Passando props corretamente */}
+</Modal>
+
     </div>
   );
 };
