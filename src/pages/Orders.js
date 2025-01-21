@@ -11,7 +11,7 @@ import ToAccompany from '../components/ToAccompany';
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [orderId, setOrderId] = useState(null);  // Definindo o estado do orderId
-  const [statusId, setStatusId] = useState([]);  // Definindo o estado do orderId
+  const [statusId, setStatusId] = useState(null);  // Definindo o estado do statusId
   const [currentPage, setCurrentPage] = useState(1); // Página atual
   const [itemsPerPage] = useState(5); // Número de pedidos por página
   const [loading, setLoading] = useState(false);
@@ -40,6 +40,8 @@ const Orders = () => {
   }, [userId, token]);  // Dependências de fetchOrderItems 
 
   const handleOrderClick = async (order) => {
+    setOrderId('');
+    setStatusId('');
     await fetchOrderItems(order.ID_PEDIDO);
     setIsModalVisible(true);
   };
@@ -175,10 +177,10 @@ const Orders = () => {
   
     fetchOrders(); // Carregar os pedidos inicialmente
   
-    // Definir o intervalo para atualizar o status dos pedidos a cada 10 segundos
+    // Definir o intervalo para atualizar o status dos pedidos a cada 8 segundos
     const intervalId = setInterval(() => {
       updateOrderStatus();
-    }, 10000);
+    }, 5000);
   
     return () => clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
   }, [orderId, token, userId]); // Adicionar apenas as dependências essenciais

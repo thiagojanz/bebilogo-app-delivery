@@ -4,7 +4,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 const ToAccompany = ({ orderId, statusId }) => {
   if (!orderId || !statusId) {
-    return <div>Erro: Dados do pedido não encontrados.</div>;
+    return <div>Aguarde por favor, carregando...</div>;
   }
 
   // Função para renderizar o título do passo, com ícone de carregamento se for o status atual
