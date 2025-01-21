@@ -5,7 +5,7 @@ import { Api_VariavelGlobal } from '../global';
 import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList, FaBiking } from 'react-icons/fa';
 import moment from 'moment';
 import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import ToAccompany from '../components/ToAccompany';
 
 const Orders = () => {
@@ -39,11 +39,13 @@ const Orders = () => {
     }
   }, [userId, token]);  // Dependências de fetchOrderItems 
 
+  const navigate = useNavigate(); // Declare o hook aqui, dentro do componente principal
+
   const handleOrderClick = async (order) => {
-    setOrderId('');
-    setStatusId('');
-    await fetchOrderItems(order.ID_PEDIDO);
-    setIsModalVisible(true);
+    setOrderId(''); // Limpa o estado anterior do pedido
+    setStatusId(''); // Limpa o estado anterior do status
+    await fetchOrderItems(order.ID_PEDIDO); // Executa a lógica de fetch necessária
+    navigate(`/acompanhar-pedido/${order.ID_PEDIDO}`); // Use o navigate aqui
   };
 
   const getStatusText = (value) => {

@@ -25,6 +25,7 @@ import ProductsAll from './components/ProductsAll';
 import ProductsByBrand from './pages/ProductsByBrand';
 import './global.css';
 import { CartProvider } from './CartContext'; // Certifique-se de importar o provider
+import ToAccompany from './components/AcompanharPedidos';
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -53,6 +54,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/acompanhar-pedido/:id" element={<ToAccompany />} />
                 <Route path="/shoppingcart" element={<Shoppingcart />} />
                 <Route path="/ProductsAll" element={<ProductsAll />} />
                 <Route path="/cadastro-confirmation" element={<CadastroConfirmation />} />
