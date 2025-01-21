@@ -59,7 +59,7 @@ const ToAccompany = ({ orderId }) => {
 
   // Define os passos com base no status do pedido
   const steps = [
-    { title: renderStepTitle('Recebido', '2') },
+    { title: renderStepTitle('Pedido Recebido', '2') },
     { title: renderStepTitle('Aguardando Confirmação', '3') },
     { title: renderStepTitle('Preparação iniciada', '4') },
     { title: renderStepTitle('Saiu para entrega', '5') },
@@ -68,7 +68,6 @@ const ToAccompany = ({ orderId }) => {
 
   return (
     <div>
-      <div>Status do Pedido: {status}</div> {/* Exibindo o valor do status */}
       <Steps
         direction="vertical"
         size="small"
