@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Spin, Alert, Modal, Button, Card, Flex, Pagination } from 'antd';
 import { Api_VariavelGlobal } from '../global';
@@ -6,10 +6,11 @@ import { FaCreditCard, FaMotorcycle, FaClock, FaCalendar, FaClipboardList, FaBik
 import moment from 'moment';
 import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
+import ToAccompany from '../components/ToAccompany';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [orderId, setOrderId] = useState(null);  // Definindo o estado do orderId
   const [currentPage, setCurrentPage] = useState(1); // Página atual
   const [itemsPerPage] = useState(5); // Número de pedidos por página
   const [loading, setLoading] = useState(false);
@@ -19,21 +20,23 @@ const Orders = () => {
   const [modalLoading, setModalLoading] = useState(false);
 
   const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');  
 
-  const fetchOrderItems = async (orderId) => {
+
+  const fetchOrderItems = useCallback(async (orderId) => {
     setModalLoading(true);
     try {
       const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/${userId}/itens/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setOrderId(orderId);  // Atualize o estado com o orderId  
       setSelectedOrderItems(response.data || []);
     } catch (err) {
       setError(`Erro ao carregar itens do pedido: ${err.response ? err.response.data.message : err.message}`);
     } finally {
       setModalLoading(false);
     }
-  };
+  }, [userId, token]);  // Dependências de fetchOrderItems 
 
   const handleOrderClick = async (order) => {
     await fetchOrderItems(order.ID_PEDIDO);
@@ -59,7 +62,6 @@ const Orders = () => {
         return "Status Desconhecido";
     }
   };
-  
 
   const getCardStyles = (value) => {
     const numericValue = Number(value);
@@ -99,7 +101,6 @@ const Orders = () => {
   
     return { backgroundColor, color };
   };
-  
 
   const getPaymentMethod = (value) => {
     const numericValuePay = Number(value);
@@ -133,7 +134,6 @@ const Orders = () => {
         const response = await axios.get(`${Api_VariavelGlobal}/api/pedidos/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
         const sortedOrders = response.data.sort((a, b) => b.ID_PEDIDO - a.ID_PEDIDO);
         setOrders(sortedOrders);
       } catch (err) {
@@ -171,7 +171,6 @@ const Orders = () => {
   
     return () => clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
   }, [token, userId]); // Adicionar apenas as dependências essenciais
-  
 
   const renderOrderItems = () => {
     if (modalLoading) {
@@ -184,15 +183,40 @@ const Orders = () => {
 
     return (
       <div>
-        {selectedOrderItems.map((item, index) => (
-          <div key={index}>
-            <p><strong>Produto:</strong> {item.ID_PRODUTO}</p>
-            <p><strong>Quantidade:</strong> {item.QUANTIDADE}</p>
-            <p><strong>Preço:</strong> R${item.PRECO_UNITARIO}</p>
-            <hr />
-          </div>
-        ))}
-      </div>
+  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <thead>
+      <tr>
+        <th style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f0f0f0' }}>Produto</th>
+        <th style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f0f0f0' }}>Quantidade</th>
+        <th style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f0f0f0' }}>Preço Unitário</th>
+        <th style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f0f0f0' }}>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {selectedOrderItems.map((item, index) => {
+        const precoUnitario = parseFloat(item.PRECO_UNITARIO) || 0; // Converte para número e trata valores inválidos
+        const subtotal = item.QUANTIDADE * precoUnitario; // Calcula o subtotal
+        return (
+          <tr key={index}>
+            <td style={{ padding: '5px' }}>{item.ID_PRODUTO}</td>
+            <td style={{ padding: '5px' }}>{item.QUANTIDADE}</td>
+            <td style={{ padding: '5px' }}>R${precoUnitario.toFixed(2)}</td>
+            <td style={{ padding: '5px' }}>R${subtotal.toFixed(2)}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colSpan={3} style={{ textAlign: 'right', padding: '5px', fontWeight: 'bold' }}>Total sem frete:</td>
+        <td style={{ padding: '5px', fontWeight: 'bold' }}>
+          R${selectedOrderItems.reduce((acc, item) => acc + (parseFloat(item.PRECO_UNITARIO) || 0) * item.QUANTIDADE, 0).toFixed(2)}
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+    
     );
   };
 
@@ -280,12 +304,13 @@ const Orders = () => {
 
       {/* Modal de Itens do Pedido */}
       <Modal
-        title="Itens do Pedido"
+         title={`Pedido ${orderId}`}
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={[<Button key="close" onClick={() => setIsModalVisible(false)}>Fechar</Button>]}
       >
-        {renderOrderItems()}
+        {renderOrderItems(orderId)}  {/* Passando o orderId */}
+        <ToAccompany orderId={orderId} />  {/* Passando o orderId para ToAccompany */}
       </Modal>
     </div>
   );
