@@ -59,7 +59,7 @@ const ToAccompany = ({ orderId }) => {
         direction="vertical"
         size="small"
         current={status ? ['2', '3', '4', '5', '6'].indexOf(status) : 0} // Mapeia o status para o índice
-        items={steps} // Mantém os steps fixos, apenas atualiza o 'current'
+        items={steps}
       />
     </div>
   );
