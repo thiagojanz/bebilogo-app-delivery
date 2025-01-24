@@ -182,7 +182,7 @@ const Orders = () => {
     // Definir o intervalo para atualizar o status dos pedidos a cada 8 segundos
     const intervalId = setInterval(() => {
       updateOrderStatus();
-    }, 5000);
+    }, 10000);
   
     return () => clearInterval(intervalId); // Limpar o intervalo quando o componente for desmontado
   }, [orderId, token, userId]); // Adicionar apenas as dependências essenciais

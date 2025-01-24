@@ -39,7 +39,7 @@ const ToAccompany = () => {
     fetchOrderStatus();
 
     // Configura o polling para buscar em tempo real a cada 5 segundos
-    const interval = setInterval(fetchOrderStatus, 30000);
+    const interval = setInterval(fetchOrderStatus, 5000);
 
     // Limpa o intervalo ao desmontar o componente
     return () => clearInterval(interval);
