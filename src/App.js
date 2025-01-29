@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import FloatingCartIcon from './components/FloatingCartIcon';
 import SplashScreen from './components/SplashScreen';
 import Checkout from './components/Checkout.js'; // Importe o componente Checkout
+import OrderSummary from './components/OrderSummary.js'; // Importe o componente Checkout
 import OrderConfirmation from './pages/OrderConfirmation'; // Importe a tela de confirmação
 import CadastroConfirmation from './components/CadastroConfirmation';
 import EnderecoConfirmation from './components/EnderecoConfirmation';
@@ -65,6 +66,7 @@ const App = () => {
                 <Route path="/produtos/categoria/:idCategoria" element={<ProductsCategory />} />
                 <Route path="/categories" element={<CategoryList />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-summary" element={<OrderSummary />} />
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="/confirmacao" element={<Confirmacao />} />
                 <Route path="/produtos/marca/:brandId" element={<ProductsByBrand />} />

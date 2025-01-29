@@ -64,7 +64,7 @@ const SearchResults = () => {
 
   const handleBuy = (product) => {
     handleAddToCart(product);
-    navigate('/checkout', {
+    navigate('/order-summary', {
       state: {
         totalAmount: product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1),
         isOpen: true,

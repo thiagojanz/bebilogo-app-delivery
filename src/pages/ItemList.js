@@ -102,7 +102,7 @@ const ItemList = ({ searchQuery }) => {
 
   const handleBuy = (product) => {
     handleAddToCart(product);
-    navigate('/checkout', { state: { totalAmount: product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1), isOpen: true } });
+    navigate('/order-summary', { state: { totalAmount: product.PRECO_ATUAL * (quantities[product.ID_PRODUTO] || 1), isOpen: true } });
   };
 
   const increaseQuantity = (id) => {

@@ -1,242 +1,115 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Flex, Radio, Form, Button, message, Card } from 'antd';
-import MD5 from 'crypto-js/md5';
-import { useCart } from '../CartContext'; // Certifique-se de que o CartContext tem uma função para limpar o carrinho
-import { FaArrowLeft, FaMapMarkerAlt, FaMoneyCheck, FaCubes } from "react-icons/fa";
-import { Api_VariavelGlobal } from '../global';
-import '../global.css';
-import { useNavigate, Link } from 'react-router-dom';
-import SectionClient from '../components/SectionClient';
+import React, { useState } from "react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid"; // Para gerar o UUID
 
 const Checkout = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const generateRandomToken = () => MD5(Math.floor(Math.random() * 99999).toString()).toString();
-  const [isFreteLoading, setIsFreteLoading] = useState(true);
-  const { cartItems, clearCart } = useCart(); // Adicione a função clearCart do contexto
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const [frete, setFrete] = useState();
-  const [orderData, setOrderData] = useState({
-    STATUS: '3',
-    OBS: 'Pedido pelo Ap',
-    ENTREGA: '1',
-    PAGAMENTO: '1',
-    TOKEN: generateRandomToken(),
-    ID_LOJA: '0',
-    ID_USUARIO: localStorage.getItem('userId'),
-    SUBTOTAL: '0.00',
-    TOTAL: '0.00',
-    FRETE: '0.00',
-    DATA: new Date().toISOString(),
-  });
+  const [amount, setAmount] = useState(""); // Valor da transação
+  const [accessToken, setAccessToken] = useState(null); // Token de acesso
+  const [transactionResponse, setTransactionResponse] = useState(null); // Resposta da transação
+  const [checkoutUrl, setCheckoutUrl] = useState(""); // Armazenar a URL do checkout
+  const [isPaymentPageVisible, setIsPaymentPageVisible] = useState(false); // Controlar visibilidade da página de pagamento
 
-  useEffect(() => {
-    if (frete) {
-      setIsFreteLoading(false);
+  // Autenticar com a API da SumUp
+  const authenticate = async () => {
+    try {
+      const clientId = "cc_classic_fBxJVbegYHwzzDQDuSd9DG1FkgVzC"; // Substitua pelo seu Client ID
+      const clientSecret = "cc_sk_classic_EeWEQPx6TrV9XAKjxWANcnPjxmenF2fa1Juag75PUfScAObzj2"; // Substitua pelo seu Client Secret
+
+      const params = new URLSearchParams();
+      params.append("grant_type", "client_credentials");
+      params.append("client_id", clientId);
+      params.append("client_secret", clientSecret);
+      params.append("application_type", "web");
+
+      const response = await axios.post("https://api.sumup.com/token", params, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+
+      const token = response.data.access_token;
+      setAccessToken(token); // Armazenar o token
+      alert("Autenticação bem-sucedida! Token gerado.");
+    } catch (error) {
+      alert("Erro ao autenticar. Verifique suas credenciais.");
     }
-  }, [frete]);
-
-  useEffect(() => {
-    setTimeout(() => setIsOpen(true), 50);
-  }, []);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    setTimeout(() => navigate('/'), 300);
   };
 
-  const calculateTotal = useCallback(() => {
-    return cartItems
-      .reduce((total, item) => total + (parseFloat(item.PRECO_ATUAL) || 0) * (item.quantity || 0), 0)
-      .toFixed(2);
-  }, [cartItems]);
-
-  useEffect(() => {
-    const calculatedTotal = calculateTotal();
-    setOrderData((prevData) => ({
-      ...prevData,
-      SUBTOTAL: calculatedTotal,
-    }));
-  }, [cartItems, calculateTotal]);
-
-  useEffect(() => {
-    const freight = parseFloat(frete) || 0;
-    const subtotal = parseFloat(orderData.SUBTOTAL) || 0;
-    const total = (subtotal + freight).toFixed(2);
-
-    setOrderData((prevData) => ({
-      ...prevData,
-      TOTAL: total,
-      FRETE: frete,
-    }));
-  }, [orderData.SUBTOTAL, frete]);
-
-  const handleFreteUpdate = (newFrete) => {
-    setFrete(newFrete);
-  };
-
-  const handleSubmit = async () => {
-    if (cartItems.length === 0) {
-      message.error('Seu carrinho está vazio. Adicione produtos antes de finalizar o pedido.');
+  // Criar a transação (exemplo de como criar a transação)
+  const createTransaction = async () => {
+    if (!accessToken) {
+      alert("Você precisa autenticar antes de criar uma transação!");
       return;
     }
-  
-    setIsSubmitting(true); // Ativa o estado de carregamento
-  
-    const pedidoData = {
-      ...orderData,
-      produtos: cartItems.map(item => ({
-        produtoId: item.id,
-        quantidade: item.quantity,
-        precoUnitario: item.PRECO_ATUAL,
-      })),
-    };
-  
+
     try {
-      const response = await fetch(`${Api_VariavelGlobal}/api/pedidos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedidoData),
+      const amountInCents = Math.round(parseFloat(amount) * 100);
+      const checkoutReference = uuidv4(); // Gerando UUID para a referência do checkout
+
+      const payload = {
+        amount: amountInCents / 100,
+        checkout_reference: checkoutReference,
+        currency: "BRL",
+        description: "Compra de Produto X",
+        merchant_code: "MDEC6EP7",
+        pay_to_email: "thiagojanz@hotmail.com",
+        hosted_checkout_settings: { enabled: true },
+      };
+
+      const response = await axios.post("https://api.sumup.com/v0.1/checkouts", payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
       });
-  
-      const data = await response.json();
-      if (response.ok) {
-        clearCart(); // Limpa o carrinho
-        navigate('/confirmacao'); // Redireciona para a tela de confirmação
-      } else {
-        message.error('Erro ao realizar o pedido, favor tentar novamente...');
-        //message.error('Erro ao realizar o pedido: ' + data.error);
-      }
+
+      setTransactionResponse(response.data);
+
+      // Armazene a URL do checkout
+      setCheckoutUrl(response.data.hosted_checkout_url);
+
+      // Exibir a página de pagamento diretamente na tela
+      setIsPaymentPageVisible(true);
     } catch (error) {
-      message.error('Erro de comunicação com a API:', error);
-    } finally {
-      setIsSubmitting(false); // Desativa o estado de carregamento
+      console.error("Erro ao criar a transação:", error.response?.data || error.message);
+      alert("Erro ao criar a transação.");
     }
-  };
-
-  const handlePaymentChange = (e) => {
-    setOrderData((prevData) => ({
-      ...prevData,
-      PAGAMENTO: e.target.value,
-    }));
-  };
-
-  const handleDeliveryChange = (e) => {
-    setOrderData((prevData) => ({
-      ...prevData,
-      ENTREGA: e.target.value,
-    }));
   };
 
   return (
-    <div className={`checkout ${isOpen ? 'slide-in' : 'slide-out'}`}>
-      <div className="container">
-      <div className="left-arrow">
-        <Link onClick={handleClose} className="secondary" to='/'><FaArrowLeft /></Link>
-      </div>
-      <h1 className="titulo-home center">Resumo do Pedido</h1>
+    <div className="checkout-container">
+      <h1>SumUp Checkout</h1>
+      <button onClick={authenticate}>Autenticar com SumUp</button>
 
-      <SectionClient onFreteUpdate={handleFreteUpdate} />
-
-      <div className=''>
-      <Card title={<><FaMapMarkerAlt size={20} /> <h3 style={{display:'contents'}}>{'Opções de Entrega'}</h3> <br/> <p className="subtitulo-home"> {'Clique no botão para alterar:'} </p></>} 
-      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
-        <Flex vertical gap="middle">
-          <Radio.Group defaultValue="1" className='bottom10 center' name='ENTREGA' buttonStyle="solid" onChange={handleDeliveryChange}>
-            <Radio.Button value="1">Delivery</Radio.Button>
-            <Radio.Button disabled value="2">Buscar na Loja</Radio.Button>
-            <Radio.Button disabled value="3">Agendado</Radio.Button>
-          </Radio.Group>
-        </Flex>
-        </Card>
+      <div>
+        <label htmlFor="amount">Valor (BRL):</label>
+        <input
+          type="number"
+          id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Insira o valor"
+        />
       </div>
 
-      <div className=''>
-      <Card title={<><FaMoneyCheck size={20} /> <h3 style={{display:'contents'}}>{'Modelo de Pagamento'}</h3> <br/> <p className="subtitulo-home"> {'Clique no botão para alterar:'} </p></>} 
-      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
-        <Flex vertical gap="middle">
-        <Radio.Group defaultValue="1" className='bottom10 center' name='PAGAMENTO' buttonStyle="solid" onChange={handlePaymentChange}>
-            <Radio.Button value="1">Dinheiro</Radio.Button>
-            <Radio.Button value="2">Cartão</Radio.Button>
-            <Radio.Button value="3">Pix</Radio.Button>
-          </Radio.Group>
-        </Flex>
-        </Card>
-      </div>
+      <button onClick={createTransaction}>Criar Transação</button>
 
-      <div className=''>
-      <Card title={<><FaCubes size={20} /> <h3 style={{display:'contents'}}>{'Produto(s) Selecionado(s)'}</h3> <br/> <p className="subtitulo-home"> {'Lista com seus produtos:'} </p></>} 
-      bordered={true} style={{ width: '100%', marginBottom: '20px' }}>      
-  <Flex vertical>
-    <ul className="product-list-checkout" style={{ listStyle: 'none', padding: 0 }}>
-      {cartItems.length > 0 ? (
-        cartItems.map((item) => (
-          <li 
-            key={item.id} 
-            style={{
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              marginBottom: '8px',
-            }}
-          >
-            <span><span style={{ fontWeight: 'bold' }}>{item.PRODUTO}</span>
-            <br/><span style={{fontWeight:'300px'}}>{item.quantity}</span> x R$ {parseFloat(item.PRECO_ATUAL).toFixed(2)}</span>
-            <span style={{ fontWeight: 'bold' }}>R$ {(parseFloat(item.PRECO_ATUAL) * item.quantity).toFixed(2)}</span>
-          </li>
-        ))
-      ) : (
-        <p style={{ color: 'red' }}>Nenhum item no carrinho...</p>
+      {transactionResponse && (
+       <></>
       )}
-    </ul>
-  </Flex>
-</Card>
 
-      </div>
-
-      <div className=''>        
-        <Form
-          onFinish={handleSubmit}
-          initialValues={{
-            ...orderData,
-            FRETE: frete
-          }}
-        >   
-          <div className='flex' style={{fontSize: '18px', padding:'0px 10px 0px 10px'}}>
-            <div className='left-form'><b>Subtotal</b></div>
-            <div className='right-form'><b>R$ {orderData.SUBTOTAL}</b></div>
-          </div>
-          <div className="flex" style={{fontSize: '18px', padding:'0px 10px 10px 10px'}}>
-            <div className="left-form"><b>Frete</b></div>
-            <div className="right-form">
-              <b>{isFreteLoading ? 'Aguardando...' : `R$ ${frete}`}</b>
-            </div>
-          </div>
-          <div className="flex" style={{fontSize: '20px', backgroundColor:'#f5f5f5', borderRadius: '10px', padding:'10px 10px 10px 10px'}}>
-            <div className='left-form'><b>Total</b></div>
-            <div className='right-form'><b>R$ {orderData.TOTAL}</b></div>
-          </div>
-
-          {/* Botão desabilitado se o carrinho estiver vazio */}
-          <Button
-            htmlType="submit"
-            className="checkout-button"
-            size="large"
-            disabled={cartItems.length === 0 || !frete || parseFloat(frete) <= 0}
-            loading={isSubmitting} // Mostra a animação de carregamento
-            style={{
-              marginTop: '30px', // Adiciona espaço acima
-              padding: '16px 100px', // Aumenta o tamanho do botão
-              fontSize: '16px', // Mantém o tamanho da fonte
-            }}
-          >
-          Fazer Pedido
-        </Button>
-        </Form>
-      </div>
-      </div>
-      <div className="center">
-            <Link onClick={() => navigate(-1)} className="continue-shopping" style={{color:"#000", marginBottom: '60px'}}>Continuar comprando</Link>
-        </div> 
+      {/* Exibir a página de pagamento na mesma tela */}
+      {isPaymentPageVisible && checkoutUrl && (
+        <div className="payment-page-container">
+          <iframe
+            src={checkoutUrl} // URL do checkout gerado
+            width="100%" // Ocupa toda a largura do container
+            height="600px" // Definindo a altura do iframe
+            frameBorder="0" // Removendo a borda do iframe
+            title="Página de Pagamento" // Acessibilidade
+          />
+        </div>
+      )}
     </div>
   );
 };
